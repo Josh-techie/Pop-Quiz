@@ -1,27 +1,27 @@
-# PopQuiz
+# Pop-Quiz
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.12.
+Welcome to POP QUIZ - where learning meets fun! Engage, challenge, and grow with customizable quizzes, seamless sharing, and a competitive leaderboard. Elevate your knowledge game today!
 
-## Development server
+I'll have to add Schedule of Work (in the canva presentation)
+Learning Objectives
+and Challenges and Solutions
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+---
 
-## Code scaffolding
+## Author
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- [`@Josh-techie`](https://github.com/Josh-techie) | Software Engineer Student
 
-## Build
+  > Reach out to me if you need any help or have any questions.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+  <a href="mailto:youssef.abouyahia@e-polytechnique.ma">
+  	<img alt="Feel free to contact me" src="https://img.shields.io/badge/-Ask_me_anything-blue?style=flat&logo=Gmail&logoColor=white&link=mailto:youssef.abouyahia@e-polytechnique.ma&color=3d85c6" />
+  </a>
+  <span> | </span>
+    <a href="https://www.linkedin.com/in/youssef-abouyahia/">
+        <img alt="Linkedin Profile" src="https://img.shields.io/badge/-Linkedin-0072b1?style=flat&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/youssef-abouyahia/" />
+    </a>
+    <span> | </span>
+    <a href="https://twitter.com/JoesephAb">
+        <img alt="Twitter Profile" src="https://img.shields.io/badge/-Twitter-0072b1?style=flat&logo=Twitter&logoColor=white&link=https://twitter.com/JoesephAb&color=1DA1F2" />
+    </a>
