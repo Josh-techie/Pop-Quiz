@@ -1,24 +1,4 @@
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background: #f7f3f3bd;
-  text-transform: capitalize;
-  font-family: Arial, sans-serif; /* Change this to your preferred font */
-}
 
-.container h2 {
-  color: grey;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.container .small {
-  text-align: center;
-  font-size: 0.8em;
-  color: grey;
-  margin-bottom: 20px;
-}
 
 .row {
   display: flex;
@@ -26,11 +6,16 @@ body {
   justify-content: space-between;
 }
 
+.card-link {
+  text-decoration: none; /* Removes the underline from the link */
+  color: inherit; /* Makes the link color the same as the text color */
+}
+
 .card {
   position: relative;
-  width: 24%;
-  margin-bottom: 20px;
-  overflow: hidden;
+  border:none;
+  width: 18rem;
+  user-select: none;
 }
 
 .card img {
@@ -42,10 +27,8 @@ body {
 
 .card .card-title {
   position: absolute;
-  top: 0;
+  bottom: 0;
   width: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  padding: 10px;
+  color: rgb(29, 3, 3);
   text-align: center;
 }
