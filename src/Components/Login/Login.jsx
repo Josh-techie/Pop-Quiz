@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import "./Login.scss";
 
-export class Login extends Component {
+
+export class Login1 extends Component {
   contRef = React.createRef();
 
   toggleSignUp = () => {
@@ -148,4 +149,4 @@ export class Login extends Component {
   }
 }
 
-export default Login;
+export default Login1;
