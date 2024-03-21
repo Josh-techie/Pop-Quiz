@@ -1,5 +1,4 @@
 import React from "react";
-import Login from "./Components/Login";
 import './styles/tailwind.css';
 import Dashboard from "./Components/Dashboard/Dashboard";
 import Login1 from "./Components/Login/Login";
