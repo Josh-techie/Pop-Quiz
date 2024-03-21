@@ -1,9 +1,6 @@
-import React, { Component } from "react";
+import React, { Component } from 'react'
 
-
-export class Login1 extends Component {
-
-
+export class SignUp extends Component {
   render() {
     return (
       <div className="fullscreen">
@@ -24,7 +21,7 @@ export class Login1 extends Component {
               <h1 className="text-xl font-bold">Abstract UI</h1>
 
               <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">
-                Log in to your account
+                Sign Up To your Account
               </h1>
 
               <form className="mt-6" action="#" method="POST">
@@ -56,21 +53,12 @@ export class Login1 extends Component {
                   />
                 </div>
 
-                <div className="text-right mt-2">
-                  <a
-                    href="#"
-                    className="text-sm font-semibold text-gray-700 hover:text-blue-700 focus:text-blue-700"
-                  >
-                    Forgot Password?
-                  </a>
-                </div>
-
                 <button
                   type="submit"
                   className="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 text-white font-semibold rounded-lg
                 px-4 py-3 mt-6"
                 >
-                  Log In
+                  Sign Up
                 </button>
               </form>
 
@@ -117,22 +105,22 @@ export class Login1 extends Component {
                       d="M48 48L17 24l-4-3 35-10z"
                     />
                   </svg>
-                  <span className="ml-4">Log in with Google</span>
+                  <span className="ml-4">Sign Up with Google</span>
                 </div>
               </button>
 
               <p className="mt-8">
-                Need an account?{""}
+                Already Have an account?{""}
                 <a
-                  href="/SignUp"
+                  href="/Login"
                   className="text-blue-500 hover:text-blue-700 font-semibold"
                 >
-                  Create an account
+                  Log In
                 </a>
               </p>
 
               <p className="text-sm text-gray-500 mt-12">
-                &copy; 2020 Abstract UI - All Rights Reserved.
+                &copy; Joe ALX 😑- All Rights Reserved.
               </p>
             </div>
           </div>
@@ -142,4 +130,4 @@ export class Login1 extends Component {
   }
 }
 
-export default Login1;
+export default SignUp
