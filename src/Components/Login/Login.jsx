@@ -1,17 +1,14 @@
 import React, { Component } from "react";
 
-
 export class Login1 extends Component {
-
-
   render() {
     return (
       <div className="fullscreen">
         <section className="flex flex-col md:flex-row h-screen items-center">
           <div className="bg-blue-600 hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
             <img
-              src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F551bfcb6-91ff-4dff-a34c-ab570e56042d%2Flogin-img.png?table=block&id=d3bcae42-bdd4-4aea-8c3f-4cb45c62af38&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2"
-              alt=""
+              src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F956aa46a-b180-4bff-92f8-3f525f478b13%2FQuote.png?table=block&id=f1945a54-8da6-40f5-9db5-8015f73f337b&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2"
+              alt="img of quote"
               className="w-full h-full object-cover"
             />
           </div>
@@ -21,7 +18,13 @@ export class Login1 extends Component {
           flex items-center justify-center"
           >
             <div className="w-full h-100">
-              <h1 className="text-xl font-bold">Abstract UI</h1>
+              <img
+                src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F5f8b096b-a2b8-4b23-998e-0084f415fb2c%2FLogo.png?table=block&id=30fc8a2c-e3f9-4b99-868c-3690d70e7e59&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2"
+                alt="logo"
+                width={150}
+                height={200} // Set the desired height
+                className="mx-auto"
+              />
 
               <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">
                 Log in to your account
