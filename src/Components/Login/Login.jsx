@@ -10,7 +10,7 @@ export class Login1 extends Component {
         <section className="flex flex-col md:flex-row h-screen items-center">
           <div className="bg-blue-600 hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
             <img
-              src="https://images.unsplash.com/photo-1444313431167-e7921088a9d3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1441&q=100"
+              src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F551bfcb6-91ff-4dff-a34c-ab570e56042d%2Flogin-img.png?table=block&id=d3bcae42-bdd4-4aea-8c3f-4cb45c62af38&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2"
               alt=""
               className="w-full h-full object-cover"
             />
