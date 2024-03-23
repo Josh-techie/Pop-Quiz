@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 
 const AuthDetails = () => {
   const [authUser, setAuthUser] = useState(null);
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     const listen = onAuthStateChanged(auth, (user) => {
-      if (user && user.emailVerified) {
+      if (user) {
         setAuthUser(user);
-      } else {
-        setAuthUser(null);
-        navigate("/login"); // Redirect to the sign-in page if not authenticated or email not verified
+      } else if (
+        !location.pathname.includes("/login") &&
+        !location.pathname.includes("/signup")
+      ) {
+        navigate("/login"); // Redirect to the login page if not authenticated
       }
     });
 
     return () => {
       listen();
     };
-  }, [navigate]);
+  }, [location, navigate]);
 
   return null;
 };

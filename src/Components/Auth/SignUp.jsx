@@ -4,19 +4,36 @@ import {
   createUserWithEmailAndPassword,
   fetchSignInMethodsForEmail,
   sendEmailVerification,
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+
+// Move redirect_home function outside the component
+function redirect_home(navigate) {
+  navigate("/dashboard");
+}
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [notification, setNotification] = useState("");
+  const navigate = useNavigate(); // Get navigate function from useNavigate
+
+  // to sign up with google
+  const provider = new GoogleAuthProvider();
+  const authInstance = getAuth();
 
   const signUp = async (e) => {
     e.preventDefault();
 
     try {
       // Check if the email already exists
-      const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+      const signInMethods = await fetchSignInMethodsForEmail(
+        authInstance,
+        email
+      );
 
       if (signInMethods.length > 0) {
         // Email already exists, show notification
@@ -28,13 +45,13 @@ const SignUp = () => {
       } else {
         // Email doesn't exist, proceed with sign up
         const userCredential = await createUserWithEmailAndPassword(
-          auth,
+          authInstance,
           email,
           password
         );
 
         // Send email verification
-        await sendEmailVerification(auth.currentUser);
+        await sendEmailVerification(authInstance.currentUser);
 
         // Clear input fields
         setEmail("");
@@ -50,15 +67,15 @@ const SignUp = () => {
         }, 3000);
       }
     } catch (error) {
-      if (error.code === 'auth/email-already-in-use') {
-      // Error occurred, set notification accordingly
-      setNotification("Email already exists in our database.");
-      
-      // Clear notification after 3 seconds
-      setTimeout(() => {
-        setNotification("");
-      }, 3000);
-    }
+      if (error.code === "auth/email-already-in-use") {
+        // Error occurred, set notification accordingly
+        setNotification("Email already exists in our database.");
+
+        // Clear notification after 3 seconds
+        setTimeout(() => {
+          setNotification("");
+        }, 3000);
+      }
     }
   };
 
@@ -136,6 +153,23 @@ const SignUp = () => {
             <button
               type="button"
               className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300"
+              onClick={() => {
+                signInWithPopup(authInstance, provider)
+                  .then((result) => {
+                    // Redirect to dashboard after successful authentication
+                    redirect_home(navigate);
+                  })
+                  .catch((error) => {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    // The email of the user's account used.
+                    var email = error.email;
+                    // The firebase.auth.AuthCredential type that was used.
+                    var credential = error.credential;
+                    // ...
+                  });
+              }}
             >
               <div className="flex items-center justify-center">
                 <svg

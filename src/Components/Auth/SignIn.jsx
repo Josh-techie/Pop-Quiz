@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  fetchSignInMethodsForEmail,
+} from "firebase/auth";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -10,31 +15,67 @@ const SignIn = () => {
   const [loading, setLoading] = useState(false); // State for loading indicator
   const navigate = useNavigate();
 
-  const signIn = (e) => {
+  const signIn = async (e) => {
     e.preventDefault();
     setLoading(true); // Set loading to true when signing in
 
+    // Check if the email exists in the database
+    try {
+      const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+      if (signInMethods.length === 0) {
+        // Email doesn't exist in the database
+        setNotification("Email doesn't exist in our database!");
+        setLoading(false); // Set loading to false
+        return;
+      }
+    } catch (error) {
+      console.error("Error checking email:", error);
+      setNotification("An error occurred. Please try again later.");
+      setLoading(false); // Set loading to false
+      return;
+    }
+
+    // Email exists, proceed with sign in
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
         setLoading(false); // Set loading to false after successful login
         navigate("/Dashboard");
       })
       .catch((error) => {
-        console.log(error);
+        console.error("Error signing in:", error);
         setLoading(false); // Set loading to false if login fails
         setNotification("Incorrect email or password. Please try again.");
-
         // hide notification after 3 seconds
         setTimeout(() => {
           setNotification("");
-        }, 1000);
+        }, 3000);
+      });
+  };
+
+  // sign in with google
+  const signInWithGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        // Signed in with Google, redirect to Dashboard
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.error("Error signing in with Google:", error);
+        setNotification(
+          "An error occurred while signing in with Google. Please try again."
+        );
+        // hide notification after 3 seconds
+        setTimeout(() => {
+          setNotification("");
+        }, 3000);
       });
   };
 
   return (
     <div className="fullscreen">
       <section className="flex flex-col md:flex-row h-screen items-center">
+        {/* Left Side */}
         <div className="bg-blue-600 hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
           <img
             src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F956aa46a-b180-4bff-92f8-3f525f478b13%2FQuote.png?table=block&id=f1945a54-8da6-40f5-9db5-8015f73f337b&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2"
@@ -43,16 +84,14 @@ const SignIn = () => {
           />
         </div>
 
-        <div
-          className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
-          flex items-center justify-center"
-        >
+        {/* Right Side */}
+        <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
           <div className="w-full h-100">
             <img
               src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F5f8b096b-a2b8-4b23-998e-0084f415fb2c%2FLogo.png?table=block&id=30fc8a2c-e3f9-4b99-868c-3690d70e7e59&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2"
               alt="logo"
               width={150}
-              height={200} // Set the desired height
+              height={200}
               className="mx-auto"
             />
 
@@ -61,14 +100,13 @@ const SignIn = () => {
             </h1>
 
             <form className="mt-6" onSubmit={signIn}>
+              {/* Email input */}
               <div>
                 <label className="block text-gray-700">Email Address</label>
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  name=""
-                  id=""
                   placeholder="Enter Email Address"
                   className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                   autoFocus
@@ -77,22 +115,21 @@ const SignIn = () => {
                 />
               </div>
 
+              {/* Password input */}
               <div className="mt-4">
                 <label className="block text-gray-700">Password</label>
                 <input
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  name=""
-                  id=""
                   placeholder="Enter Password"
                   minLength="6"
-                  className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
-                  focus:bg-white focus:outline-none"
+                  className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                   required
                 />
               </div>
 
+              {/* Forgot password link */}
               <div className="text-right mt-2">
                 <Link
                   to="/forgot-password"
@@ -102,20 +139,20 @@ const SignIn = () => {
                 </Link>
               </div>
 
+              {/* Sign in button */}
               <button
                 type="submit"
-                className="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 text-white font-semibold rounded-lg
-                px-4 py-3 mt-6"
+                className="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 text-white font-semibold rounded-lg px-4 py-3 mt-6"
               >
                 Log In
               </button>
             </form>
 
-            <hr className="my-6 border-gray-300 w-full" />
-
+            {/* Sign in with Google button */}
             <button
               type="button"
-              className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300"
+              onClick={signInWithGoogle}
+              className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300 mt-4"
             >
               <div className="flex items-center justify-center">
                 <svg
@@ -154,8 +191,9 @@ const SignIn = () => {
               </div>
             </button>
 
+            {/* Sign up link */}
             <p className="mt-8">
-              Need an account?{""}
+              Need an account?{" "}
               <Link
                 to="/signup"
                 className="text-blue-500 hover:text-blue-700 font-semibold"
@@ -164,24 +202,21 @@ const SignIn = () => {
               </Link>
             </p>
 
-            <p className="text-sm text-gray-500 mt-12">
-              &copy; 2020 Abstract UI - All Rights Reserved.
-            </p>
+           {/* Display notification */}
+            {notification && (
+              <div className="fixed bottom-0 left-0 right-0 bg-red-500 text-white text-center py-2">
+                {notification}
+              </div>
+            )}
+
+            {/* Loading indicator */}
+            {loading && (
+              <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-300 bg-opacity-50 z-50">
+                <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-24 w-24"></div>
+              </div>
+            )}
           </div>
         </div>
-
-        {/* notification show or hide */}
-        {loading ? ( // Show loading indicator if loading is true
-          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-300 bg-opacity-50 z-50">
-            <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-24 w-24"></div>
-          </div>
-        ) : null}
-
-        {notification && ( // Show notification if notification is not empty
-          <div className="fixed bottom-0 left-0 right-0 bg-red-500 text-white text-center py-2">
-            {notification}
-          </div>
-        )}
       </section>
     </div>
   );
