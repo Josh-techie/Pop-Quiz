@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignIn from "./Components/Auth/SignIn";
 import SignUp from "./Components/Auth/SignUp";
 import AuthDetails from "./Components/Auth/AuthDetails";
+import ForgotPasswd from "./Components/Auth/ForgotPasswd";
 
 
 function App() {
@@ -17,7 +18,9 @@ function App() {
         <AuthDetails />
         <Routes>
           <Route path="/" element={<SignUp />}/>
+          <Route path="/signup" element={<SignUp />}/>
           <Route path="/login" element={<SignIn />} />
+          <Route path="/forgot-password" element={<ForgotPasswd />} />
         </Routes>
       </BrowserRouter>
     </div>

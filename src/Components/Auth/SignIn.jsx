@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
@@ -94,12 +94,12 @@ const SignIn = () => {
               </div>
 
               <div className="text-right mt-2">
-                <a
-                  href="#"
+                <Link
+                  to="/forgot-password"
                   className="text-sm font-semibold text-gray-700 hover:text-blue-700 focus:text-blue-700"
                 >
                   Forgot Password?
-                </a>
+                </Link>
               </div>
 
               <button
@@ -156,12 +156,12 @@ const SignIn = () => {
 
             <p className="mt-8">
               Need an account?{""}
-              <a
-                href="#"
+              <Link
+                to="/signup"
                 className="text-blue-500 hover:text-blue-700 font-semibold"
               >
                 Create an account
-              </a>
+              </Link>
             </p>
 
             <p className="text-sm text-gray-500 mt-12">
