@@ -11,11 +11,9 @@ const AuthDetails = () => {
     const listen = onAuthStateChanged(auth, (user) => {
       if (user && user.emailVerified) {
         setAuthUser(user);
-        navigate("/Dashboard");
-      } else if (user && !user.emailVerified) {
-        setAuthUser(user);
       } else {
         setAuthUser(null);
+        navigate("/login"); // Redirect to the sign-in page if not authenticated or email not verified
       }
     });
 
@@ -23,16 +21,6 @@ const AuthDetails = () => {
       listen();
     };
   }, [navigate]);
-
-  const userSignOut = () => {
-    signOut(auth)
-      .then(() => {
-        setAuthUser(null);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   return null;
 };
