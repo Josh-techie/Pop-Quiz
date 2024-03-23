@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { auth } from "../../firebase";
 import {
   createUserWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
   sendEmailVerification,
 } from "firebase/auth";
 
@@ -10,32 +11,55 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [notification, setNotification] = useState("");
 
-  const signUp = (e) => {
+  const signUp = async (e) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+
+    try {
+      // Check if the email already exists
+      const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+
+      if (signInMethods.length > 0) {
+        // Email already exists, show notification
+        setNotification("Email already exists in our database.");
+        // Clear notification after 3 seconds
+        setTimeout(() => {
+          setNotification("");
+        }, 3000);
+      } else {
+        // Email doesn't exist, proceed with sign up
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
         // Send email verification
-        sendEmailVerification(auth.currentUser)
-          .then(() => {
-            // Clear input fields
-            setEmail("");
-            setPassword("");
-            // Set notification
-            setNotification(
-              "Signed up successfully, please check your email for verification!"
-            );
-            // Clear notification after 3 seconds
-            setTimeout(() => {
-              setNotification("");
-            }, 3000);
-          })
-          .catch((error) => {
-            console.error("Error sending verification email:", error);
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        await sendEmailVerification(auth.currentUser);
+
+        // Clear input fields
+        setEmail("");
+        setPassword("");
+
+        // Set notification for successful sign-up
+        setNotification(
+          "Signed up successfully, please check your email for verification!"
+        );
+        // Clear notification after 3 seconds
+        setTimeout(() => {
+          setNotification("");
+        }, 3000);
+      }
+    } catch (error) {
+      if (error.code === 'auth/email-already-in-use') {
+      // Error occurred, set notification accordingly
+      setNotification("Email already exists in our database.");
+      
+      // Clear notification after 3 seconds
+      setTimeout(() => {
+        setNotification("");
+      }, 3000);
+    }
+    }
   };
 
   return (
@@ -179,3 +203,4 @@ const SignUp = () => {
 };
 
 export default SignUp;
+

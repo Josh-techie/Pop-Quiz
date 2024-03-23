@@ -34,18 +34,7 @@ const AuthDetails = () => {
       });
   };
 
-  return (
-    <div>
-      {authUser ? (
-        <>
-          <p>{`Signed In as ${authUser.email}`} </p>
-          <button onClick={userSignOut}> Sign Out</button>
-        </>
-      ) : (
-        <p> Signed Out</p>
-      )}
-    </div>
-  );
+  return null;
 };
 
 export default AuthDetails;

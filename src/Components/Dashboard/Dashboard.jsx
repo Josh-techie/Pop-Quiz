@@ -1,12 +1,26 @@
-import React, { Component } from 'react';
-import '../../styles/tailwind.css';
+import React, { useState } from "react";
+import { auth } from "../../firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import "../../styles/tailwind.css";
 
-export class Dashboard extends Component {
-  render() {
-    return (
-  <p>Dashborad</p>
-      );
-  }
-}
+const Dashboard = () => {
+  const [authUser, setAuthUser] = useState(null);
+
+  const userSignOut = () => {
+    signOut(auth)
+      .then(() => {
+        setAuthUser(null);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  return (
+    <div>
+      <button onClick={userSignOut}> Sign Out</button>
+    </div>
+  );
+};
 
 export default Dashboard;
