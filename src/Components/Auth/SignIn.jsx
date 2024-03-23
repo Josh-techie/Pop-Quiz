@@ -20,20 +20,7 @@ const SignIn = () => {
     setLoading(true); // Set loading to true when signing in
 
     // Check if the email exists in the database
-    try {
-      const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-      if (signInMethods.length === 0) {
-        // Email doesn't exist in the database
-        setNotification("Email doesn't exist in our database!");
-        setLoading(false); // Set loading to false
-        return;
-      }
-    } catch (error) {
-      console.error("Error checking email:", error);
-      setNotification("An error occurred. Please try again later.");
-      setLoading(false); // Set loading to false
-      return;
-    }
+
 
     // Email exists, proceed with sign in
     signInWithEmailAndPassword(auth, email, password)
