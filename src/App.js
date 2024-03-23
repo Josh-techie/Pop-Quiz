@@ -12,11 +12,12 @@ function App() {
     <div className="App">
       <BrowserRouter>
         {/* <Login /> */}
-        <SignIn/>
-        <SignUp/>
+        {/* <SignIn />
+        <SignUp /> */}
         <AuthDetails />
         <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/" element={<SignUp />}/>
+          <Route path="/login" element={<SignIn />} />
         </Routes>
       </BrowserRouter>
     </div>

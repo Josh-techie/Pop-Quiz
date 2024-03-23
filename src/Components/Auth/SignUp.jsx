@@ -1,16 +1,37 @@
 import React, { useState } from "react";
 import { auth } from "../../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [notification, setNotification] = useState("");
 
-  const SignUp = (e) => {
+  const signUp = (e) => {
     e.preventDefault();
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
+        // Send email verification
+        sendEmailVerification(auth.currentUser)
+          .then(() => {
+            // Clear input fields
+            setEmail("");
+            setPassword("");
+            // Set notification
+            setNotification(
+              "Signed up successfully, please check your email for verification!"
+            );
+            // Clear notification after 3 seconds
+            setTimeout(() => {
+              setNotification("");
+            }, 3000);
+          })
+          .catch((error) => {
+            console.error("Error sending verification email:", error);
+          });
       })
       .catch((error) => {
         console.log(error);
@@ -30,7 +51,7 @@ const SignUp = () => {
               src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F5f8b096b-a2b8-4b23-998e-0084f415fb2c%2FLogo.png?table=block&id=30fc8a2c-e3f9-4b99-868c-3690d70e7e59&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2"
               alt="logo"
               width={150}
-              height={200} // Set the desired height
+              height={200}
               className="mx-auto"
             />
 
@@ -38,14 +59,13 @@ const SignUp = () => {
               Get Started with Pop Quiz 🚀
             </h1>
 
-            <form className="mt-6" onSubmit={SignUp}>
+            <form className="mt-6" onSubmit={signUp}>
               <div>
                 <label className="block text-gray-700">Email Address</label>
                 <input
                   type="email"
                   onChange={(e) => setEmail(e.target.value)}
-                  name=""
-                  id=""
+                  value={email}
                   placeholder="Enter Email Address"
                   className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                   autoFocus
@@ -59,8 +79,7 @@ const SignUp = () => {
                 <input
                   type="password"
                   onChange={(e) => setPassword(e.target.value)}
-                  name=""
-                  id=""
+                  value={password}
                   placeholder="Enter Password"
                   minLength="6"
                   className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
@@ -77,6 +96,16 @@ const SignUp = () => {
                 Sign Up
               </button>
             </form>
+
+            {/* Display notification */}
+            {notification && (
+              <div
+                className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mt-4"
+                role="alert"
+              >
+                <span className="block sm:inline">{notification}</span>
+              </div>
+            )}
 
             <hr className="my-6 border-gray-300 w-full" />
 
@@ -117,7 +146,7 @@ const SignUp = () => {
                     d="M48 48L17 24l-4-3 35-10z"
                   />
                 </svg>
-                <span className="ml-4">Sign Up with Google</span>
+                <span className="ml-4">Log in with Google</span>
               </div>
             </button>
 
@@ -147,6 +176,6 @@ const SignUp = () => {
       </section>
     </div>
   );
-  };
+};
 
 export default SignUp;

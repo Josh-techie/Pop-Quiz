@@ -1,14 +1,18 @@
-import React, { useEffect, userEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
-import { on } from "events";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 
 const AuthDetails = () => {
   const [authUser, setAuthUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const listen = onAuthStateChanged(auth, (user) => {
-      if (user) {
+      if (user && user.emailVerified) {
+        setAuthUser(user);
+        navigate("/Dashboard");
+      } else if (user && !user.emailVerified) {
         setAuthUser(user);
       } else {
         setAuthUser(null);
@@ -18,7 +22,7 @@ const AuthDetails = () => {
     return () => {
       listen();
     };
-  }, []);
+  }, [navigate]);
 
   const userSignOut = () => {
     signOut(auth)
@@ -28,7 +32,7 @@ const AuthDetails = () => {
       .catch((error) => {
         console.log(error);
       });
-};
+  };
 
   return (
     <div>
@@ -39,7 +43,7 @@ const AuthDetails = () => {
         </>
       ) : (
         <p> Signed Out</p>
-      )}{" "}
+      )}
     </div>
   );
 };

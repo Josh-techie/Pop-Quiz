@@ -1,20 +1,36 @@
 import React, { useState } from "react";
-import { auth } from '../../firebase';
+import { useNavigate } from "react-router-dom";
+import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [notification, setNotification] = useState("");
+  const [loading, setLoading] = useState(false); // State for loading indicator
+  const navigate = useNavigate();
 
-
-const signIn = (e) => {
+  const signIn = (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+    setLoading(true); // Set loading to true when signing in
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
         console.log(userCredential);
-    }).catch((error) => {
+        setLoading(false); // Set loading to false after successful login
+        navigate("/Dashboard");
+      })
+      .catch((error) => {
         console.log(error);
-    });
-};
+        setLoading(false); // Set loading to false if login fails
+        setNotification("Incorrect email or password. Please try again.");
+
+        // hide notification after 3 seconds
+        setTimeout(() => {
+          setNotification("");
+        }, 1000);
+      });
+  };
 
   return (
     <div className="fullscreen">
@@ -153,6 +169,19 @@ const signIn = (e) => {
             </p>
           </div>
         </div>
+
+        {/* notification show or hide */}
+        {loading ? ( // Show loading indicator if loading is true
+          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-300 bg-opacity-50 z-50">
+            <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-24 w-24"></div>
+          </div>
+        ) : null}
+
+        {notification && ( // Show notification if notification is not empty
+          <div className="fixed bottom-0 left-0 right-0 bg-red-500 text-white text-center py-2">
+            {notification}
+          </div>
+        )}
       </section>
     </div>
   );
