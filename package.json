@@ -14,6 +14,7 @@
     "autoprefixer": "^10.4.18",
     "firebase": "^10.9.0",
     "framer-motion": "^11.0.20",
+    "lucid-ui": "^8.16.0",
     "lucide-react": "^0.363.0",
     "material-ui-search-bar": "^1.0.1",
     "node": "^21.7.1",

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 
-import Logo from "../../Assets/Logo.png";
+import Logo from "../../assets/Logo.png";
 
 import {
   ArrowLeftRightIcon,
@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-import RightArrowIcon from "../../Assets/icons/rightArrow.svg";
+import RightArrowIcon from "../../assets/icons/rightArrow.svg";
 
 const variants = {
   expanded: { width: "20%" },
@@ -84,7 +84,7 @@ function Navbar() {
           <div className="flex space-x-3 w-full p-2 rounded">
             <ArrowLeftRightIcon />
             <span className={!isExpanded ? "hidden" : "block"}>
-              Transactions
+              Notifications
             </span>
           </div>
         </div>
@@ -93,7 +93,7 @@ function Navbar() {
           <div className="flex space-x-3 w-full p-2 rounded  ">
             <HelpCircleIcon />
             <span className={!isExpanded ? "hidden" : "block"}>
-              Help Center
+                Profil
             </span>
           </div>
         </div>
