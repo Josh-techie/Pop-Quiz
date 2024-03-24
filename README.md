@@ -8,9 +8,34 @@
 
 - Youssef
 - Saad
-- Marouane
 
 ---
+
+### Get Started
+
+1 - Clone the repo in your local machine by running:
+
+```
+git clone https://github.com/Josh-techie/Pop-Quiz
+```
+
+2- Install the dependencies by running:
+
+```
+npm install
+```
+
+> If it throws an error try forcing it, eventhough it's not recommended! Run the following:
+
+```
+npm install --force
+```
+
+3- Run the application in your local and enjoy the diverse quizes in the app by running:
+
+```
+npm run start
+```
 
 ### Mockups:
 
@@ -18,6 +43,9 @@
 
 ---
 
-## Challenges:
+## Technologies:
 
-- In this project, We used React/Express and Firebase for db.
+- In this project I used:
+  - **ReactJs** : As a frontend framework
+  - **Firebase** : As a backend nonrelationnal db
+  - **Tailwind** : For styling the components
