@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Card1 from "../../assets/card1.png";
-import Card2 from "../../assets/card2.png";
-import Card3 from "../../assets/card3.png";
-import Card4 from "../../assets/card4.png";
-import Avatar from "../../assets/avatar.jpeg"; // Example avatar image
+import Card1 from "../../Assets/card1.png";
+import Card2 from "../../Assets/card2.png";
+import Card3 from "../../Assets/card3.png";
+import Card4 from "../../Assets/card4.png";
+import Avatar from "../../Assets/avatar.jpeg";
 import DashboardHeader from "./Header";
 
 // Card component
