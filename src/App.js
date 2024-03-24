@@ -7,6 +7,7 @@ import SignUp from "./Components/Auth/SignUp";
 import AuthDetails from "./Components/Auth/AuthDetails";
 import ForgotPasswd from "./Components/Auth/ForgotPasswd";
 import Main from "./Components/Dashboard/Main";
+import "./styles/tailwind.css";
 
 function App() {
   return (

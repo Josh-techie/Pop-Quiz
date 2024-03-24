@@ -26,7 +26,7 @@ const SignIn = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setLoading(false); // Set loading to false after successful login
-        navigate("/Dashboard");
+        navigate("/main");
       })
       .catch((error) => {
         console.error("Error signing in:", error);
@@ -45,7 +45,7 @@ const SignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
         // Signed in with Google, redirect to Dashboard
-        navigate("/dashboard");
+        navigate("/main");
       })
       .catch((error) => {
         console.error("Error signing in with Google:", error);
