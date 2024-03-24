@@ -28,6 +28,18 @@ const DashboardHeader = ({
     };
   }, []);
 
+  // Function to handle logout
+  const handleLogout = () => {
+    userSignOut(); // Call userSignOut function
+    setDropdownVisible(false); // Close dropdown after logout
+  };
+
+  // Function to sign out user
+  const userSignOut = () => {
+    // Your signOut logic here
+    navigate("/login");
+  };
+
   const handleSettingsClick = () => {
     navigate("/account"); // Use navigate function to redirect to Account page
     setDropdownVisible(false);
@@ -74,7 +86,10 @@ const DashboardHeader = ({
               >
                 Settings
               </li>
-              <li className="py-1 px-3 hover:bg-gray-100 cursor-pointer">
+              <li
+                className="py-1 px-3 hover:bg-gray-100 cursor-pointer"
+                onClick={handleLogout}
+              >
                 Logout
               </li>
             </ul>
@@ -89,6 +104,7 @@ DashboardHeader.propTypes = {
   toggleDropdown: PropTypes.func.isRequired,
   showDropdown: PropTypes.bool.isRequired,
   avatar: PropTypes.string.isRequired,
+  userSignOut: PropTypes.func.isRequired, // PropTypes for userSignOut
 };
 
 export default DashboardHeader;
