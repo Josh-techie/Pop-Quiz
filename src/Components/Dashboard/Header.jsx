@@ -1,5 +1,6 @@
 import React from "react";
 import { FaSearch } from "react-icons/fa";
+import Avatar from "../../Assets/avatar.jpeg"; 
 
 
 const DashboardHeader = ({ toggleDropdown, showDropdown, Avatar }) => {
