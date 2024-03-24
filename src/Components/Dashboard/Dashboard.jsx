@@ -1,25 +1,23 @@
 import React, { useState } from "react";
-import Card1 from "../../assets/card1.png";
-import Card2 from "../../assets/card2.png";
-import Card3 from "../../assets/card3.png";
-import Card4 from "../../assets/card4.png";
-import Avatar from "../../assets/avatar.jpeg"; // Example avatar image
+import Technology from "../../Assets/technology_card.png";
+import Medicine from "../../Assets/medicine_card.png";
+import History from "../../Assets/history_card.png";
+import Agriculture from "../../Assets/agriculture_card.png";
+import Avatar from "../../Assets/avatar.png";
 import DashboardHeader from "./Header";
+import { Link } from "react-router-dom";
 
 // Card component
-const Card = ({ title, image, onClick }) => {
+const Card = ({ title, image, cardLink }) => {
   return (
-    <div
-      className="relative rounded-md p-4 overflow-hidden cursor-pointer select-none"
-      onClick={onClick}
-    >
+    <Link to={cardLink} className="relative rounded-md overflow-hidden cursor-pointer select-none block">
       <img src={image} alt={title} className="w-full h-auto" />
-      <h2 className="absolute bottom-4 left-0 right-0 text-gray text-lg font-semibold text-center">
-        {title}
-      </h2>
-    </div>
+      <h2 className="text-gray text-lg font-semibold text-center mt-2">{title}</h2>
+    </Link>
   );
 };
+
+
 
 function Dashboard() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -48,46 +46,14 @@ function Dashboard() {
 
         {/* Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          <Card
-            title="Technology"
-            image={Card1}
-            onClick={() => console.log("Technology clicked")}
-          />
-          <Card
-            title="Medicine"
-            image={Card2}
-            onClick={() => console.log("Yatharth Verma clicked")}
-          />
-          <Card
-            title="Agriculture"
-            image={Card3}
-            onClick={() => console.log("Yatharth Verma clicked")}
-          />
-          <Card
-            title="History"
-            image={Card4}
-            onClick={() => console.log("Your Activity clicked")}
-          />
-          <Card
-            title="Mathematics"
-            image={Card3}
-            onClick={() => console.log("Pending Bills clicked")}
-          />
-          <Card
-            title="Mathematics"
-            image={Card3}
-            onClick={() => console.log("Pending Bills clicked")}
-          />
-          <Card
-            title="Mathematics"
-            image={Card3}
-            onClick={() => console.log("Pending Bills clicked")}
-          />
-          <Card
-            title="Mathematics"
-            image={Card3}
-            onClick={() => console.log("Pending Bills clicked")}
-          />
+          <Card title="Technology" image={Technology} cardLink="/technology" />
+          <Card title="Medicine" image={Medicine} cardLink="/medicine" />
+          <Card title="Agriculture" image={History} cardLink="/agriculture" />
+          <Card title="History" image={Agriculture} cardLink="/history" />
+          <Card title="Technology" image={Technology} cardLink="/technology" />
+          <Card title="Medicine" image={Medicine} cardLink="/medicine" />
+          <Card title="Agriculture" image={History} cardLink="/agriculture" />
+          <Card title="History" image={Agriculture} cardLink="/history" />
         </div>
       </div>
     </div>

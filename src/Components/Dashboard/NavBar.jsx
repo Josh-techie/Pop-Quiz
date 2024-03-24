@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 
-import Logo from "../../assets/Logo.png";
+import Logo from "../../Assets/Logo.png";
 
 import {
   ArrowLeftRightIcon,
@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
-import RightArrowIcon from "../../assets/icons/rightArrow.svg";
+import RightArrowIcon from "../../Assets/icons/rightArrow.svg";
 
 const variants = {
   expanded: { width: "20%" },

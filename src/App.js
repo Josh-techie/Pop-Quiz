@@ -8,6 +8,7 @@ import AuthDetails from "./Components/Auth/AuthDetails";
 import ForgotPasswd from "./Components/Auth/ForgotPasswd";
 import Main from "./Components/Dashboard/Main";
 import "./styles/tailwind.css";
+import Technology from "./Components/Quiz/Technology";
 
 function App() {
   return (
@@ -18,11 +19,14 @@ function App() {
         <SignUp /> */}
         <AuthDetails />
         <Routes>
-          <Route path="/" element={<SignUp />}/>
-          <Route path="/signup" element={<SignUp />}/>
+          <Route path="/" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<SignIn />} />
           <Route path="/main" element={<Main />} />
           <Route path="/forgot-password" element={<ForgotPasswd />} />
+
+          {/* categories of the quiz routes */}
+          <Route path="/technology" element={<Technology />} />
         </Routes>
       </BrowserRouter>
     </div>
