@@ -1,44 +1,43 @@
-import { getAuth, signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import React from "react";
 
-const Dashboard = () => {
-  const auth = getAuth();
-  const navigate = useNavigate();
-  const authUser = getAuth().currentUser;
-
-  if (!authUser) {
-    return (
-      <div className="margin-auto">
-        <img
-          src={
-            "https://user-images.githubusercontent.com/47600906/92342363-50f71f00-f0de-11ea-85cf-d0af41acc6c8.png"
-          }
-          alt="Not authorized"
-        />
-      </div>
-    );
-  }
-  const userSignOut = () => {
-    signOut(auth)
-      .then(() => {
-        navigate("/login"); // Redirect to the sign-in page after signing out
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
+function Dashboard() {
   return (
-    <div>
-      {/* Styled sign-out button */}
-      <button
-        onClick={userSignOut}
-        className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-4 ml-4"
-      >
-        Sign Out
-      </button>
+
+    
+    <div className="flex flex-col py-10 px-16 h-screen overflow-y-auto w-full">
+        
+      <h2>Dashboard</h2>
+
+      <div className="flex space-x-8 py-6">
+        <div className="flex flex-col rounded-md border w-[400px] h-[150px] p-8 justify-center">
+          <h2>Yatharth Verma</h2>
+          <p className="text-gray-500 mt-3">Your Expenses: Rs10000</p>
+        </div>
+        <div className="flex flex-col rounded-md border w-[400px] h-[150px] p-8 justify-center">
+          <h2>Yatharth Verma</h2>
+          <p className="text-gray-500 mt-3">Your Savings: Rs100000</p>
+        </div>
+      </div>
+      <div className="flex space-x-8 py-6 w-4/5">
+        <div className="flex flex-col rounded-md border w-full p-8 justify-center">
+          Expenses Graph
+
+
+
+        </div>
+      </div>
+      <div className="flex space-x-8 py-6">
+        <div className="flex flex-col rounded-md border  w-[400px] h-[200px] p-8 justify-center">
+          <h2>Your Activity</h2>
+          <li className="text-gray-500 mt-3">Sent Rs 10000 to mother</li>
+        </div>
+        <div className="flex flex-col rounded-md border w-[400px] h-[200px] p-8 justify-center">
+          <h2>Pending Bills</h2>
+          <li className="text-gray-500 mt-3">Broadband bill: Rs 1000</li>
+        </div>
+      </div>
     </div>
   );
-};
+}
 
 export default Dashboard;
