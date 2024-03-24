@@ -6,7 +6,8 @@ import SignIn from "./Components/Auth/SignIn";
 import SignUp from "./Components/Auth/SignUp";
 import AuthDetails from "./Components/Auth/AuthDetails";
 import ForgotPasswd from "./Components/Auth/ForgotPasswd";
-
+import Main from "./Components/Dashboard/Main";
+import "./styles/tailwind.css";
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
           <Route path="/" element={<SignUp />}/>
           <Route path="/signup" element={<SignUp />}/>
           <Route path="/login" element={<SignIn />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/main" element={<Main />} />
           <Route path="/forgot-password" element={<ForgotPasswd />} />
         </Routes>
       </BrowserRouter>
