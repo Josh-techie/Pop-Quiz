@@ -40,10 +40,11 @@ const DashboardHeader = ({
     navigate("/login");
   };
 
-  const handleSettingsClick = () => {
+  const handleSettingsProfilClick = () => {
     navigate("/account"); // Use navigate function to redirect to Account page
     setDropdownVisible(false);
   };
+
 
   return (
     <div className="flex justify-between items-center mb-8">
@@ -77,12 +78,15 @@ const DashboardHeader = ({
             className="absolute top-12 right-0 z-10 bg-white border border-gray-200 rounded-md shadow-md p-2"
           >
             <ul>
-              <li className="py-1 px-3 hover:bg-gray-100 cursor-pointer">
+              <li
+                className="py-1 px-3 hover:bg-gray-100 cursor-pointer"
+                onClick={handleSettingsProfilClick}
+              >
                 Profile
               </li>
               <li
                 className="py-1 px-3 hover:bg-gray-100 cursor-pointer"
-                onClick={handleSettingsClick}
+                onClick={handleSettingsProfilClick}
               >
                 Settings
               </li>
