@@ -15,9 +15,9 @@ export default function App() {
  
   return (
     <div className='flex'>
-          <Navbar />
 
-          <main className="grow ">
+      <Navbar />
+          <main className="main-content">
         {/* <Header /> */}
        
 
