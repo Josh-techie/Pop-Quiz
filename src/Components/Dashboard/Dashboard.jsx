@@ -40,8 +40,8 @@ function Dashboard() {
       <div className="bg-white rounded-lg p-6">
         {/* Dashboard Title */}
         <div className="flex flex-col space-y-2 mb-6">
-          <h2 className="text-gray-800 text-4xl font-bold">Select a topic</h2>
           <h1 className="text-2xl font-semibold">Dashboard</h1>
+          <h1 className="text-gray-800 text-4xl font-bold">Select a topic</h1>
         </div>
 
         {/* Cards */}

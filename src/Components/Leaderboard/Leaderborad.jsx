@@ -6,7 +6,7 @@ import DashboardHeader from "../Dashboard/Header";
 
 import Avatar from "../../Assets/avatar.png";
 
-function Technology() {
+function Leaderboard() {
   // Toggle dropdown
   const [showDropdown, setShowDropdown] = React.useState(false);
 
@@ -30,4 +30,4 @@ function Technology() {
   );
 }
 
-export default Technology;
+export default Leaderboard;
