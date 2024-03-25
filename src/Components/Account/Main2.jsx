@@ -19,8 +19,7 @@ export default function App() {
       <Navbar />
           <main className="main-content">
         {/* <Header /> */}
-       
-
+      
       <SimpleBar style={{ maxHeight: '100vh' }}>
         <ChakraProvider theme={theme}>
           <Cover />
