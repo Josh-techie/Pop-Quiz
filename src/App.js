@@ -1,6 +1,5 @@
 import React from "react";
 import "./styles/tailwind.css";
-import Dashboard from "./Components/Dashboard/Dashboard";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignIn from "./Components/Auth/SignIn";
 import SignUp from "./Components/Auth/SignUp";
@@ -10,14 +9,19 @@ import Main from "./Components/Dashboard/Main";
 import Main2 from "./Components/Account/Main2";
 import "./styles/tailwind.css";
 import Technology from "./Components/Quiz/Technology";
+import MakeQuiz from "./Components/MakeQuiz/MakeQuiz";
+import Leaderboard from "./Components/Leaderboard/Leaderborad";
+import Notifications from "./Components/Notifications/Notifications";
 
 function App() {
+  
   return (
     <div className="App">
       <BrowserRouter>
         {/* <Login /> */}
         {/* <SignIn />
         <SignUp /> */}
+
         <AuthDetails />
         <Routes>
           <Route path="/" element={<SignIn />} />
@@ -25,7 +29,11 @@ function App() {
           <Route path="/login" element={<SignIn />} />
           <Route path="/main" element={<Main />} />
           <Route path="/forgot-password" element={<ForgotPasswd />} />
+          {/*Navbar pages  */}
           <Route path="/account" element={<Main2 />}/>
+          <Route path="/makequiz" element={<MakeQuiz />}/>
+          <Route path="/notification" element={<Notifications />}/>
+          <Route path="/leaderboard" element={<Leaderboard />}/>
 
           {/* categories of the quiz routes */}
           <Route path="/technology" element={<Technology />} />
