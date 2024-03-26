@@ -12,6 +12,7 @@ import Technology from "./Components/Quiz/Technology";
 import MakeQuiz from "./Components/MakeQuiz/MakeQuiz";
 import Leaderboard from "./Components/Leaderboard/Leaderborad";
 import Notifications from "./Components/Notifications/Notifications";
+import QuizQuestions from "./Components/Quiz/QuizQuestions";
 
 function App() {
   
@@ -30,13 +31,18 @@ function App() {
           <Route path="/main" element={<Main />} />
           <Route path="/forgot-password" element={<ForgotPasswd />} />
           {/*Navbar pages  */}
-          <Route path="/account" element={<Main2 />}/>
-          <Route path="/makequiz" element={<MakeQuiz />}/>
-          <Route path="/notification" element={<Notifications />}/>
-          <Route path="/leaderboard" element={<Leaderboard />}/>
+          <Route path="/account" element={<Main2 />} />
+          <Route path="/makequiz" element={<MakeQuiz />} />
+          <Route path="/notification" element={<Notifications />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
 
           {/* categories of the quiz routes */}
           <Route path="/technology" element={<Technology />} />
+          {/* quiz questions */}
+          <Route
+            path="/technology/quiz-questions"
+            element={<QuizQuestions />}
+          />
         </Routes>
       </BrowserRouter>
     </div>
