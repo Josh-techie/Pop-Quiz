@@ -3,6 +3,7 @@ import Navbar from "../Dashboard/NavBar";
 import DashboardHeader from "../Dashboard/Header";
 import Avatar from "../../Assets/avatar.png";
 import CybersecQuestions from "../../Assets/Cyber-Security.jpg";
+import Timer from "./Timer";
 
 function QuizQuestions() {
   const [showDropdown, setShowDropdown] = React.useState(false);
@@ -29,8 +30,8 @@ function QuizQuestions() {
               <h2 className="text-4xl font-bold text-gray-700 mb-2">
                 History Quiz
               </h2>
-              <p className="text-4xl font-bold text-gray-700 mb-2">
-                Timer: 29:09mins
+              <p className="text-2xl font-bold text-gray-700 mb-2">
+                Timer: <Timer duration="30m" />
               </p>
             </div>
             {/* Description */}
