@@ -1,0 +1,37 @@
+[
+    {
+        "quiz_category": "Technology",
+        "quiz_category_img": "../../Assets/Cyber-Security.jpg",
+        "quiz_title": "Technology Quiz",
+        "quiz_description": "A quiz that tests your general knowledge in Technology.",
+        "quiz_nb_of_attempts": 1,
+        "quiz_nb_of_questions": 5,
+        "quiz_time_limit": "30m",
+        "quiz_points": 200,
+        "quiz_link": "https://example.com/quizzes/science",
+        "quiz_questions": [
+            {
+                "id": 1,
+                "question_text": "Which programming language is known for its versatility and is commonly used for web development?",
+                "options": [
+                    "Java",
+                    "Python",
+                    "C++",
+                    "Ruby"
+                ],
+                "correct_option": "Python"
+            },
+            {
+                "id": 2,
+                "question_text": "What does CPU stand for in computing jargon?",
+                "options": [
+                    "Central Processing Unit",
+                    "Computer Processing Unit",
+                    "Core Processing Unit",
+                    "Central Power Unit"
+                ],
+                "correct_option": "Central Processing Unit"
+            }
+        ]
+    }
+]

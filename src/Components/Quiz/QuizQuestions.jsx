@@ -4,9 +4,28 @@ import DashboardHeader from "../Dashboard/Header";
 import Avatar from "../../Assets/avatar.png";
 import CybersecQuestions from "../../Assets/Cyber-Security.jpg";
 import Timer from "./Timer";
+import quizData from "../Data/Quiz.json";
 
 function QuizQuestions() {
   const [showDropdown, setShowDropdown] = React.useState(false);
+
+
+  // fetch quiz title
+  const quizTitle = quizData[0].quiz_title;
+
+  // fetch the quiz data number of questions
+  const numberOfQuestions = quizData[0].quiz_nb_of_questions;
+ 
+ // fetch the id of the question from the quiz data in an array format
+  const ids = quizData[0].quiz_questions.map((question) => question.id);
+
+ // fetch quiz description
+ const quizDescription = quizData[0].quiz_description;
+
+ // fetch quiz questions
+const quizQuestions = quizData[0].quiz_questions.map(
+  (question) => question.question_text
+);
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -28,10 +47,10 @@ function QuizQuestions() {
           <div className="flex flex-col py-10 px-4 sm:px-8 md:px-16 h-auto sm:h-screen overflow-y-auto w-full bg-white rounded">
             <div className="flex justify-between items-center">
               <h2 className="text-4xl font-bold text-gray-700 mb-2">
-                History Quiz
+                {quizTitle}
               </h2>
               <p className="text-2xl font-bold text-gray-700 mb-2">
-                Timer: <Timer duration="30m" />
+                Timer: <Timer duration="1h" />
               </p>
             </div>
             {/* Description */}
@@ -42,14 +61,12 @@ function QuizQuestions() {
                 <div className="-mx-4 flex flex-wrap">
                   <div className="w-full px-4 lg:w-5/12">
                     <div className="hero-content">
-                      <h1 className="mb-10 text-2xl font-bold !leading-[1.208] text-dark dark:text-gray sm:text-[42px] lg:text-[40px] xl:text-5xl">
-                        Question 1/5
+                      <h1 className="mb-10 text-xl font-bold leading-[1.208] text-dark dark:text-gray sm:text-2xl lg:text-3xl xl:text-5xl">
+                        {" "}
+                        Question {ids[0]}/ {numberOfQuestions}
                       </h1>
                       <p className="mb-8 max-w-[480px] text-base text-body-color dark:text-dark-6 text-justify">
-                        Guy Bailey, Roy Hackett and Paul Stephenson made history
-                        in 1963, as part of a protest against a bus company that
-                        refused to employ black and Asian drivers in which UK
-                        city?
+                        {quizQuestions[0]}
                       </p>
                       {/* Add your questions and checkboxes here */}
                     </div>

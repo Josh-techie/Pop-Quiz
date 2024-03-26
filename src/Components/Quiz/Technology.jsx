@@ -134,8 +134,8 @@ function Technology() {
             </p>
 
             <p className="text-gray-800 mt-4">
-              To start, click the "Store" button. When finished, click the
-              "Submit" button.
+              To start, click the <b>Start Quiz</b> button. When finished, click
+              the <b> Submit </b> button.
             </p>
 
             {/* Start Quiz Button */}
