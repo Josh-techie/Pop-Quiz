@@ -118,6 +118,7 @@ const SignIn = () => {
 
               {/* Forgot password link */}
               <div className="text-right mt-2">
+                {/* Update the link to navigate to the "Forgot Password" page */}
                 <Link
                   to="/forgot-password"
                   className="text-sm font-semibold text-gray-700 hover:text-blue-700 focus:text-blue-700"
