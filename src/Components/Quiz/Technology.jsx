@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../Dashboard/NavBar";
 import DashboardHeader from "../Dashboard/Header";
 import Avatar from "../../Assets/avatar.png";
-import PicQuiz from "../../Assets/technology_card.png";
+import PicTechnology from "../../Assets/PicQuizTechnology.jpg";
 import QuizQuestions from "./QuizQuestions";
 import { useNavigate } from "react-router-dom";
 
@@ -91,7 +91,7 @@ function Technology() {
             {/* Image and Info */}
             <div className="flex items-center">
               <img
-                src={PicQuiz}
+                src={PicTechnology}
                 alt="Quiz Image"
                 className="w-2/4 p-0 rounded-md mr-8 select-none" // Added select-none to make the photo not selectable
               />
@@ -116,24 +116,24 @@ function Technology() {
             </div>
 
             {/* Instruction bold */}
-            <h2 className="text-xl font-bold text-gray-700 mb-2">
+            <h2 className="text-xl font-bold text-gray-700 mb-2 mt-4">
               Instructions
             </h2>
             {/* Description */}
-            <p className="text-gray-800 mt-4">
+            <p className="text-gray-800 mt-6">
               This quiz consists of 5 multiple-choice questions. To be
               successful with the quizzes, it's important to conversant with the
               topics. Keep the following in mind:
             </p>
 
-            <p className="text-gray-800 mt-4">
+            <p className="text-gray-800 mt-6">
               Timing - You need to complete each of your attempts in one
               sitting, as you are allotted 30 minutes to each attempt. Answers -
               You may review your answer-choices and compare them to the correct
               answers after your final attempt.
             </p>
 
-            <p className="text-gray-800 mt-4">
+            <p className="text-gray-800 mt-6">
               To start, click the <b>Start Quiz</b> button. When finished, click
               the <b> Submit </b> button.
             </p>
