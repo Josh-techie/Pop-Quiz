@@ -1,4 +1,5 @@
 import React, { useState, Fragment } from "react";
+import { MdTimer } from "react-icons/md";
 import Navbar from "../Dashboard/NavBar";
 import DashboardHeader from "../Dashboard/Header";
 import Avatar from "../../Assets/avatar.png";
@@ -14,7 +15,6 @@ function QuizQuestions() {
   const [selectedOption, setSelectedOption] = useState(null); // State to keep track of selected option
   const [userAnswers, setUserAnswers] = useState([]); // State to store user answers
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
-
 
   //to use redirections
   const navigate = useNavigate();
@@ -70,11 +70,14 @@ function QuizQuestions() {
   const handleRetry = () => {
     // Add your retry logic here
     setIsModalOpen(false); // Close the modal after handling the retry action
+    navigate("/technology");
   };
 
   const handleReview = () => {
-    // Add your review logic here
+    // Save user answers to local storage
+    localStorage.setItem("userAnswers", JSON.stringify(userAnswers));
     setIsModalOpen(false); // Close the modal after handling the review action
+    navigate("/quiz-review");
   };
 
   return (
@@ -95,8 +98,11 @@ function QuizQuestions() {
               <h2 className="text-4xl font-bold text-gray-700 mb-2">
                 {quizTitle}
               </h2>
-              <p className="text-2xl font-bold text-gray-700 mb-2">
-                Timer: <Timer duration={timeLimit} />
+              <p className="text-xl font-bold text-gray-700 mb-2">
+                <span className="flex items-center">
+                  <MdTimer className="mr-2" />
+                  <Timer duration={timeLimit} />
+                </span>
               </p>
             </div>
             {/* Description */}
@@ -196,41 +202,62 @@ function QuizQuestions() {
                     >
                       <div className="min-h-screen px-4 text-center">
                         <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-
                         <span
                           className="inline-block h-screen align-middle"
                           aria-hidden="true"
                         >
                           &#8203;
                         </span>
-
                         <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-                          <Dialog.Title
-                            as="h3"
-                            className="text-lg font-medium leading-6 text-gray-900"
-                          >
-                            Quiz Submitted
-                          </Dialog.Title>
-
+                          <div className="flex justify-between items-center mb-4">
+                            <Dialog.Title
+                              as="h3"
+                              className="text-lg font-medium leading-6 text-gray-900"
+                            >
+                              Quiz Submitted
+                            </Dialog.Title>
+                            {/* Close button */}
+                            <button
+                              type="button"
+                              className="text-gray-500 hover:text-gray-700"
+                              onClick={() => setIsModalOpen(false)}
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="h-6 w-6"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                            </button>
+                          </div>
                           <div className="mt-2">
                             <p className="text-sm text-gray-500">
                               Your answers have been submitted. What would you
                               like to do next?
                             </p>
                           </div>
-
-                          <div className="mt-4">
+                          <div className="mt-4 flex justify-center space-x-4">
+                            {/* Review button */}
                             <button
                               type="button"
-                              className="ml-4 inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                              // onClick={}
+                              className="flex-grow-0 flex-shrink-0 px-4 py-2 text-sm font-medium text-white bg-green-500 border border-transparent rounded-md hover:bg-green-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-green-500"
+                              onClick={handleReview}
                             >
                               Review
                             </button>
+                            {/* Retry button */}
                             <button
                               type="button"
-                              className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                              onClick={() => navigate("/technology")}
+                              className="flex-grow-0 flex-shrink-0 px-4 py-2 text-sm font-medium text-gray-900 bg-gray-100 border border-transparent rounded-md hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-500"
+                              onClick={handleRetry}
                             >
                               Retry
                             </button>

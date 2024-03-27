@@ -13,6 +13,7 @@ import MakeQuiz from "./Components/MakeQuiz/MakeQuiz";
 import Leaderboard from "./Components/Leaderboard/Leaderborad";
 import Notifications from "./Components/Notifications/Notifications";
 import QuizQuestions from "./Components/Quiz/QuizQuestions";
+import ReviewQuiz from "./Components/Quiz/ReviewQuiz";
 
 function App() {
   
@@ -39,10 +40,10 @@ function App() {
           {/* categories of the quiz routes */}
           <Route path="/technology" element={<Technology />} />
           {/* quiz questions */}
-          <Route
-            path="/technology/quiz-questions"
-            element={<QuizQuestions />}
-          />
+          <Route path="/quiz-questions" element={<QuizQuestions />} />
+
+          {/* review questions */}
+          <Route path="/quiz-review" element={<ReviewQuiz />} />
         </Routes>
       </BrowserRouter>
     </div>
