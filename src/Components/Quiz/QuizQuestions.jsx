@@ -1,34 +1,80 @@
-import React from "react";
+import React, { useState, Fragment } from "react";
 import Navbar from "../Dashboard/NavBar";
 import DashboardHeader from "../Dashboard/Header";
 import Avatar from "../../Assets/avatar.png";
 import CybersecQuestions from "../../Assets/Cyber-Security.jpg";
+import { useNavigate } from "react-router-dom";
 import Timer from "./Timer";
 import quizData from "../Data/Quiz.json";
+import { Dialog, Transition } from "@headlessui/react";
 
 function QuizQuestions() {
-  const [showDropdown, setShowDropdown] = React.useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null); // State to keep track of selected option
+  const [userAnswers, setUserAnswers] = useState([]); // State to store user answers
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
 
-  // fetch quiz title
+  //to use redirections
+  const navigate = useNavigate();
+
+  // Fetch quiz title
   const quizTitle = quizData[0].quiz_title;
 
-  // fetch the quiz data number of questions
-  const numberOfQuestions = quizData[0].quiz_nb_of_questions;
- 
- // fetch the id of the question from the quiz data in an array format
-  const ids = quizData[0].quiz_questions.map((question) => question.id);
+  // Fetch the quiz data number of questions
+  const numberOfQuestions = quizData[0].quiz_questions.length;
 
- // fetch quiz description
- const quizDescription = quizData[0].quiz_description;
+  // Fetch quiz description
+  const quizDescription = quizData[0].quiz_description;
 
- // fetch quiz questions
-const quizQuestions = quizData[0].quiz_questions.map(
-  (question) => question.question_text
-);
+  // Fetch quiz questions
+  const quizQuestions = quizData[0].quiz_questions.map(
+    (question) => question.question_text
+  );
+
+  // fetch the time quiz
+  const timeLimit = quizData[0].quiz_time_limit;
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
+  };
+
+  const handleNextQuestion = () => {
+    setCurrentQuestionIndex((prevIndex) =>
+      prevIndex < numberOfQuestions - 1 ? prevIndex + 1 : prevIndex
+    );
+    setSelectedOption(userAnswers[currentQuestionIndex + 1]); // Save selected option when moving to next question
+  };
+
+  const handlePreviousQuestion = () => {
+    setCurrentQuestionIndex((prevIndex) =>
+      prevIndex > 0 ? prevIndex - 1 : prevIndex
+    );
+    setSelectedOption(userAnswers[currentQuestionIndex - 1]); // Restore previous answer
+  };
+
+  const handleOptionChange = (option) => {
+    setSelectedOption(option);
+    setUserAnswers((prevAnswers) => {
+      const updatedAnswers = [...prevAnswers];
+      updatedAnswers[currentQuestionIndex] = option;
+      return updatedAnswers;
+    });
+  };
+
+  const handleSubmit = () => {
+    setIsModalOpen(true); // Show the modal on submit
+  };
+
+  const handleRetry = () => {
+    // Add your retry logic here
+    setIsModalOpen(false); // Close the modal after handling the retry action
+  };
+
+  const handleReview = () => {
+    // Add your review logic here
+    setIsModalOpen(false); // Close the modal after handling the review action
   };
 
   return (
@@ -50,7 +96,7 @@ const quizQuestions = quizData[0].quiz_questions.map(
                 {quizTitle}
               </h2>
               <p className="text-2xl font-bold text-gray-700 mb-2">
-                Timer: <Timer duration="1h" />
+                Timer: <Timer duration={timeLimit} />
               </p>
             </div>
             {/* Description */}
@@ -63,12 +109,11 @@ const quizQuestions = quizData[0].quiz_questions.map(
                     <div className="hero-content">
                       <h1 className="mb-10 text-xl font-bold leading-[1.208] text-dark dark:text-gray sm:text-2xl lg:text-3xl xl:text-5xl">
                         {" "}
-                        Question {ids[0]}/ {numberOfQuestions}
+                        Question {currentQuestionIndex + 1}/{numberOfQuestions}
                       </h1>
                       <p className="mb-8 max-w-[480px] text-base text-body-color dark:text-dark-6 text-justify">
-                        {quizQuestions[0]}
+                        {quizQuestions[currentQuestionIndex]}
                       </p>
-                      {/* Add your questions and checkboxes here */}
                     </div>
                   </div>
                   <div className="hidden px-4 lg:block lg:w-1/12"></div>
@@ -96,42 +141,104 @@ const quizQuestions = quizData[0].quiz_questions.map(
                     <h2 className="text-gray-500 text-2xl mb-4 pb-4">
                       Choose an answer
                     </h2>
-                    <label className="flex items-center mb-4">
-                      <input
-                        type="radio"
-                        name="answer"
-                        className="rounded text-gray-500 mr-4"
-                      />
-                      London
-                    </label>
-                    <label className="flex items-center mb-4">
-                      <input
-                        type="radio"
-                        name="answer"
-                        className="rounded text-gray-500 mr-4"
-                      />
-                      Liverpool
-                    </label>
-                    <label className="flex items-center mb-4">
-                      <input
-                        type="radio"
-                        name="answer"
-                        className="rounded text-gray-500 mr-4"
-                      />
-                      Canary
-                    </label>
-                    <label className="flex items-center mb-4">
-                      <input
-                        type="radio"
-                        name="answer"
-                        className="rounded text-gray-500 mr-4"
-                      />
-                      Agadir
-                    </label>
+                    {quizData[0].quiz_questions[
+                      currentQuestionIndex
+                    ].options.map((option, index) => (
+                      <label key={index} className="flex items-center mb-4">
+                        <input
+                          type="radio"
+                          name="answer"
+                          className="rounded text-gray-500 mr-4"
+                          checked={selectedOption === index}
+                          onChange={() => handleOptionChange(index)}
+                        />
+                        {option}
+                      </label>
+                    ))}
                   </div>
-                  <button className="bg-gray-700 hover:bg-gray-900 text-white font-semibold py-3 px-10 rounded-full mt-4 ml-auto">
-                    Next
+                  <button
+                    className={`${
+                      currentQuestionIndex === 0
+                        ? "bg-gray-700 opacity-50 cursor-not-allowed"
+                        : "bg-gray-700 hover:bg-gray-900"
+                    } text-white font-semibold py-3 px-10 rounded-full mt-4 ml-auto`}
+                    onClick={handlePreviousQuestion}
+                    disabled={currentQuestionIndex === 0}
+                  >
+                    Back
                   </button>
+
+                  <button
+                    className={`${
+                      currentQuestionIndex === numberOfQuestions - 1
+                        ? "bg-green-500 hover:bg-green-700"
+                        : "bg-gray-700 hover:bg-gray-900"
+                    }  text-white font-semibold py-3 px-10 rounded-full mt-4 ${
+                      currentQuestionIndex === numberOfQuestions - 1
+                        ? "cursor-pointer"
+                        : ""
+                    }`}
+                    onClick={
+                      currentQuestionIndex === numberOfQuestions - 1
+                        ? handleSubmit
+                        : handleNextQuestion
+                    }
+                  >
+                    {currentQuestionIndex === numberOfQuestions - 1
+                      ? "Submit"
+                      : "Next"}
+                  </button>
+                  <Transition appear show={isModalOpen} as={Fragment}>
+                    <Dialog
+                      as="div"
+                      className="fixed inset-0 z-10 overflow-y-auto"
+                      onClose={() => setIsModalOpen(false)}
+                    >
+                      <div className="min-h-screen px-4 text-center">
+                        <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+
+                        <span
+                          className="inline-block h-screen align-middle"
+                          aria-hidden="true"
+                        >
+                          &#8203;
+                        </span>
+
+                        <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+                          <Dialog.Title
+                            as="h3"
+                            className="text-lg font-medium leading-6 text-gray-900"
+                          >
+                            Quiz Submitted
+                          </Dialog.Title>
+
+                          <div className="mt-2">
+                            <p className="text-sm text-gray-500">
+                              Your answers have been submitted. What would you
+                              like to do next?
+                            </p>
+                          </div>
+
+                          <div className="mt-4">
+                            <button
+                              type="button"
+                              className="ml-4 inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                              // onClick={}
+                            >
+                              Review
+                            </button>
+                            <button
+                              type="button"
+                              className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                              onClick={() => navigate("/technology")}
+                            >
+                              Retry
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </Dialog>
+                  </Transition>
                 </div>
               </div>
             </div>
