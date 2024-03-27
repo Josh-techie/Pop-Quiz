@@ -1,5 +1,4 @@
 import React, { useState, Fragment } from "react";
-import { MdTimer } from "react-icons/md";
 import Navbar from "../Dashboard/NavBar";
 import DashboardHeader from "../Dashboard/Header";
 import Avatar from "../../Assets/avatar.png";
@@ -8,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Timer from "./Timer";
 import quizData from "../Data/Quiz.json";
 import { Dialog, Transition } from "@headlessui/react";
+import "../../styles/index.css";
 
 function QuizQuestions() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -100,7 +100,7 @@ function QuizQuestions() {
               </h2>
               <p className="text-xl font-bold text-gray-700 mb-2">
                 <span className="flex items-center">
-                  <MdTimer className="mr-2" />
+                  <div class="timer"></div>
                   <Timer duration={timeLimit} />
                 </span>
               </p>

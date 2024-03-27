@@ -4,6 +4,7 @@ import DashboardHeader from "../Dashboard/Header";
 import Avatar from "../../Assets/avatar.png";
 import PicTechnology from "../../Assets/PicQuizTechnology.jpg";
 import QuizQuestions from "./QuizQuestions";
+import quizData from "../Data/Quiz.json";
 import { useNavigate } from "react-router-dom";
 
 function Technology() {
@@ -11,6 +12,27 @@ function Technology() {
   const [showModal, setShowModal] = useState(false);
   const [timer, setTimer] = useState(30 * 60); // 30 minutes in seconds
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+
+  // render the page dynamically
+  // get the quititle from the quizData
+  const quizTitle = quizData[0].quiz_title;
+  // get quiz date from the quizData
+  const quizDate = quizData[0].quiz_date;
+
+  // get quiz time_limit
+  const quizTimeLimit = quizData[0].quiz_time_limit;
+
+  // nbr of attemps fetching
+  const quizAttempts = quizData[0].quiz_nb_of_attempts;
+
+  // fetch quiz points
+  const quizPoints = quizData[0].quiz_points;
+
+  // fetch quiz description
+  const quizDescription = quizData[0].quiz_description;
+
+  // fetch the number of questions from the data file
+  const nbrOfQuestions = quizData[0].quiz_nb_of_questions;
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -81,7 +103,7 @@ function Technology() {
           {/* Card */}
           <div className="flex flex-col py-10 px-4 sm:px-8 md:px-16 h-auto sm:h-screen overflow-y-auto w-full bg-white rounded">
             <h2 className="text-4xl font-bold text-gray-700 mb-2">
-              History Quiz
+              {quizTitle}
             </h2>
             {/* Description */}
             <p className="text-gray-800 mb-4">
@@ -98,39 +120,45 @@ function Technology() {
               <div className="flex flex-col">
                 {/* Description */}
                 <p className="text-gray-800 mb-10">
-                  <span className="font-bold">Date:</span> March 24, 2024
+                  <span className="font-bold">Date:</span> {quizDate}
                 </p>
                 {/* Description */}
                 <p className="text-gray-800 mb-10">
-                  <span className="font-bold">Time Limit:</span> 30min
+                  <span className="font-bold">Time Limit:</span> {quizTimeLimit}
                 </p>
                 {/* Description */}
                 <p className="text-gray-800 mb-10">
-                  <span className="font-bold">Attempts:</span> Once
+                  <span className="font-bold">Attempts:</span> {quizAttempts}
                 </p>
                 {/* Description */}
                 <p className="text-gray-800 mb-10">
-                  <span className="font-bold">Points:</span> 200 🌟
+                  <span className="font-bold">Points:</span> {quizPoints} 🌟
                 </p>
               </div>
             </div>
 
             {/* Instruction bold */}
             <h2 className="text-xl font-bold text-gray-700 mb-2 mt-4">
+              Description
+            </h2>
+            {/* Description */}
+            <p className="text-gray-800 mt-6 mb-6">{quizDescription}</p>
+
+            <h2 className="text-xl font-bold text-gray-700 mb-2 mt-4">
               Instructions
             </h2>
             {/* Description */}
             <p className="text-gray-800 mt-6">
-              This quiz consists of 5 multiple-choice questions. To be
-              successful with the quizzes, it's important to conversant with the
-              topics. Keep the following in mind:
+              This quiz consists of {nbrOfQuestions} multiple-choice questions.
+              To be successful with the quizzes, it's important to conversant
+              with the topics. Keep the following in mind:
             </p>
 
             <p className="text-gray-800 mt-6">
               Timing - You need to complete each of your attempts in one
-              sitting, as you are allotted 30 minutes to each attempt. Answers -
-              You may review your answer-choices and compare them to the correct
-              answers after your final attempt.
+              sitting, as you are allotted {quizTimeLimit} to each attempt.
+              Answers - You may review your answer-choices and compare them to
+              the correct answers after your final attempt.
             </p>
 
             <p className="text-gray-800 mt-6">
