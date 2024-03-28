@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 // Move redirect_home function outside the component
 function redirect_home(navigate) {
-  navigate("/dashboard");
+  navigate("/login");
 }
 
 const SignUp = () => {
