@@ -10,3 +10,71 @@
   padding-left: 2rem;
   padding-right: 2rem;
 }
+
+/* MakeQuiz and the other component in the dashboard that are comming soon */
+.loader {
+  width: 50px;
+  --b: 8px; 
+  aspect-ratio: 1;
+  border-radius: 50%;
+  padding: 1px;
+  background: conic-gradient(#0000 10%,#f03355) content-box;
+  -webkit-mask:
+    repeating-conic-gradient(#0000 0deg,#000 1deg 20deg,#0000 21deg 36deg),
+    radial-gradient(farthest-side,#0000 calc(100% - var(--b) - 1px),#000 calc(100% - var(--b)));
+  -webkit-mask-composite: destination-in;
+          mask-composite: intersect;
+  animation:l4 1s infinite steps(10);
+}
+@keyframes l4 {to{transform: rotate(1turn)}}
+
+/* timer animation in quiz-questions component */
+.timer {
+  --c1:#673b14;
+  --c2:#f8b13b;
+  width: 40px;
+  height: 60px;
+  border-top: 4px solid var(--c1);
+  border-bottom: 4px solid var(--c1);
+  background: linear-gradient(90deg, var(--c1) 2px, var(--c2) 0 5px,var(--c1) 0) 50%/7px 8px no-repeat;
+  display: grid;
+  overflow: hidden;
+  animation: l5-0 2s infinite linear;
+}
+.timer::before,
+.timer::after {
+  content: "";
+  grid-area: 1/1;
+  width: 75%;
+  height: calc(50% - 4px);
+  margin: 0 auto;
+  border: 2px solid var(--c1);
+  border-top: 0;
+  box-sizing: content-box;
+  border-radius: 0 0 40% 40%;
+  -webkit-mask: 
+    linear-gradient(#000 0 0) bottom/4px 2px no-repeat,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: destination-out;
+          mask-composite: exclude;
+  background: 
+    linear-gradient(var(--d,0deg),var(--c2) 50%,#0000 0) bottom /100% 205%,
+    linear-gradient(var(--c2) 0 0) center/0 100%;
+  background-repeat: no-repeat;
+  animation: inherit;
+  animation-name: l5-1;
+}
+.timer::after {
+  transform-origin: 50% calc(100% + 2px);
+  transform: scaleY(-1);
+  --s:3px;
+  --d:180deg;
+}
+@keyframes l5-0 {
+  80%  {transform: rotate(0)}
+  100% {transform: rotate(0.5turn)}
+}
+@keyframes l5-1 {
+  10%,70%  {background-size:100% 205%,var(--s,0) 100%}
+  70%,100% {background-position: top,center}
+}

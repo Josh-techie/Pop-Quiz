@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import Technology from "../../Assets/technology_card.png";
-import Medicine from "../../Assets/medicine_card.png";
-import History from "../../Assets/history_card.png";
-import Agriculture from "../../Assets/agriculture_card.png";
+import Technology from "../../Assets/technology_card.jpg";
+import Medicine from "../../Assets/medicine_card.jpg";
+import History from "../../Assets/history_card.jpg";
+import Agriculture from "../../Assets/agriculture_card.jpg";
 import Avatar from "../../Assets/avatar.png";
+import Linguistics from "../../Assets/linguistics_card.jpg";
+import Mythology from "../../Assets/mythology_card.jpeg";
+import Art from "../../Assets/art_card.jpg";
+import Sports from "../../Assets/sports_card.jpg";
 import DashboardHeader from "./Header";
 import { Link } from "react-router-dom";
 
@@ -48,12 +52,27 @@ function Dashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           <Card title="Technology" image={Technology} cardLink="/technology" />
           <Card title="Medicine" image={Medicine} cardLink="/medicine" />
-          <Card title="Agriculture" image={History} cardLink="/agriculture" />
-          <Card title="History" image={Agriculture} cardLink="/history" />
-          <Card title="Technology" image={Technology} cardLink="/technology" />
-          <Card title="Medicine" image={Medicine} cardLink="/medicine" />
-          <Card title="Agriculture" image={History} cardLink="/agriculture" />
-          <Card title="History" image={Agriculture} cardLink="/history" />
+          <Card
+            title="Agriculture"
+            image={Agriculture}
+            cardLink="/agriculture"
+          />
+          <Card title="History" image={History} cardLink="/history" />
+          <Card title="Art" image={Art} cardLink="/Art" />
+          <Card
+            title="Mythology"
+            image={Mythology}
+            cardLink="/Mythology"
+          />{" "}
+
+          <Card title="Sports" image={Sports} cardLink="/Sports" />{" "}
+          {/*Mythology  */}
+          <Card
+            title="Linguistics"
+            image={Linguistics}
+            cardLink="/Linguistics"
+          />{" "}
+          {/*Linguistics */}
         </div>
       </div>
     </div>

@@ -1,0 +1,106 @@
+[
+    {
+        "quiz_category": "Technology",
+        "quiz_category_img": "../../Assets/Cyber-Security.jpg",
+        "quiz_title": "Technology Quiz",
+        "quiz_description": "Welcome to our exciting quiz where we delve deep into the groundbreaking world of technology, particularly focusing on the field of computers. Join us as we explore the inner workings of these technological marvels, testing your knowledge and understanding of the latest advancements and innovations. Get ready to uncover the secrets behind the technologies that shape our modern world and see how well you fare in this immersive journey through the realm of computer science. Are you ready to challenge yourself and expand your knowledge of cutting-edge technologies? Let's dive in and discover the wonders of the digital age together!",
+        "quiz_nb_of_attempts": 1,
+        "quiz_nb_of_questions": 5,
+        "quiz_date": "28/09/2023",
+        "quiz_time_limit": "30m",
+        "quiz_points": 200,
+        "quiz_link": "https://example.com/quizzes/science",
+        "quiz_questions": [
+            {
+                "id": 1,
+                "question_text": "Which programming language is known for its versatility and is commonly used for web development?",
+                "options": [
+                    "Java",
+                    "Python",
+                    "C++",
+                    "Ruby"
+                ],
+                "correct_option": "Python"
+            },
+            {
+                "id": 2,
+                "question_text": "What does CPU stand for in computing jargon?",
+                "options": [
+                    "Central Processing Unit",
+                    "Computer Processing Unit",
+                    "Core Processing Unit",
+                    "Central Power Unit"
+                ],
+                "correct_option": "Central Processing Unit"
+            },
+            {
+                "id": 3,
+                "question_text": "What does HTTP stand for?",
+                "options": [
+                    "Hyper Text Transfer Protocol",
+                    "Hyper Text Transmission Protocol",
+                    "Hyper Text Transfer Port",
+                    "High Transfer Text Protocol"
+                ],
+                "correct_option": "Hyper Text Transfer Protocol"
+            },
+            {
+                "id": 4,
+                "question_text": "Which programming language is often used for building iOS and macOS applications?",
+                "options": [
+                    "Swift",
+                    "Java",
+                    "JavaScript",
+                    "C#"
+                ],
+                "correct_option": "Swift"
+            },
+            {
+                "id": 5,
+                "question_text": "What does SMTP stand for?",
+                "options": [
+                    "Simple Mail Transfer Protocol",
+                    "Secure Mail Transfer Protocol",
+                    "Server Mail Transfer Protocol",
+                    "System Mail Transfer Protocol"
+                ],
+                "correct_option": "Simple Mail Transfer Protocol"
+            }
+        ]
+    },
+    {
+        "quiz_category": "Science",
+        "quiz_category_img": "../../Assets/Science.jpg",
+        "quiz_title": "Science Quiz",
+        "quiz_description": "A quiz that tests your general knowledge in Science.",
+        "quiz_nb_of_attempts": 1,
+        "quiz_nb_of_questions": 5,
+        "quiz_time_limit": "30m",
+        "quiz_points": 200,
+        "quiz_link": "https://example.com/quizzes/science",
+        "quiz_questions": [
+            {
+                "id": 1,
+                "question_text": "What is the chemical symbol for the element oxygen?",
+                "options": [
+                    "O",
+                    "Ox",
+                    "O2",
+                    "O3"
+                ],
+                "correct_option": "O"
+            },
+            {
+                "id": 2,
+                "question_text": "What is the powerhouse of the cell?",
+                "options": [
+                    "Nucleus",
+                    "Mitochondria",
+                    "Ribosome",
+                    "Endoplasmic reticulum"
+                ],
+                "correct_option": "Mitochondria"
+            }
+        ]
+    }
+]

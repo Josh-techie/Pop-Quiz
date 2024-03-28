@@ -14,7 +14,8 @@ const AuthDetails = () => {
         setAuthUser(user);
       } else if (
         !location.pathname.includes("/login") &&
-        !location.pathname.includes("/signup")
+        !location.pathname.includes("/signup") &&
+        !location.pathname.includes("/forgot-password")
       ) {
         navigate("/login"); // Redirect to the login page if not authenticated
       }

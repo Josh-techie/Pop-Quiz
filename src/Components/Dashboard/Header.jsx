@@ -3,6 +3,8 @@ import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 import PropTypes from "prop-types"; // Import PropTypes for prop validation
 import defaultAvatar from "../../Assets/avatar.png";
+import { Link } from "react-router-dom";
+
 
 const DashboardHeader = ({
   toggleDropdown,
@@ -57,9 +59,11 @@ const DashboardHeader = ({
         <FaSearch className="absolute top-1/2 left-2 transform -translate-y-1/2 text-gray-400" />
       </div>
 
-      <button className="bg-gray-700 hover:bg-gray-900 text-white font-semibold py-2 px-8 rounded-full mr-4">
-        Start Quiz
-      </button>
+      <Link to="/makequiz">
+        <button className="bg-gray-700 hover:bg-gray-900 text-white font-semibold py-2 px-8 rounded-full mr-4">
+          Create your Quiz
+        </button>
+      </Link>
 
       <div className="relative">
         <div

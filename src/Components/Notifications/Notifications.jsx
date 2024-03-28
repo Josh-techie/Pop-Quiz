@@ -25,6 +25,11 @@ function Notifications() {
           showDropdown={showDropdown}
           Avatar={Avatar}
         />
+        <div className="flex items-center justify-center h-screen">
+          <div class="loader"></div>
+          <br></br>
+          <h2 className="text-4xl">Coming Soon</h2>
+        </div>
       </main>
     </div>
   );
