@@ -168,9 +168,9 @@ function QuizQuestions() {
                   <button
                     className={`${
                       currentQuestionIndex === 0
-                        ? "bg-gray-700 opacity-50 cursor-not-allowed"
-                        : "bg-gray-700 hover:bg-gray-900"
-                    } text-white font-semibold py-3 px-10 rounded-full mt-4 ml-auto`}
+                        ? "bg-gray-700 opacity-50 cursor-not-allowed mr-2"
+                        : "bg-gray-700 hover:bg-gray-900 mr-2"
+                    } text-white font-semibold py-3 px-10 rounded-full mt-4 ml-auto mr-2`}
                     onClick={handlePreviousQuestion}
                     disabled={currentQuestionIndex === 0}
                   >

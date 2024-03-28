@@ -102,50 +102,79 @@ function Technology() {
 
           {/* Card */}
           <div className="flex flex-col py-10 px-4 sm:px-8 md:px-16 h-auto sm:h-screen overflow-y-auto w-full bg-white rounded">
-            <h2 className="text-lg font-bold text-gray-700 mb-2">
-              History Quiz
+            <h2 className="text-4xl font-bold text-gray-700 mb-2">
+              {quizTitle}
             </h2>
             {/* Description */}
-            <p className="text-gray-800 mb-4">Read the following instructions</p>
+            <p className="text-gray-800 mb-4">
+              Read the following instructions
+            </p>
 
             {/* Image and Info */}
-            <div className="flex flex-col sm:flex-row items-stretch w-full">
+            <div className="flex items-center">
               <img
                 src={PicTechnology}
                 alt="Quiz Image"
-                className="w-1/2 h-auto rounded-md flex-grow p-0"
+                className="w-2/4 p-0 rounded-md mr-8 select-none" // Added select-none to make the photo not selectable
               />
               <div className="flex flex-col">
                 {/* Description */}
-                <p className="text-gray-800 mb-2">
-                  <span className="font-bold">Date:</span> March 24, 2024
+                <p className="text-gray-800 mb-10">
+                  <span className="font-bold">Date:</span> {quizDate}
                 </p>
                 {/* Description */}
-                <p className="text-gray-800 mb-2">
-                  <span className="font-bold">Time Limit:</span> 30min
+                <p className="text-gray-800 mb-10">
+                  <span className="font-bold">Time Limit:</span> {quizTimeLimit}
                 </p>
                 {/* Description */}
-                <p className="text-gray-800 mb-2">
-                  <span className="font-bold">Attempts:</span> Once
+                <p className="text-gray-800 mb-10">
+                  <span className="font-bold">Attempts:</span> {quizAttempts}
                 </p>
                 {/* Description */}
-                <p className="text-gray-800 mb-2">
-                  <span className="font-bold">Points:</span> 200 🌟
+                <p className="text-gray-800 mb-10">
+                  <span className="font-bold">Points:</span> {quizPoints} ⭐
                 </p>
               </div>
             </div>
 
             {/* Instruction bold */}
-            <h2 className="text-lg font-bold text-gray-700 mb-2">
+            <h2 className="text-xl font-bold text-gray-700 mb-2 mt-4">
+              Description
+            </h2>
+            {/* Description */}
+            <p className="text-gray-800 mt-6 mb-6">{quizDescription}</p>
+
+            <h2 className="text-xl font-bold text-gray-700 mb-2 mt-4">
               Instructions
             </h2>
             {/* Description */}
-            <p className="text-gray-800 mt-4">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-              auctor ultricies sem nec sagittis. Quisque id velit sed lorem
-              ultricies feugiat vel ac libero. Nam fermentum consectetur eros,
-              eu ultricies neque mollis at.
+            <p className="text-gray-800 mt-6">
+              This quiz consists of {nbrOfQuestions} multiple-choice questions.
+              To be successful with the quizzes, it's important to conversant
+              with the topics. Keep the following in mind:
             </p>
+
+            <p className="text-gray-800 mt-6">
+              Timing - You need to complete each of your attempts in one
+              sitting, as you are allotted {quizTimeLimit} to each attempt.
+              Answers - You may review your answer-choices and compare them to
+              the correct answers after your final attempt.
+            </p>
+
+            <p className="text-gray-800 mt-6">
+              To start, click the <b>Start Quiz</b> button. When finished, click
+              the <b> Submit </b> button.
+            </p>
+
+            {/* Start Quiz Button */}
+            <div className="flex justify-end mt-6">
+              <button
+                className="bg-gray-700 hover:bg-gray-900 text-white font-semibold py-2 px-8 rounded-full"
+                onClick={openModal}
+              >
+                Start Quiz
+              </button>
+            </div>
           </div>
         </main>
       </div>
