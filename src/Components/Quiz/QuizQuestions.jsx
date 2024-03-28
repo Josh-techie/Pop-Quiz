@@ -64,9 +64,11 @@ function QuizQuestions() {
   };
 
   const handleSubmit = () => {
+    // Store user answers in local storage
+    localStorage.setItem("userAnswers", JSON.stringify(userAnswers));
     setIsModalOpen(true); // Show the modal on submit
   };
-
+  
   const handleRetry = () => {
     // Add your retry logic here
     setIsModalOpen(false); // Close the modal after handling the retry action

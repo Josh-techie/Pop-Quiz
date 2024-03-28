@@ -20,7 +20,7 @@
                     "C++",
                     "Ruby"
                 ],
-                "correct_option": "Python"
+                "correct_option": 1
             },
             {
                 "id": 2,
@@ -31,7 +31,7 @@
                     "Core Processing Unit",
                     "Central Power Unit"
                 ],
-                "correct_option": "Central Processing Unit"
+                "correct_option": 0
             },
             {
                 "id": 3,
@@ -42,7 +42,7 @@
                     "Hyper Text Transfer Port",
                     "High Transfer Text Protocol"
                 ],
-                "correct_option": "Hyper Text Transfer Protocol"
+                "correct_option": 0
             },
             {
                 "id": 4,
@@ -53,7 +53,7 @@
                     "JavaScript",
                     "C#"
                 ],
-                "correct_option": "Swift"
+                "correct_option": 0
             },
             {
                 "id": 5,
@@ -64,7 +64,7 @@
                     "Server Mail Transfer Protocol",
                     "System Mail Transfer Protocol"
                 ],
-                "correct_option": "Simple Mail Transfer Protocol"
+                "correct_option": 0
             }
         ]
     },
@@ -88,7 +88,7 @@
                     "O2",
                     "O3"
                 ],
-                "correct_option": "O"
+                "correct_option": 0
             },
             {
                 "id": 2,
@@ -99,7 +99,7 @@
                     "Ribosome",
                     "Endoplasmic reticulum"
                 ],
-                "correct_option": "Mitochondria"
+                "correct_option": 1
             }
         ]
     }
