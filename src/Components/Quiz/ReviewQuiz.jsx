@@ -73,8 +73,8 @@ function ReviewQuiz() {
               </div>
             ))}
           <Link to="/Main">
-        <button className="bg-gray-700 hover:bg-gray-900 text-white font-semibold py-2 px-8 rounded-full ">
-          Finish Reviewing
+        <button className="bg-gray-700 hover:bg-gray-900 text-white font-semibold py-2 px-8 rounded-full float-right">
+          Finish Review
         </button>
       </Link>
           </div>
