@@ -50,14 +50,11 @@ function ReviewQuiz() {
 
                     let colorClass = "";
 
-                    if (isSelected && isCorrect) {
+                    if (isSelected&&isCorrect) {
                       colorClass = "bg-green-200";
-                    } else if (!isSelected && isCorrect) {
-                      colorClass = "bg-green-200";
-                    } else if (isSelected && !isCorrect) {
+                    }else if (isSelected&&!isCorrect){
                       colorClass = "bg-red-200";
-                    } else {
-                      colorClass = "transparent";
+                      
                     }
 
                     return (
