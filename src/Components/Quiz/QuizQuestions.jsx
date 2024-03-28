@@ -64,6 +64,7 @@ function QuizQuestions() {
   };
 
   const handleSubmit = () => {
+    
     // Store user answers in local storage
     localStorage.setItem("userAnswers", JSON.stringify(userAnswers));
     setIsModalOpen(true); // Show the modal on submit

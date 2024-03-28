@@ -48,11 +48,22 @@ function ReviewQuiz() {
                     const isCorrect = userAnswers[index] === correctAnswerIndex;
                     const isSelected = userAnswers[index] === optionIndex;
 
+                    let colorClass = "";
+
+                    if (isSelected && isCorrect) {
+                      colorClass = "bg-green-200";
+                    } else if (!isSelected && isCorrect) {
+                      colorClass = "bg-green-200";
+                    } else if (isSelected && !isCorrect) {
+                      colorClass = "bg-red-200";
+                    } else {
+                      colorClass = "transparent";
+                    }
+
                     return (
                       <div
                         key={optionIndex}
-                        className={`py-2 px-4 rounded ${isSelected && isCorrect ? "bg-green-200" : !isSelected && isCorrect ? "bg-green-200" : isSelected&&!isCorrect ? "bg-red-200" : ""
-                          }`}
+                        className={`py-2 px-4 rounded ${colorClass}`}
                       >
                         <p>{option}</p>
                       </div>
