@@ -3,6 +3,7 @@ import Navbar from "../Dashboard/NavBar";
 import DashboardHeader from "../Dashboard/Header";
 import Avatar from "../../Assets/avatar.png";
 import quizData from "../Data/Quiz.json";
+import { Link } from "react-router-dom";
 
 function ReviewQuiz() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -20,9 +21,11 @@ function ReviewQuiz() {
     }
   }, []);
 
-  // Function to get the correct answer index for a given question
-  const getCorrectAnswerIndex = (questionIndex) => {
-    return quizData[0].quiz_questions[questionIndex].correct_option;
+  // Function to get the correct option for a given question
+  const getCorrectOption = (questionIndex) => {
+    return quizData[0].quiz_questions[questionIndex].options[
+      quizData[0].quiz_questions[questionIndex].correct_option
+    ];
   };
 
   return (
@@ -44,16 +47,17 @@ function ReviewQuiz() {
                 </h2>
                 <div className="grid gap-2">
                   {question.options.map((option, optionIndex) => {
-                    const correctAnswerIndex = getCorrectAnswerIndex(index);
-                    const isCorrect = userAnswers[index] === correctAnswerIndex;
                     const isSelected = userAnswers[index] === optionIndex;
+                    const isCorrect = option === getCorrectOption(index);
 
                     let colorClass = "";
 
                     if (isSelected && isCorrect) {
-                      colorClass = "bg-green-200";
-                    }  else if (isSelected && !isCorrect) {
-                      colorClass = "bg-red-200";
+                      colorClass = "bg-green-200"; // Selected and correct
+                    } else if (!isSelected && isCorrect) {
+                      colorClass = "bg-green-200"; // Correct but not selected
+                    } else if (isSelected && !isCorrect) {
+                      colorClass = "bg-red-200"; // Selected but incorrect
                     }
 
                     return (
@@ -68,6 +72,11 @@ function ReviewQuiz() {
                 </div>
               </div>
             ))}
+          <Link to="/Main">
+        <button className="bg-gray-700 hover:bg-gray-900 text-white font-semibold py-2 px-8 rounded-full ">
+          Finish Reviewing
+        </button>
+      </Link>
           </div>
         </main>
       </div>
