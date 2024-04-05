@@ -130,16 +130,41 @@ npm run start
 
 <h2> Contributors </h2>
 
-### Hall of Fame
+<div class="contributors">
+ <span>
+ <img src="https://github.com/identicons/johndoe.png" alt="Josh-Techie" class="avatar">
+ <span class="description">
+ Main developer and repository owner who created the code and implemented the design mockups into responsive code. Currently, I am the sole maintainer of the repository. 😊
+ </span>
+ </span>
+ <span>
+ <img src="https://github.com/identicons/janesmith.png" alt="saad484" class="avatar">
+ <span class="description">
+ First collaborator, friend of mine, helped fix a bug, and design the pages in Figma. 🙃
+ </span>
+ </span>
+</div>
 
-- **Josh-Techie**
+<style>
+.contributors {
+ display: flex;
+ align-items: center;
+ overflow-x: auto;
+}
 
-  - ![Josh-Techie](https://github.com/identicons/johndoe.png)
-  - I am the main developer and repository owner who created the code and implemented the design mockups into responsive code. Currently, I am the sole maintainer of the repository. 😊
+.avatar {
+ width: 50px;
+ height: 50px;
+ border-radius: 50%;
+ object-fit: cover;
+ margin-right: 10px;
+}
 
-- **saad484**
-  - ![saad484](https://github.com/identicons/janesmith.png)
-  - First collaborator, friend of mine, helped fix a bug, and design the pages in Figma. 🙃
+.description {
+ margin-top: 5px;
+ font-size: 14px;
+}
+</style>
 
 ---
 
