@@ -220,7 +220,7 @@ function Medicine() {
                   type="button"
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-700 text-base font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:ml-3 sm:w-auto sm:text-sm"
                   onClick={() => {
-                    navigate("/quiz-questions"); // Replace "/quiz-questions" with the desired path to QuizQuestions component
+                    navigate("/medicinequestions"); // Replace "/quiz-questions" with the desired path to QuizQuestions component
                     closeModal(); // Close the modal after redirection
                   }}
                 >

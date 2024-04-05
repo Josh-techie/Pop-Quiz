@@ -2,14 +2,14 @@ import React, { useState, Fragment } from "react";
 import Navbar from "../Dashboard/NavBar";
 import DashboardHeader from "../Dashboard/Header";
 import Avatar from "../../Assets/avatar.png";
-import ITQuizQuestion from "../../Assets/itQuestions.jpeg";
+import medicineQuestions from "../../Assets/medicineQuestions.jpg";
 import { useNavigate } from "react-router-dom";
 import Timer from "./Timer";
 import quizData from "../Data/Quiz.json";
 import { Dialog, Transition } from "@headlessui/react";
 import "../../styles/index.css";
 
-function QuizQuestions() {
+function MedicineQuestions() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null); // State to keep track of selected option
@@ -20,21 +20,21 @@ function QuizQuestions() {
   const navigate = useNavigate();
 
   // Fetch quiz title
-  const quizTitle = quizData[0].quiz_title;
+  const quizTitle = quizData[1].quiz_title;
 
   // Fetch the quiz data number of questions
-  const numberOfQuestions = quizData[0].quiz_questions.length;
+  const numberOfQuestions = quizData[1].quiz_questions.length;
 
   // Fetch quiz description
-  const quizDescription = quizData[0].quiz_description;
+  const quizDescription = quizData[1].quiz_description;
 
   // Fetch quiz questions
-  const quizQuestions = quizData[0].quiz_questions.map(
+  const quizQuestions = quizData[1].quiz_questions.map(
     (question) => question.question_text
   );
 
   // fetch the time quiz
-  const timeLimit = quizData[0].quiz_time_limit;
+  const timeLimit = quizData[1].quiz_time_limit;
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -64,23 +64,22 @@ function QuizQuestions() {
   };
 
   const handleSubmit = () => {
-    
     // Store user answers in local storage
     localStorage.setItem("userAnswers", JSON.stringify(userAnswers));
     setIsModalOpen(true); // Show the modal on submit
   };
-  
+
   const handleRetry = () => {
     // Add your retry logic here
     setIsModalOpen(false); // Close the modal after handling the retry action
-    navigate("/technology");
+    navigate("/medicine");
   };
 
   const handleReview = () => {
     // Save user answers to local storage
     localStorage.setItem("userAnswers", JSON.stringify(userAnswers));
     setIsModalOpen(false); // Close the modal after handling the review action
-    navigate("/quiz-review");
+    navigate("/quiz-review-medicine");
   };
 
   return (
@@ -130,7 +129,7 @@ function QuizQuestions() {
                     <div className="lg:mr-auto lg:text-left">
                       <div className="relative z-10 inline-block pt-11 lg:pt-0">
                         <img
-                          src={ITQuizQuestion}
+                          src={medicineQuestions}
                           alt="hero"
                           className="max-w-full lg:ml-auto rounded-md"
                         />
@@ -150,7 +149,7 @@ function QuizQuestions() {
                     <h2 className="text-gray-500 text-2xl mb-4 pb-4">
                       Choose an answer
                     </h2>
-                    {quizData[0].quiz_questions[
+                    {quizData[1].quiz_questions[
                       currentQuestionIndex
                     ].options.map((option, index) => (
                       <label key={index} className="flex items-center mb-4">
@@ -279,4 +278,4 @@ function QuizQuestions() {
   );
 }
 
-export default QuizQuestions;
+export default MedicineQuestions;

@@ -7,7 +7,7 @@
         "quiz_nb_of_attempts": 2,
         "quiz_nb_of_questions": 5,
         "quiz_date": "28/09/2023",
-        "quiz_time_limit": "10m",
+        "quiz_time_limit": "5m",
         "quiz_points": 200,
         "quiz_link": "https://example.com/quizzes/science",
         "quiz_questions": [

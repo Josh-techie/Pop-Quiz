@@ -16,6 +16,8 @@ import QuizQuestions from "./Components/Quiz/QuizQuestions";
 import ReviewQuiz from "./Components/Quiz/ReviewQuiz";
 import Medicine from "./Components/Quiz/Medicine";
 import Agriculture from "./Components/Quiz/Agriculture";
+import MedicineQuestions from "./Components/Quiz/MedicineQuestions";
+import ReviewQuizMedicine from "./Components/Quiz/ReviewQuizMedicine";
 
 function App() {
   return (
@@ -41,7 +43,12 @@ function App() {
           {/* categories of the quiz routes */}
           <Route path="/technology" element={<Technology />} />
           <Route path="/medicine" element={<Medicine />} />
+          <Route path="/medicinequestions" element={<MedicineQuestions />} />
           <Route path="/agriculture" element={<Agriculture />} />
+          <Route
+            path="/quiz-review-medicine"
+            element={<ReviewQuizMedicine />}
+          />
           {/* quiz questions */}
           <Route path="/quiz-questions" element={<QuizQuestions />} />
 
