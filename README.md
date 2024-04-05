@@ -78,15 +78,6 @@
 
 ---
 
-## Collaborators
-
-| Name        | Photo                                                                                                           |
-| ----------- | --------------------------------------------------------------------------------------------------------------- |
-| Josh-Techie | ![Owner](https://avatars.githubusercontent.com/u/95583855?s=400&u=8bfc3a54ebda84af0684a79b4085486e7adff237&v=4) |
-| saad484     | ![First-Collab](https://avatars.githubusercontent.com/u/77203662?v=4)                                           |
-
----
-
 <h2>  Getting Started</h2>
 
 - To start using Pop Quiz, you can either check the deployed version online at [Pop Quiz](https://pop-quiz-five.vercel.app/) or follow those steps to get up and running in your local machine:
@@ -133,7 +124,22 @@ npm run start
 
 - If you have skills in design and would like to contribute to further enhancing the user interface and experience, your expertise would be invaluable. Feel free to reach out to me via [youssef.abouyahia@e-polytechnique.ma](mailto:youssef.abouyahia@e-polytechnique.ma) or find more about my socials in the About Repo Owner section.
 
-<h4> To view the original mockups on Figma, please visit: [Mockups](https://www.figma.com/file/KoSmTUMKXap4xoZb18GbW6/Quiz-Game-(Community)?type=design&mode=design&t=UbOu3GlL52LrT2ZG-1) </h4>
+- **To view the original mockups on Figma, please visit: [Mockups](<https://www.figma.com/file/KoSmTUMKXap4xoZb18GbW6/Quiz-Game-(Community)?type=design&mode=design&t=UbOu3GlL52LrT2ZG-1>)**
+
+---
+
+<h2> Contributors </h2>
+
+### Hall of Fame
+
+- **Josh-Techie**
+
+  - ![Josh-Techie](https://github.com/identicons/johndoe.png)
+  - I am the main developer and repository owner who created the code and implemented the design mockups into responsive code. Currently, I am the sole maintainer of the repository. 😊
+
+- **saad484**
+  - ![saad484](https://github.com/identicons/janesmith.png)
+  - First collaborator, friend of mine, helped fix a bug, and design the pages in Figma. 🙃
 
 ---
 
