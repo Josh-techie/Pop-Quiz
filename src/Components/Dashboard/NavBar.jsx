@@ -61,15 +61,18 @@ function Navbar({ activeRoute }) {
       </div>
 
       <div className="logo-div flex space-x-4 items-center">
-        <img src={Logo} alt="logo" width={170} />
+        <Link to="/main">
+          <img src={Logo} alt="logo" width={170} />
+        </Link>
       </div>
 
       <div className="flex flex-col space-y-8 mt-12">
         <div className="nav-links w-full">
           <Link
             to="/main"
-            className={`flex space-x-3 w-full p-2 rounded ${location.pathname === "/main" ? "bg-[#494E52] text-white" : ""
-              }`}
+            className={`flex space-x-3 w-full p-2 rounded ${
+              location.pathname === "/main" ? "bg-[#494E52] text-white" : ""
+            }`}
           >
             <LayoutDashboard />
             <span className={!isExpanded ? "hidden" : "block"}>Dashboard</span>
@@ -79,30 +82,41 @@ function Navbar({ activeRoute }) {
         <div className="nav-links w-full">
           <Link
             to="/makequiz"
-            className={`flex space-x-3 w-full p-2 rounded ${location.pathname === "/makequiz" ? "bg-[#494E52] text-white" : ""
-              }`}
+            className={`flex space-x-3 w-full p-2 rounded ${
+              location.pathname === "/makequiz" ? "bg-[#494E52] text-white" : ""
+            }`}
           >
             <BookMarkedIcon />
-            <span className={!isExpanded ? "hidden" : "block"}>Make a Quiz</span>
+            <span className={!isExpanded ? "hidden" : "block"}>
+              Make a Quiz
+            </span>
           </Link>
         </div>
 
         <div className="nav-links w-full">
           <Link
             to="/leaderboard"
-            className={`flex space-x-3 w-full p-2 rounded ${location.pathname === "/leaderboard" ? "bg-[#494E52] text-white" : ""
-              }`}
+            className={`flex space-x-3 w-full p-2 rounded ${
+              location.pathname === "/leaderboard"
+                ? "bg-[#494E52] text-white"
+                : ""
+            }`}
           >
             <BarChart3Icon />
-            <span className={!isExpanded ? "hidden" : "block"}>Leaderboard</span>
+            <span className={!isExpanded ? "hidden" : "block"}>
+              Leaderboard
+            </span>
           </Link>
         </div>
 
         <div className="nav-links w-full">
           <Link
             to="/notification"
-            className={`flex space-x-3 w-full p-2 rounded ${location.pathname === "/notification" ? "bg-[#494E52] text-white" : ""
-              }`}
+            className={`flex space-x-3 w-full p-2 rounded ${
+              location.pathname === "/notification"
+                ? "bg-[#494E52] text-white"
+                : ""
+            }`}
           >
             <ArrowLeftRightIcon />
             <span className={!isExpanded ? "hidden" : "block"}>
@@ -114,29 +128,26 @@ function Navbar({ activeRoute }) {
         <div className="nav-links w-full">
           <Link
             to="/account"
-            className={`flex space-x-3 w-full p-2 rounded ${location.pathname === "/account" ? "bg-[#494E52] text-white" : ""
-              }`}
+            className={`flex space-x-3 w-full p-2 rounded ${
+              location.pathname === "/account" ? "bg-[#494E52] text-white" : ""
+            }`}
           >
             <HelpCircleIcon />
-            <span className={!isExpanded ? "hidden" : "block"}>
-              Profil
-            </span>
+            <span className={!isExpanded ? "hidden" : "block"}>Profil</span>
           </Link>
         </div>
 
         <div className="nav-links w-full">
-            <Link
-              onClick={userSignOut}
-              to="/logout"
-              className={`flex space-x-3 w-full p-2 rounded ${location.pathname === "/logout" ? "bg-[#494E52] text-white" : ""
-                }`}
-            >
-              <LogOutIcon />
-              <span className={!isExpanded ? "hidden" : "block"}>
-                Logout
-              </span>
-            </Link>
-          
+          <Link
+            onClick={userSignOut}
+            to="/logout"
+            className={`flex space-x-3 w-full p-2 rounded ${
+              location.pathname === "/logout" ? "bg-[#494E52] text-white" : ""
+            }`}
+          >
+            <LogOutIcon />
+            <span className={!isExpanded ? "hidden" : "block"}>Logout</span>
+          </Link>
         </div>
       </div>
     </motion.div>
