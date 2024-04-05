@@ -1,12 +1,11 @@
-import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 
-import AccountSettings from './AccountSettings'
-import Actions from './Actions'
-import CompanySettings from './CompanySettings'
-import Notifications from './Notifications'
+import AccountSettings from "./AccountSettings";
+import Actions from "./Actions";
+import Notifications from "./Notifications";
 
 const Content = () => {
-  const tabs = ['Account Settings', 'Company Settings', 'Notifications']
+  const tabs = ["Account Settings", "Notifications"];
 
   return (
     <Box
@@ -20,11 +19,11 @@ const Content = () => {
       rounded="md"
       borderWidth={1}
       borderColor="gray.200"
-      style={{ transform: 'translateY(-100px)' }}
+      style={{ transform: "translateY(-100px)" }}
     >
       <Tabs>
         <TabList px={5}>
-          {tabs.map(tab => (
+          {tabs.map((tab) => (
             <Tab
               key={tab}
               mx={3}
@@ -33,8 +32,8 @@ const Content = () => {
               fontWeight="semibold"
               color="brand.cadet"
               borderBottomWidth={1}
-              _active={{ bg: 'transparent' }}
-              _selected={{ color: 'brand.dark', borderColor: 'brand.blue' }}
+              _active={{ bg: "transparent" }}
+              _selected={{ color: "brand.dark", borderColor: "brand.blue" }}
             >
               {tab}
             </Tab>
@@ -46,9 +45,6 @@ const Content = () => {
             <AccountSettings />
           </TabPanel>
           <TabPanel>
-            <CompanySettings />
-          </TabPanel>
-          <TabPanel>
             <Notifications />
           </TabPanel>
         </TabPanels>
@@ -56,7 +52,7 @@ const Content = () => {
 
       <Actions />
     </Box>
-  )
-}
+  );
+};
 
-export default Content
+export default Content;

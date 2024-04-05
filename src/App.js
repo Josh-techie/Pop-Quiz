@@ -14,9 +14,10 @@ import Leaderboard from "./Components/Leaderboard/Leaderborad";
 import Notifications from "./Components/Notifications/Notifications";
 import QuizQuestions from "./Components/Quiz/QuizQuestions";
 import ReviewQuiz from "./Components/Quiz/ReviewQuiz";
+import Medicine from "./Components/Quiz/Medicine";
+import Agriculture from "./Components/Quiz/Agriculture";
 
 function App() {
-  
   return (
     <div className="App">
       <BrowserRouter>
@@ -39,6 +40,8 @@ function App() {
 
           {/* categories of the quiz routes */}
           <Route path="/technology" element={<Technology />} />
+          <Route path="/medicine" element={<Medicine />} />
+          <Route path="/agriculture" element={<Agriculture />} />
           {/* quiz questions */}
           <Route path="/quiz-questions" element={<QuizQuestions />} />
 

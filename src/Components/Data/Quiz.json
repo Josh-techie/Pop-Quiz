@@ -69,35 +69,358 @@
         ]
     },
     {
-        "quiz_category": "Science",
+        "quiz_category": "Medicine",
         "quiz_category_img": "../../Assets/Science.jpg",
-        "quiz_title": "Science Quiz",
-        "quiz_description": "A quiz that tests your general knowledge in Science.",
+        "quiz_title": "Medicine Quiz",
+        "quiz_description": "Welcome to our comprehensive and engaging quiz that delves into the fascinating world of medicine. In this journey, we will explore the intricacies of the human body, the latest medical advancements, and the groundbreaking innovations that are shaping the future of healthcare.",
         "quiz_nb_of_attempts": 1,
-        "quiz_nb_of_questions": 5,
-        "quiz_time_limit": "30m",
-        "quiz_points": 200,
+        "quiz_nb_of_questions": 10,
+        "quiz_date": "30/12/2023",
+        "quiz_time_limit": "10m",
+        "quiz_points": 400,
         "quiz_link": "https://example.com/quizzes/science",
         "quiz_questions": [
             {
                 "id": 1,
-                "question_text": "What is the chemical symbol for the element oxygen?",
+                "question_text": "What is the largest organ in the human body?",
                 "options": [
-                    "O",
-                    "Ox",
-                    "O2",
-                    "O3"
+                    "Skin",
+                    "Liver",
+                    "Heart",
+                    "Brain"
                 ],
                 "correct_option": 0
             },
             {
                 "id": 2,
-                "question_text": "What is the powerhouse of the cell?",
+                "question_text": "Which of the following is not a type of blood cell?",
                 "options": [
-                    "Nucleus",
-                    "Mitochondria",
-                    "Ribosome",
-                    "Endoplasmic reticulum"
+                    "Red blood cells (RBCs)",
+                    "White blood cells (WBCs)",
+                    "Platelets",
+                    "Muscle cells"
+                ],
+                "correct_option": 3
+            },
+            {
+                "id": 3,
+                "question_text": "What is the medical term for the study of the structure and function of the nervous system?",
+                "options": [
+                    "Neurology",
+                    "Neurosurgery",
+                    "Neuroscience",
+                    "Neuropathology"
+                ],
+                "correct_option": 2
+            },
+            {
+                "id": 4,
+                "question_text": "What is the most common type of cancer in the world?",
+                "options": [
+                    "Lung cancer",
+                    "Breast cancer",
+                    "Colorectal cancer",
+                    "Prostate cancer"
+                ],
+                "correct_option": 0
+            },
+            {
+                "id": 5,
+                "question_text": "Which of the following is a symptom of diabetes?",
+                "options": [
+                    "Increased appetite",
+                    "Increased thirst",
+                    "Frequent urination",
+                    "All of the above"
+                ],
+                "correct_option": 3
+            },
+            {
+                "id": 6,
+                "question_text": "What is the medical term for the abnormal accumulation of fluid in the body?",
+                "options": [
+                    "Edema",
+                    "Hypertension",
+                    "Hypotension",
+                    "Diabetes"
+                ],
+                "correct_option": 0
+            },
+            {
+                "id": 7,
+                "question_text": "Which of the following is a type of antibiotic?",
+                "options": [
+                    "Penicillin",
+                    "Insulin",
+                    "Heparin",
+                    "Metformin"
+                ],
+                "correct_option": 0
+            },
+            {
+                "id": 8,
+                "question_text": "What is the medical term for a heart attack?",
+                "options": [
+                    "Myocardial infarction",
+                    "Cardiac arrest",
+                    "Angina pectoris",
+                    "Heart failure"
+                ],
+                "correct_option": 0
+            },
+            {
+                "id": 9,
+                "question_text": "Which of the following is a symptom of a concussion?",
+                "options": [
+                    "Headache",
+                    "Dizziness",
+                    "Memory loss",
+                    "All of the above"
+                ],
+                "correct_option": 3
+            },
+            {
+                "id": 10,
+                "question_text": "What is the medical term for a mental health disorder?",
+                "options": [
+                    "Psychosis",
+                    "Neurosis",
+                    "Psychiatric disorder",
+                    "Behavioral disorder"
+                ],
+                "correct_option": 2
+            }
+        ]
+    },
+    {
+        "quiz_category": "Agriculture",
+        "quiz_category_img": "../../Assets/Agriculture.jpg",
+        "quiz_title": "Agriculture Quiz",
+        "quiz_description": "Welcome to our Agriculture quiz, where we explore the fascinating world of farming, crop cultivation, and agricultural practices. Join us as we delve into the essential aspects of agriculture, from soil management to crop rotation, and test your knowledge of sustainable farming techniques and modern agricultural innovations. Get ready to cultivate your understanding of the vital role agriculture plays in feeding the world's population and sustaining our planet. Are you ready to plow through this quiz and harvest a bounty of knowledge? Let's dig in and explore the vast fields of agriculture together!",
+        "quiz_nb_of_attempts": 2,
+        "quiz_nb_of_questions": 20,
+        "quiz_date": "02/04/2024",
+        "quiz_time_limit": "10m",
+        "quiz_points": 500,
+        "quiz_link": "https://example.com/quizzes/agriculture",
+        "quiz_questions": [
+            {
+                "id": 1,
+                "question_text": "What is the process of breaking up soil clods and smoothing the soil surface called?",
+                "options": [
+                    "Plowing",
+                    "Harvesting",
+                    "Tilling",
+                    "Seeding"
+                ],
+                "correct_option": 2
+            },
+            {
+                "id": 2,
+                "question_text": "Which of the following is a primary source of nitrogen for plants?",
+                "options": [
+                    "Potassium",
+                    "Phosphorus",
+                    "Ammonia",
+                    "Carbon dioxide"
+                ],
+                "correct_option": 2
+            },
+            {
+                "id": 3,
+                "question_text": "What is the process of removing weeds from a field or garden called?",
+                "options": [
+                    "Fertilization",
+                    "Irrigation",
+                    "Pollination",
+                    "Weeding"
+                ],
+                "correct_option": 3
+            },
+            {
+                "id": 4,
+                "question_text": "Which of the following is an example of a cash crop?",
+                "options": [
+                    "Wheat",
+                    "Corn",
+                    "Soybeans",
+                    "All of the above"
+                ],
+                "correct_option": 3
+            },
+            {
+                "id": 5,
+                "question_text": "What is the primary purpose of crop rotation?",
+                "options": [
+                    "Increase soil acidity",
+                    "Control pests and diseases",
+                    "Reduce soil erosion",
+                    "Improve soil fertility"
+                ],
+                "correct_option": 1
+            },
+            {
+                "id": 6,
+                "question_text": "What is the scientific term for the process of plants converting light energy into chemical energy?",
+                "options": [
+                    "Photosynthesis",
+                    "Transpiration",
+                    "Respiration",
+                    "Germination"
+                ],
+                "correct_option": 0
+            },
+            {
+                "id": 7,
+                "question_text": "Which of the following is an example of a leguminous crop?",
+                "options": [
+                    "Rice",
+                    "Barley",
+                    "Soybeans",
+                    "Cotton"
+                ],
+                "correct_option": 2
+            },
+            {
+                "id": 8,
+                "question_text": "What is the process of moving water to crops using artificial means called?",
+                "options": [
+                    "Fertilization",
+                    "Irrigation",
+                    "Pollination",
+                    "Weeding"
+                ],
+                "correct_option": 1
+            },
+            {
+                "id": 9,
+                "question_text": "Which of the following is a method of soil conservation?",
+                "options": [
+                    "Strip cropping",
+                    "Overgrazing",
+                    "Monoculture",
+                    "Deforestation"
+                ],
+                "correct_option": 0
+            },
+            {
+                "id": 10,
+                "question_text": "What is the process of adding nutrients to the soil to improve plant growth called?",
+                "options": [
+                    "Plowing",
+                    "Harvesting",
+                    "Tilling",
+                    "Fertilization"
+                ],
+                "correct_option": 3
+            },
+            {
+                "id": 11,
+                "question_text": "Which of the following is an example of a perennial crop?",
+                "options": [
+                    "Wheat",
+                    "Rice",
+                    "Apples",
+                    "Soybeans"
+                ],
+                "correct_option": 2
+            },
+            {
+                "id": 12,
+                "question_text": "What is the process of transferring pollen from the male reproductive organs of a flower to the female reproductive organs called?",
+                "options": [
+                    "Fertilization",
+                    "Irrigation",
+                    "Pollination",
+                    "Weeding"
+                ],
+                "correct_option": 2
+            },
+            {
+                "id": 13,
+                "question_text": "Which of the following is a method of organic pest control?",
+                "options": [
+                    "Chemical pesticides",
+                    "Genetic modification",
+                    "Crop rotation",
+                    "Monoculture"
+                ],
+                "correct_option": 2
+            },
+            {
+                "id": 14,
+                "question_text": "What is the process of preparing and conditioning soil for planting called?",
+                "options": [
+                    "Plowing",
+                    "Harvesting",
+                    "Tilling",
+                    "Fertilization"
+                ],
+                "correct_option": 2
+            },
+            {
+                "id": 15,
+                "question_text": "Which of the following is an example of an herbaceous plant?",
+                "options": [
+                    "Oak tree",
+                    "Wheat",
+                    "Pineapple",
+                    "Cotton"
+                ],
+                "correct_option": 1
+            },
+            {
+                "id": 16,
+                "question_text": "What is the primary purpose of cover crops?",
+                "options": [
+                    "Provide habitat for wildlife",
+                    "Prevent soil erosion",
+                    "Increase soil acidity",
+                    "Control pests and diseases"
+                ],
+                "correct_option": 1
+            },
+            {
+                "id": 17,
+                "question_text": "Which of the following is an example of an organic fertilizer?",
+                "options": [
+                    "Urea",
+                    "Ammonium nitrate",
+                    "Compost",
+                    "Triple superphosphate"
+                ],
+                "correct_option": 2
+            },
+            {
+                "id": 18,
+                "question_text": "What is the process of removing excess water from soil to improve drainage called?",
+                "options": [
+                    "Plowing",
+                    "Harvesting",
+                    "Tilling",
+                    "Drainage"
+                ],
+                "correct_option": 3
+            },
+            {
+                "id": 19,
+                "question_text": "Which of the following is an example of a biennial crop?",
+                "options": [
+                    "Wheat",
+                    "Carrot",
+                    "Tomato",
+                    "Soybeans"
+                ],
+                "correct_option": 1
+            },
+            {
+                "id": 20,
+                "question_text": "What is the process of collecting mature crops from the field called?",
+                "options": [
+                    "Plowing",
+                    "Harvesting",
+                    "Tilling",
+                    "Fertilization"
                 ],
                 "correct_option": 1
             }

@@ -1,25 +1,25 @@
-import { FormControl, FormLabel, Grid, Input, Select } from '@chakra-ui/react'
+import { FormControl, FormLabel, Grid, Input, Select } from "@chakra-ui/react";
 
 function AccountSettings() {
   return (
     <Grid
-      templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(2, 1fr)' }}
+      templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
       gap={6}
     >
       <FormControl id="firstName">
         <FormLabel>First Name</FormLabel>
-        <Input focusBorderColor="brand.blue" type="text" placeholder="Tim" />
+        <Input focusBorderColor="brand.blue" type="text" placeholder="Joe" />
       </FormControl>
       <FormControl id="lastName">
         <FormLabel>Last Name</FormLabel>
-        <Input focusBorderColor="brand.blue" type="text" placeholder="Cook" />
+        <Input focusBorderColor="brand.blue" type="text" placeholder="Doe" />
       </FormControl>
       <FormControl id="phoneNumber">
         <FormLabel>Phone Number</FormLabel>
         <Input
           focusBorderColor="brand.blue"
           type="tel"
-          placeholder="(408) 996–1010"
+          placeholder="(+212)56-894578"
         />
       </FormControl>
       <FormControl id="emailAddress">
@@ -27,7 +27,7 @@ function AccountSettings() {
         <Input
           focusBorderColor="brand.blue"
           type="email"
-          placeholder="tcook@apple.com"
+          placeholder="joe.techie@quizapp.com"
         />
       </FormControl>
       <FormControl id="city">
@@ -36,8 +36,8 @@ function AccountSettings() {
           <option value="california">California</option>
           <option value="washington">Washington</option>
           <option value="toronto">Toronto</option>
-          <option value="newyork" selected>
-            New York
+          <option value="agadir" selected>
+            Agadir
           </option>
           <option value="london">London</option>
           <option value="netherland">Netherland</option>
@@ -47,15 +47,16 @@ function AccountSettings() {
       <FormControl id="country">
         <FormLabel>Country</FormLabel>
         <Select focusBorderColor="brand.blue" placeholder="Select country">
-          <option value="america" selected>
-            America
-          </option>
+          <option value="america">America</option>
           <option value="england">England</option>
           <option value="poland">Poland</option>
+          <option value="morocco" selected>
+            Morocco
+          </option>
         </Select>
       </FormControl>
     </Grid>
-  )
+  );
 }
 
-export default AccountSettings
+export default AccountSettings;
