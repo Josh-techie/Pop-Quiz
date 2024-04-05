@@ -7,19 +7,64 @@
 
 ---
 
-## Pop Quiz
+<h2>Welcome To Pop Quiz</h2> 
+<p align="center">
+ Description
+</p>
+- Get ready to dive into a universe where learning meets excitement, fun, and sheer awesomeness! Pop Quiz isn't your run-of-the-mill platform; it's the ultimate destination for everything educational and entertaining. Whether you're a student eager to learn, a teacher looking to engage, or just someone craving a more thrilling way to gain knowledge, Pop Quiz has you covered.
+- Imagine wanting to learn a new language but finding textbooks dull and uninspiring. Enter Pop Quiz, where you can leap into language learning like never before! Craft your customized quizzes to fit your unique learning style and embark on a thrilling journey of linguistic exploration at your own pace.
+- But there's more! Pop Quiz isn't just about making your quizzes; it's a treasure trove of fascinating content crafted by users passionate about sharing their knowledge. Explore quizzes across a wide range of subjects and discover the one that lights up your curiosity and fuels your hunger for learning.
+- And let's talk about the excitement of the leaderboard! Get ready for a dose of motivation and engagement as you aim for the top, collecting points and reveling in the glory of your achievements. Whether it's dominating a specific quiz leaderboard or shining among the elite on the global stage, you're in for an exhilarating ride.
+- So, are you ready to jump into the adventure of a lifetime with Pop Quiz? Lean back, gear up, and immerse yourself in a world where education and fun collide in one thrilling experience. Stay cool, and let's kick off this incredible journey!
 
-- Welcome to POP QUIZ - where learning meets fun! Engage, challenge, and grow with customizable quizzes, seamless sharing, and a competitive leaderboard. Elevate your knowledge game today!
+---
+
+<h2> Features </h2>
+
+- **Authentication System**: Securely Sign in/Sign Up with email or Google API, with verification email for added security, and get started with your custom profil.
+- **Custom Exploration**: Dive into subjects of your choice and challenge your knowledge with personalized quizzes.
+- **Access Public Quizzes**: Explore a broad spectrum of topics through quizzes created by other users.
+- **Discover a World of Learning**: Enhance your language skills, master programming, deepen your understanding of art, or explore the depths of history with our interactive learning quizzes.
+- **Leaderboards**: See where you stand in specific subjects or overall rankings and track your progress.
+- **User-Friendly Design**: Navigate the app effortlessly with a clear and intuitive interface.
+- **Personalized Learning Experience**: Learn at your pace, on your terms.
+- **Collaborative Features**: Connect with other users, share insights, and collaborate on quiz creation, stream and learn with your friends.
+- **Gamification**: Motivate your learning journey with badges, points, and rewards as you complete quizzes and reach new milestones.
+- **Share a Quiz**: Share quiz links with friends to test their knowledge and challenge them to beat your score.
+- **Regular Updates**: Benefit from ongoing enhancements and new functionalities for a constantly improving learning experience.
+
+<small> Please note that not all features mentioned above may be currently implemented. We're continuously working to improve the app. Additionally, each user has their custom profile with a set of quizzes ready to take and ignite their learning journey. </small>
+
+---
+
+<h2> Architecture </h2>
+
+- The technologies utilized for the FrontEnd are ReactJS with some lightweight CSS using Tailwind. The backend is handled by Firebase, and Redis is employed for caching. For testing, Selenium is utilized for Integration Testing, and Cypress for End-to-End Testing. Datadog is used for Application Performance Monitoring (APM). GitHub Actions are implemented for Continuous Integration and Deployment (CI/CD), and the application is hosted on Vercel.
+
+> <h3> My goal is to provide a platform that facilitates learning in a fun and interactive way, making it easy for users to learn new things and expand their knowledge. I believe that education should be accessible to all, and I'm proud to be a part of that mission. </h3> <p>**Joeseph Ab**</p>
+
+<p align="center">
+<img src ="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F6e0d2d3c-4e52-4238-9bd1-44a462105164%2FArchitecute-Pop-Quiz.svg?table=block&id=289d5d9a-0f6e-4a37-821b-aca67ff92c74&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2">
+<p align="center">
+ Architecture of Pop Quiz Application
+</p>
+
+---
+
+<h2> Blog Post</h2>
+
+- As a developer actively involved in the ongoing development of Pop Quiz, I've taken the opportunity to document and share my insights on this project journey through my article on Medium.
+
+- If you're interested in gaining a deeper understanding of this project and the development process, I invite you to check out: [Pop-Quiz-Article](https://medium.com/@Joe-seph)
 
 ---
 
 ## Collaborators
 
-| Name | Photo |
-| --- | --- |
+| Name        | Photo                                                                                                           |
+| ----------- | --------------------------------------------------------------------------------------------------------------- |
 | Josh-Techie | ![Owner](https://avatars.githubusercontent.com/u/95583855?s=400&u=8bfc3a54ebda84af0684a79b4085486e7adff237&v=4) |
-| saad484 | ![First-Collab](https://avatars.githubusercontent.com/u/77203662?v=4) |
-
+| saad484     | ![First-Collab](https://avatars.githubusercontent.com/u/77203662?v=4)                                           |
 
 ---
 
