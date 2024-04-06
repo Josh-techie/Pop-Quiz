@@ -72,7 +72,9 @@
 
 - The technologies utilized for the FrontEnd are ReactJS with some lightweight CSS using Tailwind. The backend is handled by Firebase, and Redis is employed for caching. For testing, Selenium is utilized for Integration Testing, and Cypress for End-to-End Testing. Datadog is used for Application Performance Monitoring (APM). GitHub Actions are implemented for Continuous Integration and Deployment (CI/CD), and the application is hosted on Vercel.
 
-> <h3> My goal is to provide a platform that facilitates learning in a fun and interactive way, making it easy for users to learn new things and expand their knowledge. I believe that education should be accessible to all, and I'm proud to be a part of that mission. </h3> <p> Youssef Abouyahia</p>
+<p align="center">
+<img src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F40863aae-b7ca-4f66-8d36-d43240835923%2FGrey_Black_Quotes_Social_Media_Instagram_Post.png?table=block&id=69815c3f-093a-4cb8-b7fa-8c2113d34f40&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2">
+</p>
 
 <p align="center">
 <img src ="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F6e0d2d3c-4e52-4238-9bd1-44a462105164%2FArchitecute-Pop-Quiz.svg?table=block&id=289d5d9a-0f6e-4a37-821b-aca67ff92c74&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2">
