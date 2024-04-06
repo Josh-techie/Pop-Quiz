@@ -1,22 +1,27 @@
 <p align="center">
 <img src ="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F90ef36c4-f606-4e7d-8443-17fe7a6d883a%2FLogo.png?table=block&id=076232fa-231d-41d1-a14f-12f5d45d4732&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2">
 </p>
-<h2 align="center">
+<h1 align="center">
  🚀 Engage, Learn, Share!
-</h2>
+</h1>
 <p align="center">
 <img src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F91c640bb-bf8e-407a-8456-4bd651f0cfe7%2FUntitled.png?table=block&id=c7c61a85-182c-47a0-a872-e80bdc278189&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2">
+<p align="center"> Home Page of Pop Quiz</p>
 </p>
 
 ---
 
 <h1>Description</h1>
 
-- Get ready to dive into a universe where learning meets excitement, fun, and sheer awesomeness! Pop Quiz isn't your run-of-the-mill platform; it's the ultimate destination for everything educational and entertaining. Whether you're a student eager to learn, a teacher looking to engage, or just someone craving a more thrilling way to gain knowledge, Pop Quiz has you covered.
-- Imagine wanting to learn a new language but finding textbooks dull and uninspiring. Enter Pop Quiz, where you can leap into language learning like never before! Craft your customized quizzes to fit your unique learning style and embark on a thrilling journey of linguistic exploration at your own pace.
-- But there's more! Pop Quiz isn't just about making your quizzes; it's a treasure trove of fascinating content crafted by users passionate about sharing their knowledge. Explore quizzes across a wide range of subjects and discover the one that lights up your curiosity and fuels your hunger for learning.
-- And let's talk about the excitement of the leaderboard! Get ready for a dose of motivation and engagement as you aim for the top, collecting points and reveling in the glory of your achievements. Whether it's dominating a specific quiz leaderboard or shining among the elite on the global stage, you're in for an exhilarating ride.
-- So, are you ready to jump into the adventure of a lifetime with Pop Quiz? Lean back, gear up, and immerse yourself in a world where education and fun collide in one thrilling experience. Stay cool, and let's kick off this incredible journey!
+- Get ready to dive into a universe where learning meets excitement, fun, and sheer awesomeness! 🚀 Pop Quiz isn't your run-of-the-mill platform; it's the ultimate destination for everything educational and entertaining. Whether you're a student eager to learn, a teacher looking to engage, or just someone craving a more thrilling way to gain knowledge, Pop Quiz has you covered. 📚
+
+- Imagine wanting to learn a new language but finding textbooks dull and uninspiring. Enter Pop Quiz, where you can leap into language learning like never before! Craft your customized quizzes to fit your unique learning style and embark on a thrilling journey of linguistic exploration at your own pace. 🌍
+
+- But there's more! Pop Quiz isn't just about making your quizzes; it's a treasure trove of fascinating content crafted by users passionate about sharing their knowledge. Explore quizzes across a wide range of subjects and discover the one that lights up your curiosity and fuels your hunger for learning. 💡
+
+- And let's talk about the excitement of the leaderboard! Get ready for a dose of motivation and engagement as you aim for the top, collecting points and reveling in the glory of your achievements. Whether it's dominating a specific quiz leaderboard or shining among the elite on the global stage, you're in for an exhilarating ride. 🏆
+
+- So, are you ready to jump into the adventure of a lifetime with Pop Quiz? Lean back, gear up, and immerse yourself in a world where education and fun collide in one thrilling experience. Stay cool, and let's kick off this incredible journey! 😎
 
 <p align="center">
 <img src ="https://media.giphy.com/media/xBEQlNgvgnFRQKo6kq/giphy.gif?cid=ecf05e47hjjdastx47rufrq9ecy77mtkd42qdf0ms16nsxq1&ep=v1_gifs_search&rid=giphy.gif&ct=g">
@@ -67,7 +72,7 @@
 
 - The technologies utilized for the FrontEnd are ReactJS with some lightweight CSS using Tailwind. The backend is handled by Firebase, and Redis is employed for caching. For testing, Selenium is utilized for Integration Testing, and Cypress for End-to-End Testing. Datadog is used for Application Performance Monitoring (APM). GitHub Actions are implemented for Continuous Integration and Deployment (CI/CD), and the application is hosted on Vercel.
 
-> <h3> My goal is to provide a platform that facilitates learning in a fun and interactive way, making it easy for users to learn new things and expand their knowledge. I believe that education should be accessible to all, and I'm proud to be a part of that mission. </h3> <p>[Youssef Abouyahia](https://github.com/Josh-techie)</p>
+> <h3> My goal is to provide a platform that facilitates learning in a fun and interactive way, making it easy for users to learn new things and expand their knowledge. I believe that education should be accessible to all, and I'm proud to be a part of that mission. </h3> <p> Youssef Abouyahia</p>
 
 <p align="center">
 <img src ="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F6e0d2d3c-4e52-4238-9bd1-44a462105164%2FArchitecute-Pop-Quiz.svg?table=block&id=289d5d9a-0f6e-4a37-821b-aca67ff92c74&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2">
