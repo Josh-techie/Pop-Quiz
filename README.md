@@ -5,7 +5,8 @@
  🚀 Engage, Learn, Share!
 </h1>
 <p align="center">
-[![Maintained - Yes](https://img.shields.io/static/v1?label=Maintained&message=Yes&color=2ea44f&style=for-the-badge)](https://github.com/Josh-techie/Pop-Quiz)
+
+[![Maintained - Yes](https://img.shields.io/static/v1?label=Maintained&message=Yes&color=2ea44f&style=for-the-badge)](https://pop-quiz-five.vercel.app/)
 
 [![Open Source - Yes](https://img.shields.io/static/v1?label=Open+Source&message=Yes&color=2ea44f&style=for-the-badge)](https://pop-quiz-five.vercel.app/)
 
