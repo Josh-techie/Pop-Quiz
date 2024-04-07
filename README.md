@@ -85,7 +85,7 @@
 </p>
 
 <p align="center">
-<img src ="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F6e0d2d3c-4e52-4238-9bd1-44a462105164%2FArchitecute-Pop-Quiz.svg?table=block&id=289d5d9a-0f6e-4a37-821b-aca67ff92c74&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2">
+<img src ="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F83b85321-b1d2-4e3a-a570-c2008d6397d2%2FArchitecute-Pop-Quiz.png?table=block&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&id=46c1a31b-f623-4705-8924-ceb4c9b544b9&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2">
 <p align="center">
  Architecture of Pop Quiz Application
 </p>
