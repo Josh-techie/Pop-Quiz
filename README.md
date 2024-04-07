@@ -7,10 +7,11 @@
 <p align="center">
 
 [![Maintained - Yes](https://img.shields.io/static/v1?label=Maintained&message=Yes&color=2ea44f&style=for-the-badge)](https://pop-quiz-five.vercel.app/)
-
+&nbsp;&nbsp;&nbsp;&nbsp;
 [![Open Source - Yes](https://img.shields.io/static/v1?label=Open+Source&message=Yes&color=2ea44f&style=for-the-badge)](https://pop-quiz-five.vercel.app/)
 
 </p>
+
 <p align="center">
 <img src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F91c640bb-bf8e-407a-8456-4bd651f0cfe7%2FUntitled.png?table=block&id=c7c61a85-182c-47a0-a872-e80bdc278189&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2">
 <p align="center"> Home Page of Pop Quiz</p>
@@ -68,7 +69,7 @@
 - **Hosting**: Vercel.
 
 <p align="center">
-<img src ="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F83b85321-b1d2-4e3a-a570-c2008d6397d2%2FArchitecute-Pop-Quiz.png?table=block&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&id=46c1a31b-f623-4705-8924-ceb4c9b544b9&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2">
+<img src ="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F85203b7e-8ec7-45c9-8746-f447c3a16e02%2FTechnologues-Stack-Pop-Quiz.png?table=block&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&id=f3b89342-004f-4f42-af79-a5a506999cd4&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2">
 <p align="center">
  Technology Stack Pop Quiz
 </p>
