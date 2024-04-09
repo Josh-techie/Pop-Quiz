@@ -176,7 +176,7 @@ npm run start
 
 - As a developer actively involved in the ongoing development of Pop Quiz, I've taken the opportunity to document and share my insights on this project journey through my article on Medium.
 
-- If you're interested in gaining a deeper understanding of this project and the development process, I invite you to check out: [Pop-Quiz-Article](https://medium.com/@Joe-seph)
+- If you're interested in gaining a deeper understanding of this project and the development process, I invite you to check out: [Pop-Quiz-Article](https://medium.com/@Joe-seph/pop-quiz-where-learning-meets-fun-excitement-547b0140013e)
 
 ---
 
