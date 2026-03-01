@@ -1,4 +1,3 @@
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -11,4 +10,29 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* Disable default browser validation styles */
+input:invalid {
+  box-shadow: none;
+}
+
+input:focus:invalid {
+  border-color: inherit !important;
+  box-shadow: none !important;
+}
+
+/* Hide default validation message */
+input::-webkit-validation-bubble-message {
+  display: none;
+}
+
+input::-webkit-validation-bubble-icon {
+  display: none;
+}
+
+/* For Firefox */
+input:invalid-focus {
+  outline: none !important;
+  box-shadow: none !important;
 }

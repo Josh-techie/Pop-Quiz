@@ -4,34 +4,49 @@ import { sendPasswordResetEmail } from "firebase/auth";
 
 const ForgotPasswd = () => {
   const [email, setEmail] = useState("");
-  const [notification, setNotification] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleResetPassword = (e) => {
+  const validateEmail = () => {
+    setEmailError("");
+    if (!email) {
+      setEmailError("Email is required");
+      return false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmailError("Please enter a valid email");
+      return false;
+    }
+    return true;
+  };
+
+  const handleResetPassword = async (e) => {
     e.preventDefault();
 
-    // Send password reset email
-    sendPasswordResetEmail(auth, email)
-      .then(() => {
-        // Reset email input and show success notification
-        setEmail("");
-        setNotification(
-          `An email has been sent to ${email} for password reset.`
-        );
-        setTimeout(() => {
-          setNotification("");
-        }, 3000);
-      })
-      .catch((error) => {
-        // Handle errors
-        if (error.code === "auth/user-not-found") {
-          setNotification("No user with that email exists.");
-        } else {
-          setNotification("An error occurred. Please try again later.");
-        }
-        setTimeout(() => {
-          setNotification("");
-        }, 3000);
-      });
+    if (!validateEmail()) {
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setLoading(false);
+      setEmail("");
+      setSuccessMessage(
+        `An email has been sent to ${email} for password reset.`
+      );
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 4000);
+    } catch (error) {
+      setLoading(false);
+      if (error.code === "auth/user-not-found") {
+        setEmailError("No user with that email exists.");
+      } else {
+        setEmailError("An error occurred. Please try again later.");
+      }
+    }
   };
 
   return (
@@ -52,30 +67,68 @@ const ForgotPasswd = () => {
                 <input
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setEmailError("");
+                  }}
                   placeholder="Enter Email Address"
-                  className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                  className={`w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:bg-white focus:outline-none transition ${
+                    emailError
+                      ? "border-red-500 focus:border-red-500"
+                      : "border-gray-300 focus:border-blue-500"
+                  }`}
                   autoFocus
                   autoComplete="off"
-                  required
+                  disabled={loading}
                 />
+                {emailError && (
+                  <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                )}
               </div>
+
+              {successMessage && (
+                <div
+                  className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mt-4"
+                  role="alert"
+                >
+                  <span className="block sm:inline">{successMessage}</span>
+                </div>
+              )}
 
               <button
                 type="submit"
-                className="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 text-white font-semibold rounded-lg
-                px-4 py-3 mt-6"
+                disabled={loading}
+                className="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 disabled:bg-blue-300 text-white font-semibold rounded-lg px-4 py-3 mt-6 transition flex items-center justify-center"
               >
-                Reset Password
+                {loading ? (
+                  <>
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Sending...
+                  </>
+                ) : (
+                  "Reset Password"
+                )}
               </button>
             </form>
-
-            {/* Display notification */}
-            {notification && (
-              <div className="bg-green-500 text-white px-4 py-3 rounded mt-4">
-                {notification}
-              </div>
-            )}
 
             <p className="mt-8">
               <a
