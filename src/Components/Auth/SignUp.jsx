@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { auth } from "../../firebase";
 import {
   createUserWithEmailAndPassword,
   fetchSignInMethodsForEmail,
@@ -72,11 +71,7 @@ const SignUp = () => {
         setLoading(false);
         setEmailError("Email already exists in our database.");
       } else {
-        const userCredential = await createUserWithEmailAndPassword(
-          authInstance,
-          email,
-          password
-        );
+        await createUserWithEmailAndPassword(authInstance, email, password);
 
         await sendEmailVerification(authInstance.currentUser);
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom"; // Import useNavigate from react-router-dom
 import PropTypes from "prop-types"; // Import PropTypes for prop validation
@@ -11,29 +11,11 @@ const DashboardHeader = ({
   showDropdown,
   avatar = defaultAvatar,
 }) => {
-  const [dropdownVisible, setDropdownVisible] = useState(false);
   const navigate = useNavigate(); // Use useNavigate hook for navigation
-  const dropdownRef = useRef(null); // Ref to the dropdown menu
-
-  // Function to close the dropdown when clicked outside
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setDropdownVisible(false);
-    }
-  };
-
-  // Attach click event listener to the document body
-  useEffect(() => {
-    document.body.addEventListener("click", handleClickOutside);
-    return () => {
-      document.body.removeEventListener("click", handleClickOutside);
-    };
-  }, []);
 
   // Function to handle logout
   const handleLogout = () => {
     userSignOut(); // Call userSignOut function
-    setDropdownVisible(false); // Close dropdown after logout
   };
 
   // Function to sign out user
@@ -44,7 +26,7 @@ const DashboardHeader = ({
 
   const handleSettingsProfilClick = () => {
     navigate("/account"); // Use navigate function to redirect to Account page
-    setDropdownVisible(false);
+    // rely on parent to control dropdown visibility
   };
 
 
@@ -77,10 +59,7 @@ const DashboardHeader = ({
           />
         </div>
         {showDropdown && (
-          <div
-            ref={dropdownRef}
-            className="absolute top-12 right-0 z-10 bg-white border border-gray-200 rounded-md shadow-md p-2"
-          >
+          <div className="absolute top-12 right-0 z-10 bg-white border border-gray-200 rounded-md shadow-md p-2">
             <ul>
               <li
                 className="py-1 px-3 hover:bg-gray-100 cursor-pointer"
@@ -112,7 +91,6 @@ DashboardHeader.propTypes = {
   toggleDropdown: PropTypes.func.isRequired,
   showDropdown: PropTypes.bool.isRequired,
   avatar: PropTypes.string.isRequired,
-  userSignOut: PropTypes.func.isRequired, // PropTypes for userSignOut
 };
 
 export default DashboardHeader;

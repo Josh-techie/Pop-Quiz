@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import PicTechnology from "../../Assets/PicQuizTechnology.jpg";
 import Navbar from "../Dashboard/NavBar";
 import DashboardHeader from "../Dashboard/Header";
 import Avatar from "../../Assets/avatar.png";
-import PicTechnology from "../../Assets/PicQuizTechnology.jpg";
-import QuizQuestions from "./QuizQuestions";
+// PicTechnology and QuizQuestions imports removed (not used)
 import quizData from "../Data/Quiz.json";
 import { useNavigate } from "react-router-dom";
 
 function Technology() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [timer, setTimer] = useState(30 * 60); // 30 minutes in seconds
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  // Timer removed because it's not used in this component
 
   // render the page dynamically
   // get the quititle from the quizData
@@ -44,48 +43,11 @@ function Technology() {
 
   const closeModal = () => {
     setShowModal(false);
-    setIsTimerRunning(false); // Stop the timer when modal is closed
   };
 
   const navigate = useNavigate();
 
-  const startTimer = () => {
-    setIsTimerRunning(true);
-  };
-
-  const pauseTimer = () => {
-    setIsTimerRunning(false);
-  };
-
-  const resetTimer = () => {
-    setTimer(30 * 60); // Reset timer to 30 minutes
-    setIsTimerRunning(false);
-  };
-
-  useEffect(() => {
-    let intervalId;
-
-    if (isTimerRunning) {
-      intervalId = setInterval(() => {
-        setTimer((prevTimer) => {
-          if (prevTimer === 0) {
-            clearInterval(intervalId);
-            return prevTimer;
-          }
-          return prevTimer - 1;
-        });
-      }, 1000);
-    } else {
-      clearInterval(intervalId);
-    }
-
-    return () => clearInterval(intervalId);
-  }, [isTimerRunning]);
-
-  const handleStartQuiz = () => {
-    startTimer();
-    openModal();
-  };
+  // Timer-related handlers removed because they were not used
 
   return (
     <div className="flex flex-col py-10 px-4 sm:px-8 md:px-16 h-auto sm:h-screen overflow-y-auto w-full bg-gray-100">
@@ -115,8 +77,8 @@ function Technology() {
             <div className="flex items-center">
               <img
                 src={PicTechnology}
-                alt="Quiz Image"
-                className="w-2/4 p-0 rounded-md mr-8 select-none" // Added select-none to make the photo not selectable
+                alt="technology illustration"
+                className="w-2/4 p-0 rounded-md mr-8 select-none"
               />
               <div className="flex flex-col">
                 {/* Description */}
