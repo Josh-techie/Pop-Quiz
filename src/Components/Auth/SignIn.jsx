@@ -150,14 +150,17 @@ const SignIn = () => {
                 )}
               </div>
 
-              {/* Forgot password link */}
-              <div className="text-right mt-2">
-                <Link
-                  to="/forgot-password"
-                  className="text-sm font-semibold text-gray-700 hover:text-blue-700 focus:text-blue-700"
-                >
-                  Forgot Password?
-                </Link>
+              {/* Forgot password centered with link on the action text */}
+              <div className="text-center mt-4">
+                <p className="text-sm">
+                  <span className="text-gray-500 mr-2">Forgot password?</span>
+                  <Link
+                    to="/forgot-password"
+                    className="text-sm font-semibold text-blue-600 hover:text-blue-700 focus:text-blue-700"
+                  >
+                    Reset password now
+                  </Link>
+                </p>
               </div>
 
               {/* Sign in button */}
@@ -240,16 +243,18 @@ const SignIn = () => {
               </div>
             </button>
 
-            {/* Sign up link */}
-            <p className="mt-8">
-              Need an account?{" "}
-              <Link
-                to="/signup"
-                className="text-blue-500 hover:text-blue-700 font-semibold"
-              >
-                Create an account
-              </Link>
-            </p>
+            {/* Sign up link centered */}
+            <div className="text-center mt-8">
+              <p className="text-sm">
+                <span className="text-gray-500 mr-2">Need an account?</span>
+                <Link
+                  to="/signup"
+                  className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+                >
+                  Create an account
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       </section>
