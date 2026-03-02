@@ -25,8 +25,7 @@ function MedicineQuestions() {
   // Fetch the quiz data number of questions
   const numberOfQuestions = quizData[1].quiz_questions.length;
 
-  // Fetch quiz description
-  const quizDescription = quizData[1].quiz_description;
+  // quizDescription not used directly here; removed to satisfy lint
 
   // Fetch quiz questions
   const quizQuestions = quizData[1].quiz_questions.map(

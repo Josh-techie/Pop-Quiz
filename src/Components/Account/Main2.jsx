@@ -1,6 +1,6 @@
 import React from 'react';
 import SimpleBar from 'simplebar-react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+// Router imports removed (not used)
 import { ChakraProvider } from '@chakra-ui/react'
 import { theme } from './helpers'
 import { Container } from '@chakra-ui/layout'

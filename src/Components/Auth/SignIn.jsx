@@ -2,60 +2,75 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { auth } from "../../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import {
-  signInWithPopup,
-  GoogleAuthProvider,
-  fetchSignInMethodsForEmail,
-} from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import QuoteImg from "../../Assets/Quote.jpg";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [notification, setNotification] = useState("");
-  const [loading, setLoading] = useState(false); // State for loading indicator
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const validateForm = () => {
+    let isValid = true;
+    setEmailError("");
+    setPasswordError("");
+
+    if (!email) {
+      setEmailError("Email is required");
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmailError("Please enter a valid email");
+      isValid = false;
+    }
+
+    if (!password) {
+      setPasswordError("Password is required");
+      isValid = false;
+    } else if (password.length < 6) {
+      setPasswordError("Password must be at least 6 characters");
+      isValid = false;
+    }
+
+    return isValid;
+  };
 
   const signIn = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true when signing in
+    
+    if (!validateForm()) {
+      return;
+    }
 
-    // Check if the email exists in the database
+    setLoading(true);
 
-
-    // Email exists, proceed with sign in
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        setLoading(false); // Set loading to false after successful login
+        setLoading(false);
         navigate("/main");
       })
       .catch((error) => {
         console.error("Error signing in:", error);
-        setLoading(false); // Set loading to false if login fails
-        setNotification("Incorrect email or password. Please try again.");
-        // hide notification after 3 seconds
-        setTimeout(() => {
-          setNotification("");
-        }, 3000);
+        setLoading(false);
+        setPasswordError("Incorrect email or password. Please try again.");
       });
   };
 
   // sign in with google
   const signInWithGoogle = () => {
     const provider = new GoogleAuthProvider();
+    setLoading(true);
     signInWithPopup(auth, provider)
       .then((result) => {
-        // Signed in with Google, redirect to Dashboard
+        setLoading(false);
         navigate("/main");
       })
       .catch((error) => {
         console.error("Error signing in with Google:", error);
-        setNotification(
-          "An error occurred while signing in with Google. Please try again."
-        );
-        // hide notification after 3 seconds
-        setTimeout(() => {
-          setNotification("");
-        }, 3000);
+        setLoading(false);
+        setPasswordError("An error occurred while signing in with Google. Please try again.");
       });
   };
 
@@ -64,19 +79,15 @@ const SignIn = () => {
       <section className="flex flex-col md:flex-row h-screen items-center">
         {/* Left Side */}
         <div className="bg-blue-600 hidden lg:block w-full md:w-1/2">
-          <img
-            src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F956aa46a-b180-4bff-92f8-3f525f478b13%2FQuote.png?table=block&id=f1945a54-8da6-40f5-9db5-8015f73f337b&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2"
-            alt="img of quote"
-            className="w-full h-full object-cover"
-          />
+          <img src={QuoteImg} alt="Quote" className="w-full h-full object-cover" />
         </div>
 
         {/* Right Side */}
         <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
           <div className="w-full h-100">
             <img
-              src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F029a1497-45bd-4b48-af71-c2ab8a918091%2F5f8b096b-a2b8-4b23-998e-0084f415fb2c%2FLogo.png?table=block&id=30fc8a2c-e3f9-4b99-868c-3690d70e7e59&spaceId=029a1497-45bd-4b48-af71-c2ab8a918091&width=2000&userId=9d08c749-75eb-439d-ad10-2a83e114a53b&cache=v2"
-              alt="logo"
+              src={require("../../Assets/Logo.png")}
+              alt="Pop Quiz Logo"
               width={150}
               height={200}
               className="mx-auto"
@@ -91,15 +102,25 @@ const SignIn = () => {
               <div>
                 <label className="block text-gray-700">Email Address</label>
                 <input
-                  type="email"
+                  type="text"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setEmailError("");
+                  }}
                   placeholder="Enter Email Address"
-                  className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                  className={`w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:bg-white focus:outline-none transition ${
+                    emailError
+                      ? "border-red-500 focus:border-red-500"
+                      : "border-gray-300 focus:border-blue-500"
+                  }`}
                   autoFocus
                   autoComplete="off"
-                  required
+                  disabled={loading}
                 />
+                {emailError && (
+                  <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                )}
               </div>
 
               {/* Password input */}
@@ -108,31 +129,69 @@ const SignIn = () => {
                 <input
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordError("");
+                  }}
                   placeholder="Enter Password"
-                  minLength="6"
-                  className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
-                  required
+                  className={`w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:bg-white focus:outline-none transition ${
+                    passwordError
+                      ? "border-red-500 focus:border-red-500"
+                      : "border-gray-300 focus:border-blue-500"
+                  }`}
+                  disabled={loading}
                 />
+                {passwordError && (
+                  <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+                )}
               </div>
 
-              {/* Forgot password link */}
-              <div className="text-right mt-2">
-                {/* Update the link to navigate to the "Forgot Password" page */}
-                <Link
-                  to="/forgot-password"
-                  className="text-sm font-semibold text-gray-700 hover:text-blue-700 focus:text-blue-700"
-                >
-                  Forgot Password?
-                </Link>
+              {/* Forgot password centered with link on the action text */}
+              <div className="text-center mt-4">
+                <p className="text-sm">
+                  <span className="text-gray-500 mr-2">Forgot password?</span>
+                  <Link
+                    to="/forgot-password"
+                    className="text-sm font-semibold text-blue-600 hover:text-blue-700 focus:text-blue-700"
+                  >
+                    Reset password now
+                  </Link>
+                </p>
               </div>
 
               {/* Sign in button */}
               <button
                 type="submit"
-                className="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 text-white font-semibold rounded-lg px-4 py-3 mt-6"
+                disabled={loading}
+                className="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 disabled:bg-blue-300 text-white font-semibold rounded-lg px-4 py-3 mt-6 transition flex items-center justify-center"
               >
-                Log In
+                {loading ? (
+                  <>
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Logging in...
+                  </>
+                ) : (
+                  "Log In"
+                )}
               </button>
             </form>
 
@@ -140,7 +199,8 @@ const SignIn = () => {
             <button
               type="button"
               onClick={signInWithGoogle}
-              className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300 mt-4"
+              disabled={loading}
+              className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 disabled:bg-gray-50 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300 mt-4 transition"
             >
               <div className="flex items-center justify-center">
                 <svg
@@ -179,30 +239,18 @@ const SignIn = () => {
               </div>
             </button>
 
-            {/* Sign up link */}
-            <p className="mt-8">
-              Need an account?{" "}
-              <Link
-                to="/signup"
-                className="text-blue-500 hover:text-blue-700 font-semibold"
-              >
-                Create an account
-              </Link>
-            </p>
-
-            {/* Display notification */}
-            {notification && (
-              <div className="fixed bottom-0 left-0 right-0 bg-red-500 text-white text-center py-2">
-                {notification}
-              </div>
-            )}
-
-            {/* Loading indicator */}
-            {loading && (
-              <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-300 bg-opacity-50 z-50">
-                <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-24 w-24"></div>
-              </div>
-            )}
+            {/* Sign up link centered */}
+            <div className="text-center mt-8">
+              <p className="text-sm">
+                <span className="text-gray-500 mr-2">Need an account?</span>
+                <Link
+                  to="/signup"
+                  className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+                >
+                  Create an account
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       </section>
