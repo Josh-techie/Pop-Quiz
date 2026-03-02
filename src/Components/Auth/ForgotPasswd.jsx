@@ -65,7 +65,7 @@ const ForgotPasswd = () => {
               <div>
                 <label className="block text-gray-700">Email Address</label>
                 <input
-                  type="email"
+                  type="text"
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);

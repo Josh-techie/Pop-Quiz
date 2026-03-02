@@ -91,7 +91,7 @@ const SignIn = () => {
           <div className="w-full h-100">
             <img
               src={require("../../Assets/Logo.png")}
-              alt="logo"
+              alt="Pop Quiz Logo"
               width={150}
               height={200}
               className="mx-auto"
@@ -106,7 +106,7 @@ const SignIn = () => {
               <div>
                 <label className="block text-gray-700">Email Address</label>
                 <input
-                  type="email"
+                  type="text"
                   value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);

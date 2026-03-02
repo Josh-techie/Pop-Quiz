@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^2.1.1",
+    "@chakra-ui/layout": "^2.3.1",
     "@chakra-ui/react": "^2.8.2",
+    "@chakra-ui/system": "^2.6.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@headlessui/react": "^1.7.18",
@@ -30,7 +32,7 @@
     "react-icons": "^5.0.1",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.22.3",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "sass": "^1.72.0",
     "simplebar-react": "^3.2.4",
     "web-vitals": "^2.1.4"
@@ -60,6 +62,7 @@
     ]
   },
   "devDependencies": {
+    "ajv": "^8.18.0",
     "tailwindcss": "^3.4.1"
   }
 }

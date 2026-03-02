@@ -24,3 +24,6 @@ yarn-error.log*
 
 # Testing credentials
 credentials.txt
+
+# Api keys ...
+.env
