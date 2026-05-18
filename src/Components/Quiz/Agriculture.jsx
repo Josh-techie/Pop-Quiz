@@ -9,28 +9,15 @@ import agricultureCard from "../../Assets/agriculture_card.jpg";
 function Agriculture() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  // Timer removed because it's not used in this component
 
   // render the page dynamically
-  // get the quititle from the quizData
   const quizTitle = quizData[2].quiz_title;
-  // get quiz date from the quizData
   const quizDate = quizData[2].quiz_date;
-
-  // get quiz time_limit
   const quizTimeLimit = quizData[2].quiz_time_limit;
-
-  // nbr of attemps fetching
   const quizAttempts = quizData[2].quiz_nb_of_attempts;
-
-  // fetch quiz points
   const quizPoints = quizData[2].quiz_points;
-
-  // fetch quiz description
-  const quizDescription = quizData[2].quiz_description;
-
-  // fetch the number of questions from the data file
   const nbrOfQuestions = quizData[2].quiz_nb_of_questions;
+  const quizDescription = quizData[2].quiz_description;
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -46,100 +33,102 @@ function Agriculture() {
 
   const navigate = useNavigate();
 
-  // Timer-related handlers removed because they were not used
-
   return (
-    <div className="flex flex-col py-10 px-4 sm:px-8 md:px-16 h-auto sm:h-screen overflow-y-auto w-full bg-gray-100">
-      <div className="flex">
-        {/* Side Navigation Bar */}
-        <Navbar />
-        <main className="grow main-content">
-          {/* Dashboard Header */}
-          {/* hello saad */}
+    <div className="flex h-screen overflow-hidden bg-gray-100">
+      {/* Side Navigation Bar */}
+      <Navbar />
+
+      {/* Main Content Area */}
+      <main className="flex-1 flex flex-col overflow-hidden">
+        {/* Dashboard Header */}
+        <div className="flex-shrink-0 py-4 md:py-6 px-4 md:px-8 bg-gray-100">
           <DashboardHeader
             toggleDropdown={toggleDropdown}
             showDropdown={showDropdown}
             Avatar={Avatar}
           />
+        </div>
 
+        {/* Content - No Scroll */}
+        <div className="flex-1 px-4 md:px-8 pb-4 md:pb-8 overflow-y-auto md:overflow-hidden flex flex-col">
           {/* Card */}
-          <div className="flex flex-col py-10 px-4 sm:px-8 md:px-16 h-auto sm:h-screen overflow-y-auto w-full bg-white rounded">
-            <h2 className="text-4xl font-bold text-gray-700 mb-2">
+          <div className="bg-white rounded-xl shadow-sm p-3 md:p-6 flex-1 flex flex-col md:overflow-hidden">
+            <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-1">
               {quizTitle}
             </h2>
-            {/* Description */}
-            <p className="text-gray-800 mb-4">
+            <p className="text-gray-500 text-xs md:text-sm mb-2 md:mb-3">
               Read the following instructions
             </p>
 
-            {/* Image and Info */}
-            <div className="flex items-center">
-              <img
-                src={agricultureCard}
-                alt="agriculture illustration"
-                className="w-2/4 p-0 rounded-md mr-8 select-none"
-              />
-              <div className="flex flex-col">
-                {/* Description */}
-                <p className="text-gray-800 mb-10">
-                  <span className="font-bold">Date:</span> {quizDate}
+            {/* Image and Info - Side by Side */}
+            <div className="flex flex-col md:flex-row gap-3 mb-2 flex-shrink-0">
+              {/* Image */}
+              <div className="md:w-2/5 flex-shrink-0">
+                <img
+                  src={agricultureCard}
+                  alt="agriculture illustration"
+                  className="w-full h-32 md:h-40 rounded-lg object-cover select-none"
+                />
+              </div>
+
+              {/* Info */}
+              <div className="md:w-3/5 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1.5 content-center text-xs md:text-sm">
+                <div className="flex gap-1">
+                  <span className="font-semibold text-gray-700">Date:</span>
+                  <span className="text-gray-600">{quizDate}</span>
+                </div>
+                <div className="flex gap-1">
+                  <span className="font-semibold text-gray-700">Time Limit:</span>
+                  <span className="text-gray-600">{quizTimeLimit}</span>
+                </div>
+                <div className="flex gap-1">
+                  <span className="font-semibold text-gray-700">Attempts:</span>
+                  <span className="text-gray-600">{quizAttempts}</span>
+                </div>
+                <div className="flex gap-1">
+                  <span className="font-semibold text-gray-700">Points:</span>
+                  <span className="text-gray-600">{quizPoints} ⭐</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Description Section */}
+            <div className="mb-2 flex-shrink-0">
+              <h3 className="text-sm md:text-base font-bold text-gray-800 mb-1">
+                Description
+              </h3>
+              <p className="text-gray-600 text-xs leading-relaxed text-justify">
+                {quizDescription}
+              </p>
+            </div>
+
+            {/* Instructions Section */}
+            <div className="mb-2 flex-shrink-0">
+              <h3 className="text-sm md:text-base font-bold text-gray-800 mb-1">
+                Instructions
+              </h3>
+              <div className="text-gray-600 text-xs leading-relaxed text-justify">
+                <p className="mb-1">
+                  This quiz consists of <span className="font-semibold">{nbrOfQuestions}</span> multiple-choice questions. To be successful with the quizzes, it's important to conversant with the topics. Keep the following in mind:
                 </p>
-                {/* Description */}
-                <p className="text-gray-800 mb-10">
-                  <span className="font-bold">Time Limit:</span> {quizTimeLimit}
-                </p>
-                {/* Description */}
-                <p className="text-gray-800 mb-10">
-                  <span className="font-bold">Attempts:</span> {quizAttempts}
-                </p>
-                {/* Description */}
-                <p className="text-gray-800 mb-10">
-                  <span className="font-bold">Points:</span> {quizPoints} ⭐
+                <p>
+                  <span className="font-semibold text-gray-800">Timing</span> - You need to complete each of your attempts in one sitting, as you are allotted {quizTimeLimit} to each attempt. <span className="font-semibold text-gray-800">Answers</span> - You may review your answer-choices and compare them to the correct answers after your final attempt.
                 </p>
               </div>
             </div>
 
-            {/* Instruction bold */}
-            <h2 className="text-xl font-bold text-gray-700 mb-2 mt-4">
-              Description
-            </h2>
-            {/* Description */}
-            <p className="text-gray-800 mt-6 mb-6">{quizDescription}</p>
-
-            <h2 className="text-xl font-bold text-gray-700 mb-2 mt-4">
-              Instructions
-            </h2>
-            {/* Description */}
-            <p className="text-gray-800 mt-6">
-              This quiz consists of {nbrOfQuestions} multiple-choice questions.
-              To be successful with the quizzes, it's important to conversant
-              with the topics. Keep the following in mind:
-            </p>
-
-            <p className="text-gray-800 mt-6">
-              Timing - You need to complete each of your attempts in one
-              sitting, as you are allotted {quizTimeLimit} to each attempt.
-              Answers - You may review your answer-choices and compare them to
-              the correct answers after your final attempt.
-            </p>
-
-            <p className="text-gray-800 mt-6">
-              To start, click the <b>Start Quiz</b> button. When finished, click
-              the <b> Submit </b> button.
-            </p>
-
             {/* Start Quiz Button */}
-            <div className="flex justify-end mt-6">
+            <div className="flex justify-end pt-2 mt-auto border-t border-gray-200 flex-shrink-0">
               <button
-                className="bg-gray-700 hover:bg-gray-900 text-white font-semibold py-2 px-8 rounded-full"
+                className="bg-[#6B7A8F] hover:bg-[#5a6675] text-white font-medium py-2 px-6 md:px-8 rounded-lg transition-colors duration-200 text-xs md:text-sm"
                 onClick={openModal}
               >
                 Start Quiz
               </button>
             </div>
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
       {/* Modal */}
       {showModal && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
@@ -180,8 +169,8 @@ function Agriculture() {
                   type="button"
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-700 text-base font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:ml-3 sm:w-auto sm:text-sm"
                   onClick={() => {
-                    navigate("/quiz-questions"); // Replace "/quiz-questions" with the desired path to QuizQuestions component
-                    closeModal(); // Close the modal after redirection
+                    navigate("/quiz-questions");
+                    closeModal();
                   }}
                 >
                   Confirm

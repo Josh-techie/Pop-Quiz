@@ -4,22 +4,26 @@ import { auth } from "../../firebase";
 import { onAuthStateChanged } from "firebase/auth";
 
 const AuthDetails = () => {
-  // authUser state removed because it's not used in this component
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
+    // If auth is not initialized (demo mode), skip auth checks
+    if (!auth) {
+      console.warn("Firebase auth not initialized - running in demo mode");
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (!user) {
-        if (
-          !location.pathname.includes("/login") &&
-          !location.pathname.includes("/signup") &&
-          !location.pathname.includes("/forgot-password")
-        ) {
-          navigate("/login");
+        // Allow access to public routes
+        const publicRoutes = ["/", "/login", "/signup", "/forgot-password", "/signin"];
+        const isPublicRoute = publicRoutes.some(route => location.pathname === route || location.pathname.includes(route));
+
+        if (!isPublicRoute) {
+          navigate("/");
         }
       }
-      // If user exists, do nothing here; this component only enforces redirect
     });
 
     return () => unsubscribe();

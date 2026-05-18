@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 
-const Timer = ({ duration }) => {
+const Timer = ({ duration, onTimeUp }) => {
   const [secondsLeft, setSecondsLeft] = useState(parseDuration(duration));
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // State for loading indicator
@@ -29,21 +29,28 @@ const Timer = ({ duration }) => {
       setSecondsLeft((secondsLeft) => {
         if (secondsLeft === 1) {
           clearInterval(timer); // Clear the interval
-          setIsLoading(true); // Set loading to true
-          setTimeout(() => {
-            setIsModalOpen(true); // Open the modal
-            setIsLoading(false); // Set loading to false
-          }, 1000);
-          setTimeout(() => {
-            navigate("/main"); // Redirect to the main page after 2 seconds
-          }, 2000);
+
+          // If onTimeUp callback is provided, call it (for auto-submit)
+          if (onTimeUp) {
+            onTimeUp();
+          } else {
+            // Old behavior: show modal and redirect
+            setIsLoading(true);
+            setTimeout(() => {
+              setIsModalOpen(true);
+              setIsLoading(false);
+            }, 1000);
+            setTimeout(() => {
+              navigate("/main");
+            }, 2000);
+          }
         }
         return secondsLeft - 1;
       });
     }, 1000);
 
     return () => clearInterval(timer); // Cleanup the interval
-  }, [navigate]);
+  }, [navigate, onTimeUp]);
 
   const displayTime =
     secondsLeft < 60

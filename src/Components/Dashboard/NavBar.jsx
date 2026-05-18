@@ -12,6 +12,7 @@ import {
   HelpCircleIcon,
   LogOutIcon,
   BookMarkedIcon,
+  Home,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -19,7 +20,7 @@ import RightArrowIcon from "../../Assets/icons/rightArrow.svg";
 
 const variants = {
   expanded: { width: "20%" },
-  nonexpanded: { width: "6%" },
+  nonexpanded: { width: "80px" },
 };
 
 function Navbar({ activeRoute }) {
@@ -36,7 +37,7 @@ function Navbar({ activeRoute }) {
       });
   };
 
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false); // Closed by default
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
@@ -60,34 +61,29 @@ function Navbar({ activeRoute }) {
         <img src={RightArrowIcon} className="w-2" alt="arrow" />
       </div>
 
-      <div className="logo-div flex space-x-4 items-center">
-        <Link to="/main">
-          <img src={Logo} alt="logo" width={170} />
+      <div className={`logo-div flex space-x-4 items-center mb-4 ${!isExpanded ? "justify-center" : ""}`}>
+        <Link to="/main" className="flex items-center">
+          {isExpanded ? (
+            <img src={Logo} alt="Pop Quiz Logo" width={170} className="h-auto" />
+          ) : (
+            <div className="w-12 h-12 bg-[#494E52] rounded-lg flex items-center justify-center shadow-md hover:bg-gray-600 transition-colors">
+              <Home className="w-6 h-6 text-white" />
+            </div>
+          )}
         </Link>
       </div>
 
       <div className="flex flex-col space-y-8 mt-12">
-        <div className="nav-links w-full">
-          <Link
-            to="/main"
-            className={`flex space-x-3 w-full p-2 rounded ${
-              location.pathname === "/main" ? "bg-[#494E52] text-white" : ""
-            }`}
-          >
-            <LayoutDashboard />
-            <span className={!isExpanded ? "hidden" : "block"}>Dashboard</span>
-          </Link>
-        </div>
 
         <div className="nav-links w-full">
           <Link
             to="/makequiz"
-            className={`flex space-x-3 w-full p-2 rounded ${
-              location.pathname === "/makequiz" ? "bg-[#494E52] text-white" : ""
-            }`}
+            className={`flex space-x-3 w-full p-2 rounded transition-all ${
+              location.pathname === "/makequiz" ? "bg-[#494E52] text-white" : "hover:bg-gray-100"
+            } ${!isExpanded ? "justify-center" : ""}`}
           >
-            <BookMarkedIcon />
-            <span className={!isExpanded ? "hidden" : "block"}>
+            <BookMarkedIcon className="w-6 h-6 flex-shrink-0" />
+            <span className={!isExpanded ? "hidden" : "block whitespace-nowrap"}>
               Make a Quiz
             </span>
           </Link>
@@ -96,13 +92,13 @@ function Navbar({ activeRoute }) {
         <div className="nav-links w-full">
           <Link
             to="/leaderboard"
-            className={`flex space-x-3 w-full p-2 rounded ${
+            className={`flex space-x-3 w-full p-2 rounded transition-all ${
               location.pathname === "/leaderboard"
                 ? "bg-[#494E52] text-white"
-                : ""
-            }`}
+                : "hover:bg-gray-100"
+            } ${!isExpanded ? "justify-center" : ""}`}
           >
-            <BarChart3Icon />
+            <BarChart3Icon className="w-6 h-6 flex-shrink-0" />
             <span className={!isExpanded ? "hidden" : "block"}>
               Leaderboard
             </span>
@@ -112,13 +108,13 @@ function Navbar({ activeRoute }) {
         <div className="nav-links w-full">
           <Link
             to="/notification"
-            className={`flex space-x-3 w-full p-2 rounded ${
+            className={`flex space-x-3 w-full p-2 rounded transition-all ${
               location.pathname === "/notification"
                 ? "bg-[#494E52] text-white"
-                : ""
-            }`}
+                : "hover:bg-gray-100"
+            } ${!isExpanded ? "justify-center" : ""}`}
           >
-            <ArrowLeftRightIcon />
+            <ArrowLeftRightIcon className="w-6 h-6 flex-shrink-0" />
             <span className={!isExpanded ? "hidden" : "block"}>
               Notifications
             </span>
@@ -128,11 +124,11 @@ function Navbar({ activeRoute }) {
         <div className="nav-links w-full">
           <Link
             to="/account"
-            className={`flex space-x-3 w-full p-2 rounded ${
-              location.pathname === "/account" ? "bg-[#494E52] text-white" : ""
-            }`}
+            className={`flex space-x-3 w-full p-2 rounded transition-all ${
+              location.pathname === "/account" ? "bg-[#494E52] text-white" : "hover:bg-gray-100"
+            } ${!isExpanded ? "justify-center" : ""}`}
           >
-            <HelpCircleIcon />
+            <HelpCircleIcon className="w-6 h-6 flex-shrink-0" />
             <span className={!isExpanded ? "hidden" : "block"}>Profil</span>
           </Link>
         </div>
@@ -141,11 +137,11 @@ function Navbar({ activeRoute }) {
           <Link
             onClick={userSignOut}
             to="/logout"
-            className={`flex space-x-3 w-full p-2 rounded ${
-              location.pathname === "/logout" ? "bg-[#494E52] text-white" : ""
-            }`}
+            className={`flex space-x-3 w-full p-2 rounded transition-all ${
+              location.pathname === "/logout" ? "bg-[#494E52] text-white" : "hover:bg-gray-100"
+            } ${!isExpanded ? "justify-center" : ""}`}
           >
-            <LogOutIcon />
+            <LogOutIcon className="w-6 h-6 flex-shrink-0" />
             <span className={!isExpanded ? "hidden" : "block"}>Logout</span>
           </Link>
         </div>
