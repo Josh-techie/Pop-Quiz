@@ -66,68 +66,67 @@ function Medicine() {
         </div>
 
         {/* Content - No Scroll */}
-        <div className="flex-1 px-4 md:px-8 pb-4 md:pb-8 overflow-hidden flex flex-col">
+        <div className="flex-1 px-4 md:px-8 pb-4 md:pb-8 overflow-y-auto md:overflow-hidden flex flex-col">
           {/* Card */}
-          <div className="bg-white rounded-xl shadow-sm p-4 md:p-6 flex-1 flex flex-col overflow-hidden">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-1">
+          <div className="bg-white rounded-xl shadow-sm p-3 md:p-6 flex-1 flex flex-col md:overflow-hidden">
+            <h2 className="text-lg md:text-2xl font-bold text-gray-800 mb-1">
               {quizTitle}
             </h2>
-            <p className="text-gray-500 text-xs md:text-sm mb-4">
+            <p className="text-gray-500 text-xs md:text-sm mb-2 md:mb-3">
               Read the following instructions
             </p>
 
             {/* Image and Info - Side by Side */}
-            <div className="flex flex-col md:flex-row gap-6 mb-4 flex-shrink-0">
+            <div className="flex flex-col md:flex-row gap-3 mb-2 flex-shrink-0">
               {/* Image */}
               <div className="md:w-2/5 flex-shrink-0">
                 <img
                   src={medicineImg}
                   alt="medicine illustration"
-                  className="w-full h-64 md:h-72 rounded-xl object-cover select-none"
+                  className="w-full h-32 md:h-40 rounded-lg object-cover select-none"
                 />
               </div>
 
               {/* Info */}
-              <div className="md:w-3/5 flex flex-col justify-center space-y-4">
-                <div>
-                  <span className="font-semibold text-gray-700 text-sm">Date:</span>
-                  <p className="text-gray-600 text-base">{quizDate}</p>
+              <div className="md:w-3/5 grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-1.5 content-center text-xs md:text-sm">
+                <div className="flex gap-1">
+                  <span className="font-semibold text-gray-700">Date:</span>
+                  <span className="text-gray-600">{quizDate}</span>
                 </div>
-                <div>
-                  <span className="font-semibold text-gray-700 text-sm">Time Limit:</span>
-                  <p className="text-gray-600 text-base">{quizTimeLimit}</p>
+                <div className="flex gap-1">
+                  <span className="font-semibold text-gray-700">Time Limit:</span>
+                  <span className="text-gray-600">{quizTimeLimit}</span>
                 </div>
-                <div>
-                  <span className="font-semibold text-gray-700 text-sm">Attempts:</span>
-                  <p className="text-gray-600 text-base">{quizAttempts}</p>
+                <div className="flex gap-1">
+                  <span className="font-semibold text-gray-700">Attempts:</span>
+                  <span className="text-gray-600">{quizAttempts}</span>
                 </div>
-                <div>
-                  <span className="font-semibold text-gray-700 text-sm">Points:</span>
-                  <p className="text-gray-600 text-base">{quizPoints} ⭐</p>
+                <div className="flex gap-1">
+                  <span className="font-semibold text-gray-700">Points:</span>
+                  <span className="text-gray-600">{quizPoints} ⭐</span>
                 </div>
               </div>
             </div>
 
             {/* Description Section */}
-            <div className="mb-4 flex-shrink-0">
-              <h3 className="text-base md:text-lg font-bold text-gray-800 mb-2">
+            <div className="mb-2 flex-shrink-0">
+              <h3 className="text-sm md:text-base font-bold text-gray-800 mb-1">
                 Description
               </h3>
-              <p className="text-gray-600 text-xs md:text-sm leading-relaxed">
+              <p className="text-gray-600 text-xs leading-relaxed text-justify">
                 {quizDescription}
               </p>
             </div>
 
             {/* Instructions Section */}
-            <div className="flex-1 mb-3 flex-shrink-0">
-              <h3 className="text-base md:text-lg font-bold text-gray-800 mb-2">
+            <div className="mb-2 flex-shrink-0">
+              <h3 className="text-sm md:text-base font-bold text-gray-800 mb-1">
                 Instructions
               </h3>
-              <div className="text-gray-600 text-xs md:text-sm leading-snug">
-                <p className="mb-1.5">
+              <div className="text-gray-600 text-xs leading-relaxed text-justify">
+                <p className="mb-1">
                   This quiz consists of <span className="font-semibold">{nbrOfQuestions}</span> multiple-choice questions. To be successful with the quizzes, it's important to conversant with the topics. Keep the following in mind:
                 </p>
-
                 <p>
                   <span className="font-semibold text-gray-800">Timing</span> - You need to complete each of your attempts in one sitting, as you are allotted {quizTimeLimit} to each attempt. <span className="font-semibold text-gray-800">Answers</span> - You may review your answer-choices and compare them to the correct answers after your final attempt.
                 </p>
@@ -135,9 +134,9 @@ function Medicine() {
             </div>
 
             {/* Start Quiz Button */}
-            <div className="flex justify-end pt-3 border-t border-gray-100 flex-shrink-0">
+            <div className="flex justify-end pt-2 mt-auto border-t border-gray-200 flex-shrink-0">
               <button
-                className="bg-[#6B7A8F] hover:bg-[#5a6675] text-white font-medium py-2 md:py-2.5 px-8 md:px-10 rounded-lg transition-colors duration-200 text-sm"
+                className="bg-[#6B7A8F] hover:bg-[#5a6675] text-white font-medium py-2 px-6 md:px-8 rounded-lg transition-colors duration-200 text-xs md:text-sm"
                 onClick={openModal}
               >
                 Start Quiz

@@ -1,6 +1,8 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -17,14 +19,20 @@ const firebaseConfig = {
 // Initialize Firebase with error handling
 let app;
 let auth;
+let db;
+let storage;
 
 try {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
+  db = getFirestore(app);
+  storage = getStorage(app);
 } catch (error) {
   console.warn("Firebase initialization failed:", error);
-  // Create a mock auth object for development
+  // Create mock objects for development
   auth = null;
+  db = null;
+  storage = null;
 }
 
-export { auth };
+export { auth, db, storage };

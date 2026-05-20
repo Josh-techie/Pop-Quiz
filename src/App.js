@@ -3,8 +3,8 @@ import "./styles/tailwind.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignIn from "./Components/Auth/SignIn";
 import SignUp from "./Components/Auth/SignUp";
-import AuthDetails from "./Components/Auth/AuthDetails";
 import ForgotPasswd from "./Components/Auth/ForgotPasswd";
+import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import Main from "./Components/Dashboard/Main";
 import Main2 from "./Components/Account/Main2";
 import "./styles/tailwind.css";
@@ -23,37 +23,118 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        {/* <Login /> */}
-        {/* <SignIn />
-        <SignUp /> */}
-
-        <AuthDetails />
         <Routes>
+          {/* Public Routes - No Authentication Required */}
           <Route path="/" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
           <Route path="/login" element={<SignIn />} />
-          <Route path="/main" element={<Main />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPasswd />} />
-          {/*Navbar pages  */}
-          <Route path="/account" element={<Main2 />} />
-          <Route path="/makequiz" element={<MakeQuiz />} />
-          <Route path="/notification" element={<Notifications />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
 
-          {/* categories of the quiz routes */}
-          <Route path="/technology" element={<Technology />} />
-          <Route path="/medicine" element={<Medicine />} />
-          <Route path="/medicinequestions" element={<MedicineQuestions />} />
-          <Route path="/agriculture" element={<Agriculture />} />
+          {/* Protected Routes - Authentication Required */}
+          <Route
+            path="/main"
+            element={
+              <ProtectedRoute>
+                <Main />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Navbar Pages */}
+          <Route
+            path="/account"
+            element={
+              <ProtectedRoute>
+                <Main2 />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/makequiz"
+            element={
+              <ProtectedRoute>
+                <MakeQuiz />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notification"
+            element={
+              <ProtectedRoute>
+                <Notifications />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/leaderboard"
+            element={
+              <ProtectedRoute>
+                <Leaderboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Quiz Category Routes */}
+          <Route
+            path="/technology"
+            element={
+              <ProtectedRoute>
+                <Technology />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/medicine"
+            element={
+              <ProtectedRoute>
+                <Medicine />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/agriculture"
+            element={
+              <ProtectedRoute>
+                <Agriculture />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Quiz Questions Routes */}
+          <Route
+            path="/quiz-questions"
+            element={
+              <ProtectedRoute>
+                <QuizQuestions />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/medicinequestions"
+            element={
+              <ProtectedRoute>
+                <MedicineQuestions />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Review Routes */}
+          <Route
+            path="/quiz-review"
+            element={
+              <ProtectedRoute>
+                <ReviewQuiz />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/quiz-review-medicine"
-            element={<ReviewQuizMedicine />}
+            element={
+              <ProtectedRoute>
+                <ReviewQuizMedicine />
+              </ProtectedRoute>
+            }
           />
-          {/* quiz questions */}
-          <Route path="/quiz-questions" element={<QuizQuestions />} />
-
-          {/* review questions */}
-          <Route path="/quiz-review" element={<ReviewQuiz />} />
         </Routes>
       </BrowserRouter>
     </div>

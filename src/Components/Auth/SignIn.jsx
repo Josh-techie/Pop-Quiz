@@ -76,31 +76,31 @@ const SignIn = () => {
 
   return (
     <div className="fullscreen">
-      <section className="flex flex-col md:flex-row h-screen items-center">
+      <section className="flex flex-col md:flex-row h-screen items-center overflow-hidden">
         {/* Left Side */}
-        <div className="bg-blue-600 hidden lg:block w-full md:w-1/2">
+        <div className="bg-blue-600 hidden lg:block w-full md:w-1/2 h-full">
           <img src={QuoteImg} alt="Quote" className="w-full h-full object-cover" />
         </div>
 
         {/* Right Side */}
-        <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
-          <div className="w-full h-100">
+        <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-12 xl:px-16 flex items-center justify-center overflow-y-auto">
+          <div className="w-full py-6 md:py-8">
             <img
               src={require("../../Assets/Logo.png")}
               alt="Pop Quiz Logo"
-              width={150}
-              height={200}
+              width={120}
+              height={150}
               className="mx-auto"
             />
 
-            <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">
+            <h1 className="text-lg md:text-xl font-bold leading-tight mt-6 md:mt-8">
               Log in to your account
             </h1>
 
-            <form className="mt-6" onSubmit={signIn}>
+            <form className="mt-4" onSubmit={signIn}>
               {/* Email input */}
               <div>
-                <label className="block text-gray-700">Email Address</label>
+                <label className="block text-gray-700 text-sm">Email Address</label>
                 <input
                   type="text"
                   value={email}
@@ -109,7 +109,7 @@ const SignIn = () => {
                     setEmailError("");
                   }}
                   placeholder="Enter Email Address"
-                  className={`w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:bg-white focus:outline-none transition ${
+                  className={`w-full px-3 py-2 md:py-2.5 rounded-lg bg-gray-200 mt-1.5 border focus:bg-white focus:outline-none transition text-sm ${
                     emailError
                       ? "border-red-500 focus:border-red-500"
                       : "border-gray-300 focus:border-blue-500"
@@ -119,13 +119,13 @@ const SignIn = () => {
                   disabled={loading}
                 />
                 {emailError && (
-                  <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                  <p className="text-red-500 text-xs mt-1">{emailError}</p>
                 )}
               </div>
 
               {/* Password input */}
-              <div className="mt-4">
-                <label className="block text-gray-700">Password</label>
+              <div className="mt-3">
+                <label className="block text-gray-700 text-sm">Password</label>
                 <input
                   type="password"
                   value={password}
@@ -134,7 +134,7 @@ const SignIn = () => {
                     setPasswordError("");
                   }}
                   placeholder="Enter Password"
-                  className={`w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:bg-white focus:outline-none transition ${
+                  className={`w-full px-3 py-2 md:py-2.5 rounded-lg bg-gray-200 mt-1.5 border focus:bg-white focus:outline-none transition text-sm ${
                     passwordError
                       ? "border-red-500 focus:border-red-500"
                       : "border-gray-300 focus:border-blue-500"
@@ -142,17 +142,17 @@ const SignIn = () => {
                   disabled={loading}
                 />
                 {passwordError && (
-                  <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+                  <p className="text-red-500 text-xs mt-1">{passwordError}</p>
                 )}
               </div>
 
               {/* Forgot password centered with link on the action text */}
-              <div className="text-center mt-4">
-                <p className="text-sm">
-                  <span className="text-gray-500 mr-2">Forgot password?</span>
+              <div className="text-center mt-3">
+                <p className="text-xs md:text-sm">
+                  <span className="text-gray-500 mr-1">Forgot password?</span>
                   <Link
                     to="/forgot-password"
-                    className="text-sm font-semibold text-blue-600 hover:text-blue-700 focus:text-blue-700"
+                    className="text-xs md:text-sm font-semibold text-blue-600 hover:text-blue-700 focus:text-blue-700"
                   >
                     Reset password now
                   </Link>
@@ -163,7 +163,7 @@ const SignIn = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 disabled:bg-blue-300 text-white font-semibold rounded-lg px-4 py-3 mt-6 transition flex items-center justify-center"
+                className="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 disabled:bg-blue-300 text-white font-semibold rounded-lg px-4 py-2.5 mt-4 transition flex items-center justify-center text-sm"
               >
                 {loading ? (
                   <>
@@ -200,13 +200,13 @@ const SignIn = () => {
               type="button"
               onClick={signInWithGoogle}
               disabled={loading}
-              className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 disabled:bg-gray-50 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300 mt-4 transition"
+              className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 disabled:bg-gray-50 text-gray-900 font-semibold rounded-lg px-4 py-2.5 border border-gray-300 mt-3 transition text-sm"
             >
               <div className="flex items-center justify-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   xmlnsXlink="http://www.w3.org/1999/xlink"
-                  className="w-6 h-6"
+                  className="w-5 h-5"
                   viewBox="0 0 48 48"
                 >
                   <defs>
@@ -235,17 +235,17 @@ const SignIn = () => {
                     d="M48 48L17 24l-4-3 35-10z"
                   />
                 </svg>
-                <span className="ml-4">Log in with Google</span>
+                <span className="ml-3">Log in with Google</span>
               </div>
             </button>
 
             {/* Sign up link centered */}
-            <div className="text-center mt-8">
-              <p className="text-sm">
-                <span className="text-gray-500 mr-2">Need an account?</span>
+            <div className="text-center mt-4 md:mt-6">
+              <p className="text-xs md:text-sm">
+                <span className="text-gray-500 mr-1">Need an account?</span>
                 <Link
                   to="/signup"
-                  className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+                  className="text-xs md:text-sm font-semibold text-blue-600 hover:text-blue-700"
                 >
                   Create an account
                 </Link>

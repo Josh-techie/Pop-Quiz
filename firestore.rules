@@ -1,0 +1,67 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ==================== HELPER FUNCTIONS ====================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // ==================== CATEGORIES ====================
+
+    match /categories/{categoryId} {
+      // Anyone can read public categories
+      // Owners can read their private categories
+      allow read: if resource.data.isPublic == true || isOwner(resource.data.createdBy);
+
+      // Only authenticated users can create categories
+      allow create: if isAuthenticated();
+
+      // Only the owner can update or delete their categories
+      allow update, delete: if isOwner(resource.data.createdBy);
+    }
+
+    // ==================== QUIZZES ====================
+
+    match /quizzes/{quizId} {
+      // Anyone can read public quizzes
+      // Owners can read their private quizzes
+      allow read: if resource.data.settings.isPublic == true || isOwner(resource.data.createdBy);
+
+      // Only authenticated users can create quizzes
+      allow create: if isAuthenticated();
+
+      // Only the owner can update or delete their quizzes
+      allow update, delete: if isOwner(resource.data.createdBy);
+    }
+
+    // ==================== QUIZ ATTEMPTS ====================
+
+    match /quizAttempts/{attemptId} {
+      // Users can only read their own attempts
+      allow read: if isOwner(resource.data.userId);
+
+      // Users can only create attempts for themselves
+      allow create: if isAuthenticated() && request.auth.uid == request.resource.data.userId;
+
+      // Attempts are immutable - no updates or deletes
+      allow update, delete: if false;
+    }
+
+    // ==================== USERS ====================
+
+    match /users/{userId} {
+      // Users can read public profiles or their own profile
+      allow read: if resource.data.preferences.publicProfile == true || isOwner(userId);
+
+      // Users can only write to their own profile
+      allow write: if isOwner(userId);
+    }
+  }
+}

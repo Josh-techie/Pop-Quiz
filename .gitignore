@@ -27,3 +27,6 @@ credentials.txt
 
 # Api keys ...
 .env
+
+# Claude documentation
+claude/

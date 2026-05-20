@@ -73,17 +73,23 @@ const SignUp = () => {
       } else {
         await createUserWithEmailAndPassword(authInstance, email, password);
 
-        await sendEmailVerification(authInstance.currentUser);
+        // Custom action code settings for better email
+        const actionCodeSettings = {
+          url: `${window.location.origin}/login?verified=true`,
+          handleCodeInApp: false,
+        };
+
+        await sendEmailVerification(authInstance.currentUser, actionCodeSettings);
 
         setLoading(false);
         setEmail("");
         setPassword("");
         setSuccessMessage(
-          "Signed up successfully, please check your email for verification!"
+          "Account created! Please check your email to verify your account."
         );
         setTimeout(() => {
           setSuccessMessage("");
-        }, 4000);
+        }, 5000);
       }
     } catch (error) {
       setLoading(false);
@@ -97,28 +103,28 @@ const SignUp = () => {
 
   return (
     <div className="fullscreen">
-      <section className="flex flex-col md:flex-row h-screen items-center">
+      <section className="flex flex-col md:flex-row h-screen items-center overflow-hidden">
         {/* first side */}
         <div
-          className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
-          flex items-center justify-center"
+          className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-12 xl:px-16
+          flex items-center justify-center overflow-y-auto"
         >
-          <div className="w-full h-100">
+          <div className="w-full py-4 md:py-6">
             <img
               src={Logo}
               alt="Pop Quiz Logo"
-              width={150}
-              height={200}
+              width={120}
+              height={150}
               className="mx-auto"
             />
 
-            <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">
+            <h1 className="text-base md:text-lg font-bold leading-tight mt-4 md:mt-6">
               Get Started with Pop Quiz 🚀
             </h1>
 
-            <form className="mt-6" onSubmit={signUp}>
+            <form className="mt-3" onSubmit={signUp}>
               <div>
-                <label className="block text-gray-700">Email Address</label>
+                <label className="block text-gray-700 text-sm">Email Address</label>
                 <input
                   type="text"
                   onChange={(e) => {
@@ -127,7 +133,7 @@ const SignUp = () => {
                   }}
                   value={email}
                   placeholder="Enter Email Address"
-                  className={`w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:bg-white focus:outline-none transition ${
+                  className={`w-full px-3 py-2 md:py-2.5 rounded-lg bg-gray-200 mt-1.5 border focus:bg-white focus:outline-none transition text-sm ${
                     emailError
                       ? "border-red-500 focus:border-red-500"
                       : "border-gray-300 focus:border-blue-500"
@@ -137,12 +143,12 @@ const SignUp = () => {
                   disabled={loading}
                 />
                 {emailError && (
-                  <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                  <p className="text-red-500 text-xs mt-1">{emailError}</p>
                 )}
               </div>
 
-              <div className="mt-4">
-                <label className="block text-gray-700">Password</label>
+              <div className="mt-2.5">
+                <label className="block text-gray-700 text-sm">Password</label>
                 <input
                   type="password"
                   onChange={(e) => {
@@ -151,7 +157,7 @@ const SignUp = () => {
                   }}
                   value={password}
                   placeholder="Enter Password"
-                  className={`w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:bg-white focus:outline-none transition ${
+                  className={`w-full px-3 py-2 md:py-2.5 rounded-lg bg-gray-200 mt-1.5 border focus:bg-white focus:outline-none transition text-sm ${
                     passwordError
                       ? "border-red-500 focus:border-red-500"
                       : "border-gray-300 focus:border-blue-500"
@@ -159,13 +165,13 @@ const SignUp = () => {
                   disabled={loading}
                 />
                 {passwordError && (
-                  <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+                  <p className="text-red-500 text-xs mt-1">{passwordError}</p>
                 )}
               </div>
 
               {successMessage && (
                 <div
-                  className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mt-4"
+                  className="bg-green-100 border border-green-400 text-green-700 px-2.5 py-1.5 rounded relative mt-2.5 text-xs"
                   role="alert"
                 >
                   <span className="block sm:inline">{successMessage}</span>
@@ -175,7 +181,7 @@ const SignUp = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 disabled:bg-blue-300 text-white font-semibold rounded-lg px-4 py-3 mt-6 transition flex items-center justify-center"
+                className="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 disabled:bg-blue-300 text-white font-semibold rounded-lg px-4 py-2.5 mt-4 transition flex items-center justify-center text-sm"
               >
                 {loading ? (
                   <>
@@ -207,11 +213,11 @@ const SignUp = () => {
               </button>
             </form>
 
-            <hr className="my-6 border-gray-300 w-full" />
+            <hr className="my-2.5 border-gray-300 w-full" />
 
             <button
               type="button"
-              className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 disabled:bg-gray-50 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300 transition"
+              className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 disabled:bg-gray-50 text-gray-900 font-semibold rounded-lg px-4 py-2 border border-gray-300 transition text-sm"
               disabled={loading}
               onClick={() => {
                 setLoading(true);
@@ -230,7 +236,7 @@ const SignUp = () => {
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   xmlnsXlink="http://www.w3.org/1999/xlink"
-                  className="w-6 h-6"
+                  className="w-5 h-5"
                   viewBox="0 0 48 48"
                 >
                   <defs>
@@ -259,11 +265,11 @@ const SignUp = () => {
                     d="M48 48L17 24l-4-3 35-10z"
                   />
                 </svg>
-                <span className="ml-4">Sign Up with Google</span>
+                <span className="ml-3">Sign Up with Google</span>
               </div>
             </button>
 
-            <p className="mt-8">
+            <p className="mt-3 text-xs md:text-sm text-center">
               Already Have an account? {""}
               <a
                 href="/Login"
@@ -272,14 +278,10 @@ const SignUp = () => {
                 Log In
               </a>
             </p>
-
-            <p className="text-sm text-gray-500 mt-12">
-              &copy; Joe ALX 😑- All Rights Reserved.
-            </p>
           </div>
         </div>
         {/* second side */}
-        <div className="bg-blue-600 hidden lg:block w-full md:w-1/2">
+        <div className="bg-blue-600 hidden lg:block w-full md:w-1/2 h-full">
           <img src={QuoteImg} alt="Quote" className="w-full h-full object-cover" />
         </div>
       </section>

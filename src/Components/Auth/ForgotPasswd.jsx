@@ -34,7 +34,13 @@ const ForgotPasswd = () => {
     setSuccessMessage("");
 
     try {
-      await sendPasswordResetEmail(auth, email);
+      // Action code settings to keep user on platform
+      const actionCodeSettings = {
+        url: `${window.location.origin}/login`,
+        handleCodeInApp: false,
+      };
+
+      await sendPasswordResetEmail(auth, email, actionCodeSettings);
       setLoading(false);
       setSuccessMessage(
         `Password reset email sent to ${email}. Please check your inbox.`
@@ -69,45 +75,45 @@ const ForgotPasswd = () => {
 
   return (
     <div className="fullscreen">
-      <section className="flex flex-col md:flex-row h-screen items-center">
+      <section className="flex flex-col md:flex-row h-screen items-center overflow-hidden">
         {/* Left Side - Quote Image */}
-        <div className="bg-blue-600 hidden lg:block w-full md:w-1/2">
+        <div className="bg-blue-600 hidden lg:block w-full md:w-1/2 h-full">
           <img src={QuoteImg} alt="Quote" className="w-full h-full object-cover" />
         </div>
 
         {/* Right Side - Form */}
-        <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12 flex items-center justify-center">
-          <div className="w-full h-100">
+        <div className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-12 xl:px-16 flex items-center justify-center overflow-y-auto">
+          <div className="w-full py-6 md:py-8">
             {/* Logo */}
             <img
               src={require("../../Assets/Logo.png")}
               alt="Pop Quiz Logo"
-              width={150}
-              height={200}
+              width={120}
+              height={150}
               className="mx-auto"
             />
 
             {/* Header */}
-            <h1 className="text-xl md:text-2xl font-bold leading-tight mt-12">
+            <h1 className="text-lg md:text-xl font-bold leading-tight mt-6 md:mt-8">
               Forgot Your Password?
             </h1>
-            <p className="text-gray-600 text-sm mt-2">
+            <p className="text-gray-600 text-xs md:text-sm mt-2">
               No worries! Enter your email and we'll send you reset instructions.
             </p>
 
             {/* Success Message */}
             {successMessage && (
-              <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mt-6" role="alert">
+              <div className="bg-green-100 border border-green-400 text-green-700 px-3 py-2 rounded mt-4 text-xs" role="alert">
                 <p className="font-medium">Email Sent Successfully!</p>
-                <p className="text-sm mt-1">{successMessage}</p>
+                <p className="text-xs mt-1">{successMessage}</p>
               </div>
             )}
 
             {/* Form */}
-            <form className="mt-6" onSubmit={handleResetPassword}>
+            <form className="mt-4" onSubmit={handleResetPassword}>
               {/* Email Input */}
               <div>
-                <label className="block text-gray-700">Email Address</label>
+                <label className="block text-gray-700 text-sm">Email Address</label>
                 <input
                   type="email"
                   value={email}
@@ -116,7 +122,7 @@ const ForgotPasswd = () => {
                     setEmailError("");
                   }}
                   placeholder="Enter Email Address"
-                  className={`w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:bg-white focus:outline-none transition ${
+                  className={`w-full px-3 py-2 md:py-2.5 rounded-lg bg-gray-200 mt-1.5 border focus:bg-white focus:outline-none transition text-sm ${
                     emailError
                       ? "border-red-500 focus:border-red-500"
                       : "border-gray-300 focus:border-blue-500"
@@ -126,10 +132,10 @@ const ForgotPasswd = () => {
                   disabled={loading || successMessage}
                 />
                 {emailError && (
-                  <p className="text-red-500 text-sm mt-1">{emailError}</p>
+                  <p className="text-red-500 text-xs mt-1">{emailError}</p>
                 )}
                 {!emailError && !successMessage && (
-                  <p className="text-gray-500 text-xs mt-2">
+                  <p className="text-gray-500 text-xs mt-1.5">
                     Check your spam folder if you don't see the email.
                   </p>
                 )}
@@ -139,7 +145,7 @@ const ForgotPasswd = () => {
               <button
                 type="submit"
                 disabled={loading || successMessage}
-                className="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 disabled:bg-blue-300 text-white font-semibold rounded-lg px-4 py-3 mt-6 transition flex items-center justify-center"
+                className="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 disabled:bg-blue-300 text-white font-semibold rounded-lg px-4 py-2.5 mt-4 transition flex items-center justify-center text-sm"
               >
                 {loading ? (
                   <>
@@ -174,22 +180,22 @@ const ForgotPasswd = () => {
             </form>
 
             {/* Back to Login */}
-            <div className="text-center mt-8">
+            <div className="text-center mt-4 md:mt-6">
               <Link
                 to="/"
-                className="text-blue-500 hover:text-blue-700 font-semibold"
+                className="text-blue-500 hover:text-blue-700 font-semibold text-xs md:text-sm"
               >
                 ← Back to Login
               </Link>
             </div>
 
             {/* Sign Up Link */}
-            <div className="text-center mt-4">
-              <p className="text-sm">
-                <span className="text-gray-500 mr-2">Don't have an account?</span>
+            <div className="text-center mt-3 md:mt-4">
+              <p className="text-xs md:text-sm">
+                <span className="text-gray-500 mr-1">Don't have an account?</span>
                 <Link
                   to="/signup"
-                  className="text-sm font-semibold text-blue-600 hover:text-blue-700"
+                  className="text-xs md:text-sm font-semibold text-blue-600 hover:text-blue-700"
                 >
                   Create an account
                 </Link>
