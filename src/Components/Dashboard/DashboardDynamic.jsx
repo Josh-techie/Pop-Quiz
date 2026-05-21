@@ -335,6 +335,8 @@ function DashboardDynamic() {
 
 // Delete Category Confirmation Modal
 const DeleteCategoryModal = ({ categoryName, quizCount, onConfirm, onCancel, loading }) => {
+  const hasQuizzes = quizCount > 0;
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
@@ -344,56 +346,55 @@ const DeleteCategoryModal = ({ categoryName, quizCount, onConfirm, onCancel, loa
         {/* Modal panel */}
         <div className="relative inline-block w-full max-w-md p-6 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
           {/* Icon */}
-          <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 bg-red-100 rounded-full">
-            <Trash2 className="w-6 h-6 text-red-600" />
+          <div className={`flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full ${
+            hasQuizzes ? 'bg-orange-100' : 'bg-red-100'
+          }`}>
+            <Trash2 className={`w-6 h-6 ${hasQuizzes ? 'text-orange-600' : 'text-red-600'}`} />
           </div>
 
           {/* Title */}
-          <h3 className="text-lg font-bold text-gray-900 text-center mb-2">
+          <h3 className="text-lg font-bold text-gray-900 text-center mb-4">
             Delete "{categoryName}"?
           </h3>
 
-          {/* Message - Different based on quiz count */}
-          <div className="mb-6">
-            {quizCount > 0 ? (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-3">
-                <p className="text-sm text-yellow-800 font-medium mb-1">
-                  ⚠️ Warning: This category contains {quizCount} {quizCount === 1 ? 'quiz' : 'quizzes'}!
+          {/* Message */}
+          {hasQuizzes ? (
+            <>
+              {/* Strong Warning Box */}
+              <div className="bg-orange-50 border-2 border-orange-300 rounded-lg p-4 mb-4">
+                <p className="text-sm text-orange-900 font-semibold mb-2">
+                  ⚠️ This category contains {quizCount} active {quizCount === 1 ? 'quiz' : 'quizzes'}
                 </p>
-                <p className="text-xs text-yellow-700">
-                  Deleting this category will make these quizzes orphaned. Consider moving them first.
-                </p>
-              </div>
-            ) : (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
-                <p className="text-sm text-blue-800">
-                  ℹ️ This category is empty (no quizzes inside).
+                <p className="text-xs text-orange-800 leading-relaxed">
+                  Deleting this category will automatically unlink {quizCount === 1 ? 'this quiz' : 'all quizzes'}, making {quizCount === 1 ? 'it' : 'them'} orphaned and harder to find. This action is permanent and cannot be undone.
                 </p>
               </div>
-            )}
-
-            <p className="text-sm text-gray-600 text-center">
-              {quizCount > 0
-                ? "Are you absolutely sure? This action cannot be undone!"
-                : "You can safely delete this empty category."}
+            </>
+          ) : (
+            <p className="text-sm text-gray-600 text-center mb-6">
+              This category is empty and safe to delete.
             </p>
-          </div>
+          )}
 
           {/* Buttons */}
           <div className="flex gap-3">
             <button
               onClick={onCancel}
               disabled={loading}
-              className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+              className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               onClick={onConfirm}
               disabled={loading}
-              className="flex-1 px-4 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors disabled:opacity-50"
+              className={`flex-1 px-4 py-2 text-sm font-semibold text-white rounded-lg transition-colors disabled:opacity-50 ${
+                hasQuizzes
+                  ? 'bg-orange-600 hover:bg-orange-700'
+                  : 'bg-red-600 hover:bg-red-700'
+              }`}
             >
-              {loading ? 'Deleting...' : 'Delete Category'}
+              {loading ? 'Deleting...' : hasQuizzes ? `Yes, Delete (${quizCount})` : 'Delete'}
             </button>
           </div>
         </div>

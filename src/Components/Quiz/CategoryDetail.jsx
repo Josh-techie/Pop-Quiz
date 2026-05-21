@@ -303,11 +303,9 @@ function CategoryDetail() {
 
       {/* Delete Category Confirmation Modal */}
       {showDeleteCategoryModal && (
-        <ConfirmModal
-          title="Delete Category"
-          message={`Are you sure you want to delete "${category.name}"? This will also delete all quizzes in this category. This action cannot be undone.`}
-          confirmText="Delete Category"
-          confirmColor="red"
+        <DeleteCategoryModal
+          categoryName={category.name}
+          quizCount={quizzes.length}
           onConfirm={handleDeleteCategory}
           onCancel={() => setShowDeleteCategoryModal(false)}
           loading={deleting}
@@ -333,7 +331,77 @@ function CategoryDetail() {
   );
 }
 
-// Confirmation Modal Component
+// Delete Category Modal Component
+const DeleteCategoryModal = ({ categoryName, quizCount, onConfirm, onCancel, loading }) => {
+  const hasQuizzes = quizCount > 0;
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+        {/* Background overlay */}
+        <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onClick={onCancel}></div>
+
+        {/* Modal panel */}
+        <div className="relative inline-block w-full max-w-md p-6 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+          {/* Icon */}
+          <div className={`flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full ${
+            hasQuizzes ? 'bg-orange-100' : 'bg-red-100'
+          }`}>
+            <Trash2 className={`w-6 h-6 ${hasQuizzes ? 'text-orange-600' : 'text-red-600'}`} />
+          </div>
+
+          {/* Title */}
+          <h3 className="text-lg font-bold text-gray-900 text-center mb-4">
+            Delete "{categoryName}"?
+          </h3>
+
+          {/* Message */}
+          {hasQuizzes ? (
+            <>
+              {/* Strong Warning Box */}
+              <div className="bg-orange-50 border-2 border-orange-300 rounded-lg p-4 mb-4">
+                <p className="text-sm text-orange-900 font-semibold mb-2">
+                  ⚠️ This category contains {quizCount} active {quizCount === 1 ? 'quiz' : 'quizzes'}
+                </p>
+                <p className="text-xs text-orange-800 leading-relaxed">
+                  Deleting this category will automatically unlink {quizCount === 1 ? 'this quiz' : 'all quizzes'}, making {quizCount === 1 ? 'it' : 'them'} orphaned and harder to find. This action is permanent and cannot be undone.
+                </p>
+              </div>
+            </>
+          ) : (
+            <p className="text-sm text-gray-600 text-center mb-6">
+              This category is empty and safe to delete.
+            </p>
+          )}
+
+          {/* Buttons */}
+          <div className="flex gap-3">
+            <button
+              onClick={onCancel}
+              disabled={loading}
+              className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={onConfirm}
+              disabled={loading}
+              className={`flex-1 px-4 py-2 text-sm font-semibold text-white rounded-lg transition-colors disabled:opacity-50 ${
+                hasQuizzes
+                  ? 'bg-orange-600 hover:bg-orange-700'
+                  : 'bg-red-600 hover:bg-red-700'
+              }`}
+            >
+              {loading ? 'Deleting...' : hasQuizzes ? `Yes, Delete (${quizCount})` : 'Delete'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Quiz Deletion Modal Component
 const ConfirmModal = ({ title, message, confirmText, confirmColor = "red", onConfirm, onCancel, loading }) => {
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">

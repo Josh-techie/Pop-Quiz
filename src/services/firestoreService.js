@@ -430,6 +430,81 @@ export const getUserProfile = async (userId) => {
   }
 };
 
+/**
+ * Get user stats (streak, quizzes completed, total points)
+ */
+export const getUserStats = async (userId) => {
+  try {
+    // Get user attempts
+    const attemptsQuery = query(
+      collection(db, "quizAttempts"),
+      where("userId", "==", userId),
+      orderBy("completedAt", "desc")
+    );
+
+    const attemptsSnapshot = await getDocs(attemptsQuery);
+    const attempts = [];
+    attemptsSnapshot.forEach((doc) => {
+      attempts.push({ id: doc.id, ...doc.data() });
+    });
+
+    // Calculate total points
+    const totalPoints = attempts.reduce((sum, attempt) => sum + (attempt.score || 0), 0);
+
+    // Calculate streak (consecutive days)
+    let streak = 0;
+    if (attempts.length > 0) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const attemptDates = attempts.map(attempt => {
+        const date = attempt.completedAt?.toDate() || new Date(attempt.completedAt);
+        date.setHours(0, 0, 0, 0);
+        return date.getTime();
+      });
+
+      // Get unique dates (remove duplicates from same day)
+      const uniqueDates = [...new Set(attemptDates)].sort((a, b) => b - a);
+
+      // Check if streak is still active (today or yesterday)
+      const dayInMs = 24 * 60 * 60 * 1000;
+      const todayMs = today.getTime();
+      const yesterdayMs = todayMs - dayInMs;
+
+      if (uniqueDates[0] === todayMs || uniqueDates[0] === yesterdayMs) {
+        streak = 1;
+        let currentDate = uniqueDates[0];
+
+        for (let i = 1; i < uniqueDates.length; i++) {
+          const expectedPrevDay = currentDate - dayInMs;
+          if (uniqueDates[i] === expectedPrevDay) {
+            streak++;
+            currentDate = uniqueDates[i];
+          } else {
+            break;
+          }
+        }
+      }
+    }
+
+    return {
+      success: true,
+      data: {
+        streak,
+        quizzesCompleted: attempts.length,
+        totalPoints,
+      },
+    };
+  } catch (error) {
+    console.error("Error getting user stats:", error);
+    return {
+      success: false,
+      error: error.message,
+      data: { streak: 0, quizzesCompleted: 0, totalPoints: 0 }
+    };
+  }
+};
+
 // ==================== SEARCH ====================
 
 /**
