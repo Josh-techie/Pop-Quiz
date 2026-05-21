@@ -30,3 +30,6 @@ credentials.txt
 
 # Claude documentation
 claude/
+
+# Scripts to handle the backend
+scripts/

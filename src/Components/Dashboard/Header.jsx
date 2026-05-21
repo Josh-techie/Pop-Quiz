@@ -90,7 +90,7 @@ const DashboardHeader = ({
 DashboardHeader.propTypes = {
   toggleDropdown: PropTypes.func.isRequired,
   showDropdown: PropTypes.bool.isRequired,
-  avatar: PropTypes.string.isRequired,
+  avatar: PropTypes.string,
 };
 
 export default DashboardHeader;

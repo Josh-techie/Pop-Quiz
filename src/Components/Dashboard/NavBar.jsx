@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { useLocation } from "react-router-dom";
+import { useNotifications } from "../../contexts/NotificationContext";
 
 import Logo from "../../Assets/Logo.png";
 
 import {
-  ArrowLeftRightIcon,
-  BarChart3Icon,
-  LayoutDashboard,
-  HelpCircleIcon,
-  LogOutIcon,
-  BookMarkedIcon,
+  Bell,
+  Trophy,
+  ClipboardEdit,
+  User,
+  LogOut,
   Home,
 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -26,6 +26,7 @@ const variants = {
 function Navbar({ activeRoute }) {
   const navigate = useNavigate();
   const auth = getAuth();
+  const { unreadCount } = useNotifications();
 
   const userSignOut = () => {
     signOut(auth)
@@ -75,21 +76,29 @@ function Navbar({ activeRoute }) {
 
       <div className="flex flex-col space-y-8 mt-12">
 
-        <div className="nav-links w-full">
+        {/* Make a Quiz */}
+        <div className="nav-links w-full relative group">
           <Link
             to="/makequiz"
             className={`flex space-x-3 w-full p-2 rounded transition-all ${
               location.pathname === "/makequiz" ? "bg-[#494E52] text-white" : "hover:bg-gray-100"
             } ${!isExpanded ? "justify-center" : ""}`}
           >
-            <BookMarkedIcon className="w-6 h-6 flex-shrink-0" />
+            <ClipboardEdit className="w-6 h-6 flex-shrink-0" />
             <span className={!isExpanded ? "hidden" : "block whitespace-nowrap"}>
               Make a Quiz
             </span>
           </Link>
+          {/* Tooltip - only show when collapsed */}
+          {!isExpanded && (
+            <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-50">
+              Make a Quiz
+            </div>
+          )}
         </div>
 
-        <div className="nav-links w-full">
+        {/* Leaderboard */}
+        <div className="nav-links w-full relative group">
           <Link
             to="/leaderboard"
             className={`flex space-x-3 w-full p-2 rounded transition-all ${
@@ -98,42 +107,70 @@ function Navbar({ activeRoute }) {
                 : "hover:bg-gray-100"
             } ${!isExpanded ? "justify-center" : ""}`}
           >
-            <BarChart3Icon className="w-6 h-6 flex-shrink-0" />
+            <Trophy className="w-6 h-6 flex-shrink-0" />
             <span className={!isExpanded ? "hidden" : "block"}>
               Leaderboard
             </span>
           </Link>
+          {/* Tooltip */}
+          {!isExpanded && (
+            <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-50">
+              Leaderboard
+            </div>
+          )}
         </div>
 
-        <div className="nav-links w-full">
+        {/* Notifications */}
+        <div className="nav-links w-full relative group">
           <Link
             to="/notification"
-            className={`flex space-x-3 w-full p-2 rounded transition-all ${
+            className={`flex space-x-3 w-full p-2 rounded transition-all relative ${
               location.pathname === "/notification"
                 ? "bg-[#494E52] text-white"
                 : "hover:bg-gray-100"
             } ${!isExpanded ? "justify-center" : ""}`}
           >
-            <ArrowLeftRightIcon className="w-6 h-6 flex-shrink-0" />
+            <div className="relative flex-shrink-0">
+              <Bell className="w-6 h-6" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </div>
             <span className={!isExpanded ? "hidden" : "block"}>
               Notifications
             </span>
           </Link>
+          {/* Tooltip */}
+          {!isExpanded && (
+            <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-50">
+              Notifications
+            </div>
+          )}
         </div>
 
-        <div className="nav-links w-full">
+        {/* Profile */}
+        <div className="nav-links w-full relative group">
           <Link
             to="/account"
             className={`flex space-x-3 w-full p-2 rounded transition-all ${
               location.pathname === "/account" ? "bg-[#494E52] text-white" : "hover:bg-gray-100"
             } ${!isExpanded ? "justify-center" : ""}`}
           >
-            <HelpCircleIcon className="w-6 h-6 flex-shrink-0" />
-            <span className={!isExpanded ? "hidden" : "block"}>Profil</span>
+            <User className="w-6 h-6 flex-shrink-0" />
+            <span className={!isExpanded ? "hidden" : "block"}>Profile</span>
           </Link>
+          {/* Tooltip */}
+          {!isExpanded && (
+            <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-50">
+              Profile
+            </div>
+          )}
         </div>
 
-        <div className="nav-links w-full">
+        {/* Logout */}
+        <div className="nav-links w-full relative group">
           <Link
             onClick={userSignOut}
             to="/logout"
@@ -141,9 +178,15 @@ function Navbar({ activeRoute }) {
               location.pathname === "/logout" ? "bg-[#494E52] text-white" : "hover:bg-gray-100"
             } ${!isExpanded ? "justify-center" : ""}`}
           >
-            <LogOutIcon className="w-6 h-6 flex-shrink-0" />
+            <LogOut className="w-6 h-6 flex-shrink-0" />
             <span className={!isExpanded ? "hidden" : "block"}>Logout</span>
           </Link>
+          {/* Tooltip */}
+          {!isExpanded && (
+            <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-50">
+              Logout
+            </div>
+          )}
         </div>
       </div>
     </motion.div>

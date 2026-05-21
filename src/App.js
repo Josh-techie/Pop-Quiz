@@ -18,11 +18,17 @@ import Medicine from "./Components/Quiz/Medicine";
 import Agriculture from "./Components/Quiz/Agriculture";
 import MedicineQuestions from "./Components/Quiz/MedicineQuestions";
 import ReviewQuizMedicine from "./Components/Quiz/ReviewQuizMedicine";
+import CategoryDetail from "./Components/Quiz/CategoryDetail";
+import AllCategories from "./Components/Dashboard/AllCategories";
+import { NotificationProvider } from "./contexts/NotificationContext";
+import ToastNotification from "./Components/Common/ToastNotification";
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
+    <NotificationProvider>
+      <div className="App">
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <ToastNotification />
         <Routes>
           {/* Public Routes - No Authentication Required */}
           <Route path="/" element={<SignIn />} />
@@ -75,6 +81,22 @@ function App() {
           />
 
           {/* Quiz Category Routes */}
+          <Route
+            path="/categories"
+            element={
+              <ProtectedRoute>
+                <AllCategories />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/category/:categoryId"
+            element={
+              <ProtectedRoute>
+                <CategoryDetail />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/technology"
             element={
@@ -138,6 +160,7 @@ function App() {
         </Routes>
       </BrowserRouter>
     </div>
+    </NotificationProvider>
   );
 }
 

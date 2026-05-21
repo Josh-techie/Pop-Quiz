@@ -35,43 +35,16 @@ export const createCategory = async (categoryData) => {
 };
 
 /**
- * Get all public categories + user's private categories
+ * Get all categories (all categories are now visible to everyone)
  */
 export const getCategories = async (userId = null) => {
   try {
-    let q;
-    if (userId) {
-      // Get public categories OR user's own categories
-      q = query(
-        collection(db, "categories"),
-        where("isPublic", "==", true)
-      );
-    } else {
-      // Get only public categories (for non-authenticated users)
-      q = query(
-        collection(db, "categories"),
-        where("isPublic", "==", true)
-      );
-    }
-
-    const querySnapshot = await getDocs(q);
+    // Get all categories - no filtering by isPublic anymore
+    const querySnapshot = await getDocs(collection(db, "categories"));
     const categories = [];
     querySnapshot.forEach((doc) => {
       categories.push({ id: doc.id, ...doc.data() });
     });
-
-    // Also get user's private categories if userId is provided
-    if (userId) {
-      const privateQuery = query(
-        collection(db, "categories"),
-        where("createdBy", "==", userId),
-        where("isPublic", "==", false)
-      );
-      const privateSnapshot = await getDocs(privateQuery);
-      privateSnapshot.forEach((doc) => {
-        categories.push({ id: doc.id, ...doc.data() });
-      });
-    }
 
     return { success: true, data: categories };
   } catch (error) {
