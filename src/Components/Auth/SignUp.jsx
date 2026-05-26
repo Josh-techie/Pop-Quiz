@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   createUserWithEmailAndPassword,
   fetchSignInMethodsForEmail,
@@ -10,6 +10,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import Logo from "../../Assets/Logo.png";
 import QuoteImg from "../../Assets/Quote.jpg";
+import { createUserProfile, checkUsernameAvailability, getUserProfile } from "../../services/firestoreService";
+import { Eye, EyeOff, Check, X } from "lucide-react";
 
 // Move redirect_home function outside the component
 function redirect_home(navigate) {
@@ -17,24 +19,121 @@ function redirect_home(navigate) {
 }
 
 const SignUp = () => {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [usernameError, setUsernameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checkingUsername, setCheckingUsername] = useState(false);
+  const [usernameAvailable, setUsernameAvailable] = useState(null);
+  const [passwordStrength, setPasswordStrength] = useState({ level: 0, label: "", color: "" });
   const navigate = useNavigate();
 
   const provider = new GoogleAuthProvider();
   const authInstance = getAuth();
 
+  // Password strength checker
+  useEffect(() => {
+    if (!password) {
+      setPasswordStrength({ level: 0, label: "", color: "", segments: 0 });
+      return;
+    }
+
+    let strength = 0;
+    let label = "";
+    let color = "";
+    let segments = 0;
+
+    // Length check
+    if (password.length >= 8) strength++;
+    if (password.length >= 12) strength++;
+
+    // Character variety checks
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+    if (/\d/.test(password)) strength++;
+    if (/[^a-zA-Z\d]/.test(password)) strength++;
+
+    // Set label, color, and segments based on strength
+    if (password.length < 8) {
+      label = "Too weak";
+      color = "text-red-600";
+      segments = 1;
+    } else if (strength <= 2) {
+      label = "Medium strength";
+      color = "text-orange-500";
+      segments = 2;
+    } else if (strength <= 4) {
+      label = "Good password";
+      color = "text-blue-600";
+      segments = 3;
+    } else {
+      label = "Strong password!";
+      color = "text-green-600";
+      segments = 4;
+    }
+
+    setPasswordStrength({ level: strength, label, color, segments });
+  }, [password]);
+
+  const validateUsername = (value) => {
+    if (!value) {
+      return "This field is required";
+    }
+    if (value.length < 3) {
+      return "Username must be at least 3 characters";
+    }
+    if (value.length > 20) {
+      return "Username must be less than 20 characters";
+    }
+    if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+      return "Only letters, numbers, and underscores allowed";
+    }
+    return null;
+  };
+
+  const handleUsernameChange = async (value) => {
+    setUsername(value);
+    setUsernameError("");
+    setUsernameAvailable(null);
+
+    const error = validateUsername(value);
+    if (error) {
+      setUsernameError(error);
+      return;
+    }
+
+    // Check availability with 300ms debouncing (fast)
+    setCheckingUsername(true);
+    setTimeout(async () => {
+      const result = await checkUsernameAvailability(value);
+      setCheckingUsername(false);
+      if (result.success && !result.available) {
+        setUsernameError("This username is already taken");
+        setUsernameAvailable(false);
+      } else if (result.success && result.available) {
+        setUsernameAvailable(true);
+      }
+    }, 300);
+  };
+
   const validateForm = () => {
     let isValid = true;
+    setUsernameError("");
     setEmailError("");
     setPasswordError("");
 
+    const usernameValidation = validateUsername(username);
+    if (usernameValidation) {
+      setUsernameError(usernameValidation);
+      isValid = false;
+    }
+
     if (!email) {
-      setEmailError("Email is required");
+      setEmailError("This field is required");
       isValid = false;
     } else if (!/\S+@\S+\.\S+/.test(email)) {
       setEmailError("Please enter a valid email");
@@ -42,7 +141,7 @@ const SignUp = () => {
     }
 
     if (!password) {
-      setPasswordError("Password is required");
+      setPasswordError("This field is required");
       isValid = false;
     } else if (password.length < 6) {
       setPasswordError("Password must be at least 6 characters");
@@ -54,7 +153,7 @@ const SignUp = () => {
 
   const signUp = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -69,9 +168,24 @@ const SignUp = () => {
 
       if (signInMethods.length > 0) {
         setLoading(false);
-        setEmailError("Email already exists in our database.");
+        setEmailError("Email already exists in our database");
       } else {
-        await createUserWithEmailAndPassword(authInstance, email, password);
+        // Create Firebase Auth account
+        const userCredential = await createUserWithEmailAndPassword(authInstance, email, password);
+        const user = userCredential.user;
+
+        // Create Firestore user profile with username
+        const profileResult = await createUserProfile(user.uid, {
+          username,
+          email,
+          displayName: username,
+        });
+
+        if (!profileResult.success) {
+          setLoading(false);
+          setUsernameError(profileResult.error || "Failed to create profile");
+          return;
+        }
 
         // Custom action code settings for better email
         const actionCodeSettings = {
@@ -82,6 +196,7 @@ const SignUp = () => {
         await sendEmailVerification(authInstance.currentUser, actionCodeSettings);
 
         setLoading(false);
+        setUsername("");
         setEmail("");
         setPassword("");
         setSuccessMessage(
@@ -94,7 +209,7 @@ const SignUp = () => {
     } catch (error) {
       setLoading(false);
       if (error.code === "auth/email-already-in-use") {
-        setEmailError("Email already exists in our database.");
+        setEmailError("Email already exists in our database");
       } else {
         setPasswordError("An error occurred. Please try again.");
       }
@@ -104,27 +219,71 @@ const SignUp = () => {
   return (
     <div className="fullscreen">
       <section className="flex flex-col md:flex-row h-screen items-center overflow-hidden">
-        {/* first side */}
+        {/* Left side - Form (full on mobile with proper height) */}
         <div
-          className="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-12 xl:px-16
+          className="bg-white w-full lg:w-[55%] xl:w-1/3 min-h-screen lg:h-screen px-6 md:px-8 lg:px-12 xl:px-16
           flex items-center justify-center overflow-y-auto"
         >
-          <div className="w-full py-4 md:py-6">
+          <div className="w-full max-w-md py-6 md:py-8">
+            {/* Logo - Centered */}
             <img
               src={Logo}
               alt="Pop Quiz Logo"
-              width={120}
-              height={150}
-              className="mx-auto"
+              className="mx-auto w-20 h-25 md:w-28 md:h-35"
             />
 
-            <h1 className="text-base md:text-lg font-bold leading-tight mt-4 md:mt-6">
-              Get Started with Pop Quiz 🚀
-            </h1>
+            <form className="mt-5 md:mt-6" onSubmit={signUp}>
+              {/* Username input - First field */}
+              <div className="mb-2.5">
+                <label className="block text-gray-700 text-sm font-medium mb-1.5">Username</label>
+                <input
+                  type="text"
+                  onChange={(e) => handleUsernameChange(e.target.value)}
+                  value={username}
+                  placeholder="Choose a unique username"
+                  className={`w-full px-4 py-2.5 md:py-3 rounded-lg bg-gray-50 border-2 transition-all text-sm md:text-base ${
+                    usernameError
+                      ? "border-red-400 focus:border-red-500 bg-red-50"
+                      : usernameAvailable
+                      ? "border-green-400 focus:border-green-500 bg-green-50"
+                      : "border-gray-200 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                  } focus:outline-none`}
+                  autoFocus
+                  autoComplete="off"
+                  disabled={loading}
+                />
+                {/* Active Context Guide */}
+                {!username && !checkingUsername && !usernameError && !usernameAvailable && (
+                  <p className="text-gray-400 text-xs mt-1">
+                    Lowercase letters, numbers, or underscores only
+                  </p>
+                )}
+                {checkingUsername && (
+                  <p className="text-blue-500 text-xs mt-1 flex items-center">
+                    <svg className="animate-spin h-3 w-3 mr-1.5" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Checking availability...
+                  </p>
+                )}
+                {usernameError && !checkingUsername && (
+                  <p className="text-red-600 text-xs mt-1 flex items-center">
+                    <X className="w-3.5 h-3.5 mr-1 flex-shrink-0" />
+                    {usernameError}
+                  </p>
+                )}
+                {usernameAvailable && !checkingUsername && !usernameError && (
+                  <p className="text-green-600 text-xs mt-1 flex items-center">
+                    <Check className="w-3.5 h-3.5 mr-1 flex-shrink-0" />
+                    Great handle! This username is available.
+                  </p>
+                )}
+              </div>
 
-            <form className="mt-3" onSubmit={signUp}>
-              <div>
-                <label className="block text-gray-700 text-sm">Email Address</label>
+              {/* Email input */}
+              <div className="mb-2.5">
+                <label className="block text-gray-700 text-sm font-medium mb-1.5">Email Address</label>
                 <input
                   type="text"
                   onChange={(e) => {
@@ -132,61 +291,113 @@ const SignUp = () => {
                     setEmailError("");
                   }}
                   value={email}
-                  placeholder="Enter Email Address"
-                  className={`w-full px-3 py-2 md:py-2.5 rounded-lg bg-gray-200 mt-1.5 border focus:bg-white focus:outline-none transition text-sm ${
+                  placeholder="Enter your email address"
+                  className={`w-full px-4 py-2.5 md:py-3 rounded-lg bg-gray-50 border-2 transition-all text-sm md:text-base ${
                     emailError
-                      ? "border-red-500 focus:border-red-500"
-                      : "border-gray-300 focus:border-blue-500"
-                  }`}
-                  autoFocus
-                  autoComplete="off"
+                      ? "border-red-400 focus:border-red-500 bg-red-50"
+                      : "border-gray-200 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                  } focus:outline-none`}
+                  autoComplete="email"
                   disabled={loading}
                 />
                 {emailError && (
-                  <p className="text-red-500 text-xs mt-1">{emailError}</p>
+                  <p className="text-red-600 text-xs mt-1.5 flex items-center">
+                    <X className="w-3.5 h-3.5 mr-1" />
+                    {emailError}
+                  </p>
                 )}
               </div>
 
-              <div className="mt-2.5">
-                <label className="block text-gray-700 text-sm">Password</label>
-                <input
-                  type="password"
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setPasswordError("");
-                  }}
-                  value={password}
-                  placeholder="Enter Password"
-                  className={`w-full px-3 py-2 md:py-2.5 rounded-lg bg-gray-200 mt-1.5 border focus:bg-white focus:outline-none transition text-sm ${
-                    passwordError
-                      ? "border-red-500 focus:border-red-500"
-                      : "border-gray-300 focus:border-blue-500"
-                  }`}
-                  disabled={loading}
-                />
+              {/* Password input with visibility toggle */}
+              <div className="mb-2.5">
+                <label className="block text-gray-700 text-sm font-medium mb-1.5">Password</label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setPasswordError("");
+                    }}
+                    value={password}
+                    placeholder="Create a strong password"
+                    className={`w-full px-4 py-2.5 md:py-3 pr-12 rounded-lg bg-gray-50 border-2 transition-all text-sm md:text-base ${
+                      passwordError
+                        ? "border-red-400 focus:border-red-500 bg-red-50"
+                        : "border-gray-200 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                    } focus:outline-none`}
+                    disabled={loading}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                    disabled={loading}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
+
+                {/* Visual Password Complexity Gauge */}
+                {password && !passwordError && (
+                  <div className="mt-1.5">
+                    {/* Horizontal bar with segments */}
+                    <div className="flex gap-1 mb-1">
+                      {[1, 2, 3, 4].map((segment) => (
+                        <div
+                          key={segment}
+                          className={`h-1 flex-1 rounded-full transition-all duration-300 ${
+                            segment <= passwordStrength.segments
+                              ? passwordStrength.segments === 1
+                                ? "bg-red-500"
+                                : passwordStrength.segments === 2
+                                ? "bg-orange-500"
+                                : passwordStrength.segments === 3
+                                ? "bg-blue-500"
+                                : "bg-green-500"
+                              : "bg-gray-200"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    {/* Label */}
+                    <p className={`text-xs font-medium ${passwordStrength.color}`}>
+                      {passwordStrength.label}
+                    </p>
+                  </div>
+                )}
+
                 {passwordError && (
-                  <p className="text-red-500 text-xs mt-1">{passwordError}</p>
+                  <p className="text-red-600 text-xs mt-1 flex items-center">
+                    <X className="w-3.5 h-3.5 mr-1 flex-shrink-0" />
+                    {passwordError}
+                  </p>
                 )}
               </div>
 
+              {/* Success message */}
               {successMessage && (
                 <div
-                  className="bg-green-100 border border-green-400 text-green-700 px-2.5 py-1.5 rounded relative mt-2.5 text-xs"
+                  className="bg-green-50 border border-green-200 text-green-700 px-3 py-2 rounded-lg mb-3 text-xs md:text-sm"
                   role="alert"
                 >
-                  <span className="block sm:inline">{successMessage}</span>
+                  <span className="font-medium">{successMessage}</span>
                 </div>
               )}
 
+              {/* Submit button */}
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full block bg-blue-500 hover:bg-blue-400 focus:bg-blue-400 disabled:bg-blue-300 text-white font-semibold rounded-lg px-4 py-2.5 mt-4 transition flex items-center justify-center text-sm"
+                disabled={loading || checkingUsername}
+                className="w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-semibold rounded-lg px-4 py-2.5 md:py-3 mt-3 transition-all duration-200 text-sm md:text-base shadow-sm hover:shadow-md"
               >
                 {loading ? (
-                  <>
+                  <div className="flex items-center justify-center">
                     <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      className="animate-spin h-5 w-5 text-white"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
@@ -205,31 +416,50 @@ const SignUp = () => {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       ></path>
                     </svg>
-                    Creating Account...
-                  </>
+                  </div>
                 ) : (
                   "Sign Up"
                 )}
               </button>
             </form>
 
-            <hr className="my-2.5 border-gray-300 w-full" />
+            {/* Divider */}
+            <div className="relative my-3 md:my-4">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-xs md:text-sm">
+                <span className="px-3 bg-white text-gray-500">or continue with</span>
+              </div>
+            </div>
 
+            {/* Google Sign Up button */}
             <button
               type="button"
-              className="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 disabled:bg-gray-50 text-gray-900 font-semibold rounded-lg px-4 py-2 border border-gray-300 transition text-sm"
+              className="w-full bg-white hover:bg-gray-50 active:bg-gray-100 disabled:bg-gray-50 disabled:cursor-not-allowed text-gray-700 font-semibold rounded-lg px-4 py-2.5 md:py-3 border-2 border-gray-300 hover:border-gray-400 transition-all duration-200 text-sm md:text-base"
               disabled={loading}
-              onClick={() => {
+              onClick={async () => {
                 setLoading(true);
-                signInWithPopup(authInstance, provider)
-                  .then((result) => {
-                    setLoading(false);
-                    redirect_home(navigate);
-                  })
-                  .catch((error) => {
-                    setLoading(false);
-                    setPasswordError("Google sign up failed. Please try again.");
-                  });
+                try {
+                  const result = await signInWithPopup(authInstance, provider);
+                  const user = result.user;
+
+                  // Check if user already has a profile with username
+                  const profileResult = await getUserProfile(user.uid);
+
+                  if (profileResult.success && profileResult.data.username) {
+                    // User already has username, go to main
+                    navigate("/main");
+                  } else {
+                    // New user, needs to set username
+                    navigate("/username-setup", { state: { fromOAuth: true } });
+                  }
+                  setLoading(false);
+                } catch (error) {
+                  console.error("Google sign up error:", error);
+                  setLoading(false);
+                  setPasswordError("Google sign up failed. Please try again.");
+                }
               }}
             >
               <div className="flex items-center justify-center">
@@ -269,20 +499,24 @@ const SignUp = () => {
               </div>
             </button>
 
-            <p className="mt-3 text-xs md:text-sm text-center">
-              Already Have an account? {""}
-              <a
-                href="/Login"
-                className="text-blue-500 hover:text-blue-700 font-semibold"
+            {/* Login link */}
+            <p className="mt-3 md:mt-4 text-xs md:text-sm text-center text-gray-600">
+              Already have an account?{" "}
+              <button
+                onClick={() => navigate("/login")}
+                className="font-semibold text-blue-600 hover:text-blue-700 hover:underline"
               >
                 Log In
-              </a>
+              </button>
             </p>
           </div>
         </div>
-        {/* second side */}
-        <div className="bg-blue-600 hidden lg:block w-full md:w-1/2 h-full">
+
+        {/* Right side - Quote image - HIDDEN with display:none on mobile */}
+        <div className="bg-blue-600 hidden lg:block lg:w-[45%] h-full relative">
           <img src={QuoteImg} alt="Quote" className="w-full h-full object-cover" />
+          {/* Glassmorphism glow bleeding from left */}
+          <div className="absolute top-0 left-0 w-6 h-full bg-gradient-to-l from-transparent via-blue-500/20 to-blue-400/30 blur-xl"></div>
         </div>
       </section>
     </div>

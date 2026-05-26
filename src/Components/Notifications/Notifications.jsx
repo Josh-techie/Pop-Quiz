@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNotifications } from "../../contexts/NotificationContext";
 import Navbar from "../Dashboard/NavBar";
 import DashboardHeader from "../Dashboard/Header";
@@ -41,12 +41,8 @@ const formatTimestamp = (date) => {
 
 // Notification Row Component
 const NotificationRow = ({ notification, onMarkAsRead, onDelete }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
   return (
     <div
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       className={`relative border-b border-gray-100 px-6 py-4 transition-all duration-200 group ${
         notification.read
           ? 'bg-white opacity-75 hover:opacity-100'
@@ -77,7 +73,7 @@ const NotificationRow = ({ notification, onMarkAsRead, onDelete }) => {
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-4">
-            <div className="flex-1 pr-12">
+            <div className="flex-1 pr-24">
               <h3 className={`text-sm font-semibold mb-1 ${
                 notification.read ? 'text-gray-700' : 'text-gray-900'
               }`}>
@@ -98,19 +94,33 @@ const NotificationRow = ({ notification, onMarkAsRead, onDelete }) => {
         </div>
       </div>
 
-      {/* Hover Actions - Mark as Read Button */}
-      {!notification.read && (
+      {/* Hover Actions - Button Group */}
+      <div className="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-200">
+        {!notification.read && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onMarkAsRead(notification.id);
+            }}
+            className="p-2 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all duration-200"
+            title="Mark as read"
+          >
+            <Check className="w-4 h-4" />
+          </button>
+        )}
         <button
           onClick={(e) => {
             e.stopPropagation();
-            onMarkAsRead(notification.id);
+            onDelete(notification.id);
           }}
-          className="absolute right-6 top-1/2 -translate-y-1/2 p-2 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all duration-200 opacity-0 group-hover:opacity-100"
-          title="Mark as read"
+          className="p-2 bg-red-600 text-white rounded-full shadow-lg hover:bg-red-700 transition-all duration-200"
+          title="Archive notification"
         >
-          <Check className="w-4 h-4" />
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+          </svg>
         </button>
-      )}
+      </div>
     </div>
   );
 };
@@ -124,14 +134,16 @@ function Notifications() {
     setShowDropdown(!showDropdown);
   };
 
-  // Filter notifications
-  const filteredNotifications = notifications.filter(notif => {
-    if (filter === 'all') return true;
-    if (filter === 'quizzes') return notif.type === 'success' || notif.type === 'error';
-    if (filter === 'achievements') return notif.type === 'success';
-    if (filter === 'system') return notif.type === 'info' || notif.type === 'warning';
-    return true;
-  });
+  // Filter notifications (exclude archived)
+  const filteredNotifications = notifications
+    .filter(notif => !notif.archived) // Hide archived notifications
+    .filter(notif => {
+      if (filter === 'all') return true;
+      if (filter === 'quizzes') return notif.type === 'success' || notif.type === 'error';
+      if (filter === 'achievements') return notif.type === 'success';
+      if (filter === 'system') return notif.type === 'info' || notif.type === 'warning';
+      return true;
+    });
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">

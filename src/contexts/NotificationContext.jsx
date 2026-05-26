@@ -20,6 +20,7 @@ export const NotificationProvider = ({ children }) => {
       id: Date.now() + Math.random(),
       timestamp: new Date(),
       read: false,
+      archived: false,
       ...notification,
     };
     setNotifications((prev) => [newNotification, ...prev]);
@@ -41,9 +42,13 @@ export const NotificationProvider = ({ children }) => {
     );
   }, []);
 
-  // Delete a notification
+  // Archive a notification (soft delete - sets archived: true)
   const deleteNotification = useCallback((notificationId) => {
-    setNotifications((prev) => prev.filter((notif) => notif.id !== notificationId));
+    setNotifications((prev) =>
+      prev.map((notif) =>
+        notif.id === notificationId ? { ...notif, archived: true } : notif
+      )
+    );
   }, []);
 
   // Clear all notifications
@@ -82,7 +87,7 @@ export const NotificationProvider = ({ children }) => {
     [showToast, addNotification]
   );
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const unreadCount = notifications.filter((n) => !n.read && !n.archived).length;
 
   const value = {
     notifications,

@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignIn from "./Components/Auth/SignIn";
 import SignUp from "./Components/Auth/SignUp";
 import ForgotPasswd from "./Components/Auth/ForgotPasswd";
+import UsernameSetup from "./Components/Auth/UsernameSetup";
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 import Main from "./Components/Dashboard/Main";
 import Main2 from "./Components/Account/Main2";
@@ -35,6 +36,9 @@ function App() {
           <Route path="/login" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot-password" element={<ForgotPasswd />} />
+
+          {/* Semi-Protected Route - Requires OAuth but no username yet */}
+          <Route path="/username-setup" element={<UsernameSetup />} />
 
           {/* Protected Routes - Authentication Required */}
           <Route

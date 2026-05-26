@@ -6,6 +6,7 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
+  setDoc,
   query,
   where,
   orderBy,
@@ -502,6 +503,94 @@ export const getUserStats = async (userId) => {
       error: error.message,
       data: { streak: 0, quizzesCompleted: 0, totalPoints: 0 }
     };
+  }
+};
+
+/**
+ * Check if username is available (unique)
+ */
+export const checkUsernameAvailability = async (username) => {
+  try {
+    const q = query(
+      collection(db, "users"),
+      where("username", "==", username.toLowerCase())
+    );
+    const querySnapshot = await getDocs(q);
+    return { success: true, available: querySnapshot.empty };
+  } catch (error) {
+    console.error("Error checking username:", error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
+ * Create user profile with username (for new signups)
+ */
+export const createUserProfile = async (userId, { username, email, displayName = null }) => {
+  try {
+    // Check if username is available
+    const usernameCheck = await checkUsernameAvailability(username);
+    if (!usernameCheck.success) {
+      return { success: false, error: "Failed to validate username" };
+    }
+    if (!usernameCheck.available) {
+      return { success: false, error: "Username already taken" };
+    }
+
+    // Create user document with userId as document ID
+    await updateDoc(doc(db, "users", userId), {
+      userId,
+      username: username.toLowerCase(),
+      displayName: displayName || username,
+      email,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    });
+
+    return { success: true };
+  } catch (error) {
+    // If document doesn't exist, use setDoc instead
+    try {
+      const { setDoc } = await import("firebase/firestore");
+      await setDoc(doc(db, "users", userId), {
+        userId,
+        username: username.toLowerCase(),
+        displayName: displayName || username,
+        email,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      return { success: true };
+    } catch (createError) {
+      console.error("Error creating user profile:", createError);
+      return { success: false, error: createError.message };
+    }
+  }
+};
+
+/**
+ * Get user by username (for login with username)
+ */
+export const getUserByUsername = async (username) => {
+  try {
+    const q = query(
+      collection(db, "users"),
+      where("username", "==", username.toLowerCase())
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      return { success: false, error: "User not found" };
+    }
+
+    const userDoc = querySnapshot.docs[0];
+    return {
+      success: true,
+      data: { id: userDoc.id, ...userDoc.data() }
+    };
+  } catch (error) {
+    console.error("Error getting user by username:", error);
+    return { success: false, error: error.message };
   }
 };
 
