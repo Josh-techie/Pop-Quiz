@@ -207,15 +207,18 @@ const SignIn = () => {
                 </div>
               </div>
 
-              {/* Forgot password link - Tightened spacing */}
+              {/* Forgot password link */}
               <div className="text-center mb-4">
-                <button
-                  type="button"
-                  onClick={() => navigate("/forgot-password")}
-                  className="text-xs md:text-sm text-gray-600 transition-colors"
-                >
-                  Forgot password? <span className="font-semibold text-blue-600 hover:underline">Reset it now</span>
-                </button>
+                <p className="text-xs md:text-sm text-gray-600">
+                  Forgot password?{" "}
+                  <button
+                    type="button"
+                    onClick={() => navigate("/forgot-password")}
+                    className="font-semibold text-blue-600 hover:text-blue-700 hover:underline"
+                  >
+                    Reset it now
+                  </button>
+                </p>
               </div>
 
               {/* Sign in button with loading state */}

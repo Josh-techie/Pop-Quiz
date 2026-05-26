@@ -83,15 +83,50 @@ const SignUp = () => {
     if (!value) {
       return "This field is required";
     }
+
+    // Length validation
     if (value.length < 3) {
       return "Username must be at least 3 characters";
     }
     if (value.length > 20) {
       return "Username must be less than 20 characters";
     }
-    if (!/^[a-zA-Z0-9_]+$/.test(value)) {
-      return "Only letters, numbers, and underscores allowed";
+
+    // Character validation - only lowercase letters, numbers, and underscores
+    if (!/^[a-z0-9_]+$/.test(value)) {
+      return "Only lowercase letters, numbers, and underscores allowed";
     }
+
+    // Must start with a letter
+    if (!/^[a-z]/.test(value)) {
+      return "Username must start with a letter";
+    }
+
+    // Cannot end with underscore
+    if (value.endsWith('_')) {
+      return "Username cannot end with an underscore";
+    }
+
+    // Cannot have consecutive underscores
+    if (value.includes('__')) {
+      return "Cannot have consecutive underscores";
+    }
+
+    // Cannot be only numbers (must have at least one letter)
+    if (/^\d+$/.test(value)) {
+      return "Username must contain at least one letter";
+    }
+
+    // Reserved words check
+    const reservedWords = [
+      'admin', 'root', 'system', 'moderator', 'mod', 'support',
+      'popquiz', 'pop_quiz', 'quiz', 'user', 'guest', 'anonymous',
+      'null', 'undefined', 'test', 'demo', 'official'
+    ];
+    if (reservedWords.includes(value.toLowerCase())) {
+      return "This username is reserved";
+    }
+
     return null;
   };
 
@@ -196,15 +231,9 @@ const SignUp = () => {
         await sendEmailVerification(authInstance.currentUser, actionCodeSettings);
 
         setLoading(false);
-        setUsername("");
-        setEmail("");
-        setPassword("");
         setSuccessMessage(
-          "Account created! Please check your email to verify your account."
+          "Account created successfully! Please check your email to verify your account before logging in."
         );
-        setTimeout(() => {
-          setSuccessMessage("");
-        }, 5000);
       }
     } catch (error) {
       setLoading(false);
@@ -232,7 +261,35 @@ const SignUp = () => {
               className="mx-auto w-20 h-25 md:w-28 md:h-35"
             />
 
-            <form className="mt-5 md:mt-6" onSubmit={signUp}>
+            {/* SUCCESS STATE - Account Created */}
+            {successMessage ? (
+              <div className="mt-6 md:mt-8 flex flex-col items-center text-center">
+                {/* Success Icon */}
+                <div className="w-16 h-16 md:w-20 md:h-20 bg-green-50 rounded-full flex items-center justify-center mb-4">
+                  <Check className="w-8 h-8 md:w-10 md:h-10 text-green-600" />
+                </div>
+
+                {/* Success Title */}
+                <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
+                  Account Created!
+                </h2>
+
+                {/* Success Description */}
+                <p className="text-gray-600 text-sm md:text-base leading-relaxed max-w-md px-4 mb-6">
+                  {successMessage}
+                </p>
+
+                {/* Primary CTA - Go to Login */}
+                <button
+                  onClick={() => navigate("/login")}
+                  className="w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-semibold rounded-lg px-4 py-3 md:py-3.5 transition-all duration-200 flex items-center justify-center text-sm md:text-base shadow-sm hover:shadow-md"
+                >
+                  Continue to Login
+                </button>
+              </div>
+            ) : (
+              <>
+              <form className="mt-5 md:mt-6" onSubmit={signUp}>
               {/* Username input - First field */}
               <div className="mb-2.5">
                 <label className="block text-gray-700 text-sm font-medium mb-1.5">Username</label>
@@ -255,7 +312,7 @@ const SignUp = () => {
                 {/* Active Context Guide */}
                 {!username && !checkingUsername && !usernameError && !usernameAvailable && (
                   <p className="text-gray-400 text-xs mt-1">
-                    Lowercase letters, numbers, or underscores only
+                    Start with a letter • 3-20 characters • Lowercase only
                   </p>
                 )}
                 {checkingUsername && (
@@ -509,6 +566,8 @@ const SignUp = () => {
                 Log In
               </button>
             </p>
+            </>
+            )}
           </div>
         </div>
 

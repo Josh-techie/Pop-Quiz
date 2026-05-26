@@ -24,15 +24,50 @@ const UsernameSetup = () => {
     if (!value) {
       return "Username is required";
     }
+
+    // Length validation
     if (value.length < 3) {
       return "Username must be at least 3 characters";
     }
     if (value.length > 20) {
       return "Username must be less than 20 characters";
     }
-    if (!/^[a-zA-Z0-9_]+$/.test(value)) {
-      return "Username can only contain letters, numbers, and underscores";
+
+    // Character validation - only lowercase letters, numbers, and underscores
+    if (!/^[a-z0-9_]+$/.test(value)) {
+      return "Only lowercase letters, numbers, and underscores allowed";
     }
+
+    // Must start with a letter
+    if (!/^[a-z]/.test(value)) {
+      return "Username must start with a letter";
+    }
+
+    // Cannot end with underscore
+    if (value.endsWith('_')) {
+      return "Username cannot end with an underscore";
+    }
+
+    // Cannot have consecutive underscores
+    if (value.includes('__')) {
+      return "Cannot have consecutive underscores";
+    }
+
+    // Cannot be only numbers (must have at least one letter)
+    if (/^\d+$/.test(value)) {
+      return "Username must contain at least one letter";
+    }
+
+    // Reserved words check
+    const reservedWords = [
+      'admin', 'root', 'system', 'moderator', 'mod', 'support',
+      'popquiz', 'pop_quiz', 'quiz', 'user', 'guest', 'anonymous',
+      'null', 'undefined', 'test', 'demo', 'official'
+    ];
+    if (reservedWords.includes(value.toLowerCase())) {
+      return "This username is reserved";
+    }
+
     return null;
   };
 

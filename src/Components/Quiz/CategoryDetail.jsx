@@ -4,13 +4,12 @@ import Navbar from "../Dashboard/NavBar";
 import DashboardHeader from "../Dashboard/Header";
 import Avatar from "../../Assets/avatar.png";
 import { auth } from "../../firebase";
-import { getQuizzesByCategory, getCategoryById, deleteQuiz, deleteCategory } from "../../services/firestoreService";
+import { getQuizzesByCategory, getCategoryById, getCategoryBySlug, deleteQuiz, updateQuiz } from "../../services/firestoreService";
 import { useNotifications } from "../../contexts/NotificationContext";
-import { Trash2, Edit, Lock } from "lucide-react";
-import { SYSTEM_USER_ID } from "../../constants/system";
+import { Trash2, Edit, Lock, Globe, Search, ChevronRight, BarChart3, Share2, Eye, Plus } from "lucide-react";
 
 function CategoryDetail() {
-  const { categoryId } = useParams();
+  const { categorySlug } = useParams();
   const navigate = useNavigate();
   const { notify } = useNotifications();
 
@@ -19,10 +18,11 @@ function CategoryDetail() {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showDeleteCategoryModal, setShowDeleteCategoryModal] = useState(false);
   const [showDeleteQuizModal, setShowDeleteQuizModal] = useState(false);
   const [selectedQuizId, setSelectedQuizId] = useState(null);
+  const [selectedQuizTitle, setSelectedQuizTitle] = useState("");
   const [deleting, setDeleting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -34,19 +34,29 @@ function CategoryDetail() {
         setLoading(true);
         const userId = auth.currentUser?.uid || null;
 
-        // Fetch category details
-        const categoryResult = await getCategoryById(categoryId);
+        // Try to get category by slug first, fallback to ID if not found
+        let categoryResult = await getCategoryBySlug(categorySlug);
+
+        // If slug lookup fails, try as ID (for backward compatibility)
+        if (!categoryResult.success) {
+          categoryResult = await getCategoryById(categorySlug);
+        }
+
         if (!categoryResult.success) {
           setError("Category not found");
           setLoading(false);
           return;
         }
+
         setCategory(categoryResult.data);
 
-        // Fetch quizzes in this category
-        const quizzesResult = await getQuizzesByCategory(categoryId, userId);
+        // Fetch quizzes using the category ID
+        const quizzesResult = await getQuizzesByCategory(categoryResult.data.id, userId);
+
         if (quizzesResult.success) {
           setQuizzes(quizzesResult.data);
+        } else {
+          console.error('Failed to fetch quizzes:', quizzesResult.error);
         }
 
         setLoading(false);
@@ -58,53 +68,15 @@ function CategoryDetail() {
     };
 
     fetchData();
-  }, [categoryId]);
-
-  const handleQuizClick = (quizId) => {
-    navigate(`/quiz/${quizId}`);
-  };
+  }, [categorySlug]);
 
   const handleCreateQuiz = () => {
-    navigate(`/makequiz?categoryId=${categoryId}`);
+    navigate(`/makequiz?categoryId=${category.id}`);
   };
 
-  const handleDeleteCategoryClick = () => {
-    setShowDeleteCategoryModal(true);
-  };
-
-  const handleDeleteCategory = async () => {
-    setDeleting(true);
-    try {
-      const result = await deleteCategory(categoryId);
-      if (result.success) {
-        notify({
-          title: 'Category Deleted',
-          message: `"${category.name}" has been deleted successfully`,
-          type: 'success',
-        });
-        navigate('/main');
-      } else {
-        notify({
-          title: 'Error',
-          message: result.error || 'Failed to delete category',
-          type: 'error',
-        });
-      }
-    } catch (err) {
-      notify({
-        title: 'Error',
-        message: 'An unexpected error occurred',
-        type: 'error',
-      });
-    } finally {
-      setDeleting(false);
-      setShowDeleteCategoryModal(false);
-    }
-  };
-
-  const handleDeleteQuizClick = (quizId, e) => {
-    e.stopPropagation();
-    setSelectedQuizId(quizId);
+  const handleDeleteQuizClick = (quiz) => {
+    setSelectedQuizId(quiz.id);
+    setSelectedQuizTitle(quiz.title);
     setShowDeleteQuizModal(true);
   };
 
@@ -115,9 +87,7 @@ function CategoryDetail() {
     try {
       const result = await deleteQuiz(selectedQuizId);
       if (result.success) {
-        // Remove quiz from local state
         setQuizzes(prev => prev.filter(q => q.id !== selectedQuizId));
-
         notify({
           title: 'Quiz Deleted',
           message: 'Quiz has been deleted successfully',
@@ -140,8 +110,51 @@ function CategoryDetail() {
       setDeleting(false);
       setShowDeleteQuizModal(false);
       setSelectedQuizId(null);
+      setSelectedQuizTitle("");
     }
   };
+
+  const handleToggleVisibility = async (quiz) => {
+    try {
+      const result = await updateQuiz(quiz.id, {
+        isPublic: !quiz.isPublic
+      });
+
+      if (result.success) {
+        // Update local state
+        setQuizzes(prev => prev.map(q =>
+          q.id === quiz.id ? { ...q, isPublic: !quiz.isPublic } : q
+        ));
+
+        notify({
+          title: 'Privacy Updated',
+          message: `Quiz is now ${!quiz.isPublic ? 'Public' : 'Private'}`,
+          type: 'success',
+        });
+      }
+    } catch (err) {
+      notify({
+        title: 'Error',
+        message: 'Failed to update privacy settings',
+        type: 'error',
+      });
+    }
+  };
+
+  const handleCopyLink = (quiz) => {
+    const link = `${window.location.origin}/quiz/${quiz.id}`;
+    navigator.clipboard.writeText(link);
+    notify({
+      title: 'Link Copied',
+      message: 'Quiz link copied to clipboard',
+      type: 'success',
+    });
+  };
+
+  // Filter quizzes based on search query
+  const filteredQuizzes = quizzes.filter((quiz) =>
+    quiz.title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   if (loading) {
     return (
@@ -194,135 +207,108 @@ function CategoryDetail() {
 
         {/* Content */}
         <div className="flex-1 px-4 md:px-8 pb-4 md:pb-8 overflow-y-auto">
-          <div className="bg-white rounded-xl shadow-sm p-6 md:p-8">
-            {/* Header with back button */}
-            <div className="flex items-center gap-3 mb-6">
-              <button
-                onClick={() => navigate("/main")}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                aria-label="Go back"
-              >
-                <svg
-                  className="w-5 h-5 text-gray-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
-              </button>
-              <div className="flex-1">
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
-                  {category.name}
-                </h1>
-                {category.description && (
-                  <p className="text-gray-500 text-sm mt-1">{category.description}</p>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
-                {(() => {
-                  const isSystemUser = auth.currentUser?.uid === SYSTEM_USER_ID;
-                  const isOwner = auth.currentUser?.uid === category.createdBy;
-                  const canDelete = isSystemUser || (isOwner && !category.isSystemCategory);
-
-                  return canDelete && (
-                    <button
-                      onClick={handleDeleteCategoryClick}
-                      className="p-2.5 hover:bg-red-50 text-red-600 rounded-lg transition-colors duration-200"
-                      title="Delete Category"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
-                  );
-                })()}
+          <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            {/* Header Section */}
+            <div className="px-6 pt-6 pb-6">
+              {/* Breadcrumb Navigation */}
+              <nav className="flex items-center text-sm mb-4">
                 <button
-                  onClick={handleCreateQuiz}
-                  className="bg-[#6B7A8F] hover:bg-[#5a6675] text-white px-4 md:px-6 py-2.5 rounded-xl font-medium transition-colors duration-200 text-sm md:text-base shadow-sm"
+                  onClick={() => navigate("/main")}
+                  className="text-gray-500 hover:text-gray-700 transition-colors font-medium"
                 >
-                  + New Quiz
+                  Categories
                 </button>
+                <ChevronRight className="w-4 h-4 text-gray-400 mx-2" />
+                <span className="text-gray-900 font-semibold">
+                  {category.name}
+                </span>
+              </nav>
+
+              <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+                {/* Title and Count */}
+                <div>
+                  <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                    {category.name}
+                  </h1>
+                  <p className="text-gray-500 text-base">
+                    {quizzes.length} {quizzes.length === 1 ? 'Quiz' : 'Quizzes'} Available
+                  </p>
+                </div>
+
+                {/* Search Bar - Right Aligned */}
+                {quizzes.length > 0 && (
+                  <div className="relative md:w-80 md:mt-2">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      type="text"
+                      placeholder="Search quizzes..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-12 pr-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-gray-50 transition-all"
+                      style={{
+                        border: '2px solid #D1D5DB'
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Quizzes Grid */}
-            {quizzes.length === 0 ? (
-              <div className="text-center py-16">
-                <svg
-                  className="w-16 h-16 text-gray-300 mx-auto mb-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-                <h3 className="text-lg font-medium text-gray-700 mb-2">
-                  No quizzes yet
+            {filteredQuizzes.length === 0 && searchQuery ? (
+              <div className="text-center py-16 px-6">
+                <Search className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  No matches found
                 </h3>
-                <p className="text-gray-500 text-sm mb-6">
-                  Be the first to create a quiz in this category!
+                <p className="text-gray-500 text-sm">
+                  Try adjusting your search to find what you're looking for.
                 </p>
-                <button
-                  onClick={handleCreateQuiz}
-                  className="bg-[#6B7A8F] hover:bg-[#5a6675] text-white px-6 py-2.5 rounded-lg font-medium transition-colors duration-200"
-                >
-                  Create Your First Quiz
-                </button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                {quizzes.map((quiz) => {
-                  const isSystemUser = auth.currentUser?.uid === SYSTEM_USER_ID;
-                  const isOwner = auth.currentUser?.uid === quiz.createdBy;
-                  const canDelete = isSystemUser || isOwner;
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-6 pb-6">
+                {/* Create Quiz Card - First position in grid */}
+                <button
+                  onClick={handleCreateQuiz}
+                  className="relative rounded-xl overflow-hidden cursor-pointer select-none transition-all duration-200 border-2 border-dashed bg-gray-50 hover:bg-gray-100 flex flex-col items-center justify-center gap-3 group"
+                  style={{
+                    aspectRatio: '1/1',
+                    borderColor: '#D1D5DB'
+                  }}
+                >
+                  <div className="transition-transform group-hover:scale-110">
+                    <Plus className="w-12 h-12 text-gray-600" strokeWidth={2} />
+                  </div>
+                  <span className="text-gray-700 font-medium text-base">Create Quiz</span>
+                </button>
 
-                  return (
-                    <QuizCard
-                      key={quiz.id}
-                      quiz={quiz}
-                      onClick={() => handleQuizClick(quiz.id)}
-                      onDelete={(e) => handleDeleteQuizClick(quiz.id, e)}
-                      isOwner={canDelete}
-                    />
-                  );
-                })}
+                {/* Existing Quizzes */}
+                {filteredQuizzes.map((quiz) => (
+                  <QuizCard
+                    key={quiz.id}
+                    quiz={quiz}
+                    onDelete={() => handleDeleteQuizClick(quiz)}
+                    onToggleVisibility={() => handleToggleVisibility(quiz)}
+                    onCopyLink={() => handleCopyLink(quiz)}
+                    onView={() => navigate(`/quiz/${quiz.id}`)}
+                    onEdit={() => navigate(`/makequiz?quizId=${quiz.id}`)}
+                  />
+                ))}
               </div>
             )}
           </div>
         </div>
       </main>
 
-      {/* Delete Category Confirmation Modal */}
-      {showDeleteCategoryModal && (
-        <DeleteCategoryModal
-          categoryName={category.name}
-          quizCount={quizzes.length}
-          onConfirm={handleDeleteCategory}
-          onCancel={() => setShowDeleteCategoryModal(false)}
-          loading={deleting}
-        />
-      )}
-
-      {/* Delete Quiz Confirmation Modal */}
+      {/* Delete Quiz Modal */}
       {showDeleteQuizModal && (
-        <ConfirmModal
-          title="Delete Quiz"
-          message="Are you sure you want to delete this quiz? This action cannot be undone."
-          confirmText="Delete Quiz"
-          confirmColor="red"
+        <SafeDeleteQuizModal
+          quizTitle={selectedQuizTitle}
           onConfirm={handleDeleteQuiz}
           onCancel={() => {
             setShowDeleteQuizModal(false);
             setSelectedQuizId(null);
+            setSelectedQuizTitle("");
           }}
           loading={deleting}
         />
@@ -331,206 +317,282 @@ function CategoryDetail() {
   );
 }
 
-// Delete Category Modal Component
-const DeleteCategoryModal = ({ categoryName, quizCount, onConfirm, onCancel, loading }) => {
-  const hasQuizzes = quizCount > 0;
+// Premium Quiz Card with Individual Tooltips
+const QuizCard = ({ quiz, onDelete, onToggleVisibility, onCopyLink, onView, onEdit }) => {
+  const [imageError, setImageError] = useState(false);
+  const [hoveredButton, setHoveredButton] = useState(null);
+  const totalQuestions = quiz.questions?.length || 0;
+
+  // Category-based fallback images
+  const categoryFallbacks = {
+    technology: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&h=300&fit=crop',
+    medicine: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=500&h=300&fit=crop',
+    agriculture: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=500&h=300&fit=crop',
+    history: 'https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=500&h=300&fit=crop',
+    art: 'https://images.unsplash.com/photo-1460661419201-fd4cecdf8a8b?w=500&h=300&fit=crop',
+    sport: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=500&h=300&fit=crop',
+    mythology: 'https://images.unsplash.com/photo-1532153955177-f59af40d6472?w=500&h=300&fit=crop'
+  };
+
+  // Gradient fallbacks if image fails
+  const gradients = [
+    'from-purple-500 to-pink-500',
+    'from-blue-500 to-cyan-500',
+    'from-green-500 to-teal-500',
+    'from-orange-500 to-red-500',
+    'from-indigo-500 to-purple-500',
+    'from-yellow-500 to-orange-500',
+  ];
+
+  const gradientIndex = quiz.title.length % gradients.length;
+  const gradient = gradients[gradientIndex];
+
+  // Get fallback image based on category or use quiz image
+  const categorySlug = quiz.categorySlug || 'technology'; // Fallback to technology
+  const coverImage = quiz.image || categoryFallbacks[categorySlug] || categoryFallbacks.technology;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+    <div
+      className={`relative group bg-white border-2 border-gray-200 rounded-xl overflow-hidden transition-all duration-200 hover:shadow-xl hover:-translate-y-1 hover:border-blue-300 cursor-pointer ${
+        !quiz.isPublic ? 'opacity-85 hover:opacity-100' : ''
+      }`}
+      onClick={onView}
+      style={{ aspectRatio: '1/1' }}
+    >
+      {/* Cover Image with Gradient Fallback (60% height) */}
+      <div className="relative overflow-hidden bg-gray-200" style={{ height: '60%' }}>
+        {!imageError ? (
+          <img
+            src={coverImage}
+            alt={quiz.title}
+            onError={() => setImageError(true)}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className={`w-full h-full bg-gradient-to-br ${gradient}`}></div>
+        )}
+
+        {/* Subtle Overlay */}
+        <div className="absolute inset-0 bg-black/10"></div>
+
+        {/* Corner Badges - Always Visible */}
+        <div className="absolute top-3 left-3 z-10">
+          <span
+            className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold"
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              backdropFilter: 'blur(6px)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              color: '#FFFFFF'
+            }}
+          >
+            {totalQuestions} {totalQuestions === 1 ? 'Q' : 'Qs'}
+          </span>
+        </div>
+
+        <div className="absolute top-3 right-3 z-10">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleVisibility();
+            }}
+            className="transition-transform hover:scale-105"
+            title={quiz.isPublic ? "Click to make private" : "Click to make public"}
+          >
+            {quiz.isPublic ? (
+              <span
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.2)',
+                  backdropFilter: 'blur(6px)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  color: '#FFFFFF'
+                }}
+              >
+                <Globe className="w-3 h-3" />
+                Public
+              </span>
+            ) : (
+              <span
+                className="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-semibold"
+                style={{
+                  background: 'rgba(0, 0, 0, 0.4)',
+                  backdropFilter: 'blur(6px)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  color: 'rgba(255, 255, 255, 0.9)'
+                }}
+              >
+                <Lock className="w-3 h-3" />
+                Private
+              </span>
+            )}
+          </button>
+        </div>
+
+        {/* Glassmorphic Action Overlay - On Hover */}
+        <div className="absolute inset-0 bg-white/10 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-3">
+          {/* Edit Button */}
+          <div className="relative">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit();
+              }}
+              onMouseEnter={() => setHoveredButton('edit')}
+              onMouseLeave={() => setHoveredButton(null)}
+              className="p-3 bg-white/95 hover:bg-white rounded-full shadow-lg transition-all duration-200 opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100"
+              style={{ transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}
+            >
+              <Edit className="w-5 h-5 text-gray-700" />
+            </button>
+            {hoveredButton === 'edit' && (
+              <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs py-1.5 px-3 rounded whitespace-nowrap z-10 animate-in fade-in slide-in-from-bottom-2 duration-150">
+                Edit Quiz Questions
+              </span>
+            )}
+          </div>
+
+          {/* Share Button */}
+          <div className="relative">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onCopyLink();
+              }}
+              onMouseEnter={() => setHoveredButton('share')}
+              onMouseLeave={() => setHoveredButton(null)}
+              className="p-3 bg-white/95 hover:bg-white rounded-full shadow-lg transition-all duration-200 opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100 delay-75"
+              style={{ transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}
+            >
+              <Share2 className="w-5 h-5 text-gray-700" />
+            </button>
+            {hoveredButton === 'share' && (
+              <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs py-1.5 px-3 rounded whitespace-nowrap z-10 animate-in fade-in slide-in-from-bottom-2 duration-150">
+                Copy Share Link
+              </span>
+            )}
+          </div>
+
+          {/* Delete Button */}
+          <div className="relative">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete();
+              }}
+              onMouseEnter={() => setHoveredButton('delete')}
+              onMouseLeave={() => setHoveredButton(null)}
+              className="p-3 bg-white/95 hover:bg-red-50 rounded-full shadow-lg transition-all duration-200 opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100 delay-150"
+              style={{ transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}
+            >
+              <Trash2 className="w-5 h-5 text-red-600" />
+            </button>
+            {hoveredButton === 'delete' && (
+              <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs py-1.5 px-3 rounded whitespace-nowrap z-10 animate-in fade-in slide-in-from-bottom-2 duration-150">
+                Delete Quiz
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Card Content (Bottom 40%) - Title Only */}
+      <div className="flex items-center px-4 bg-white" style={{ height: '40%' }}>
+        {/* Quiz Title - Bold & Centered Vertically */}
+        <h3 className="font-bold text-gray-900 text-base line-clamp-2 leading-snug">
+          {quiz.title}
+        </h3>
+      </div>
+    </div>
+  );
+};
+
+// Safe Delete Quiz Modal with Type Confirmation
+const SafeDeleteQuizModal = ({ quizTitle, onConfirm, onCancel, loading }) => {
+  const [confirmText, setConfirmText] = useState("");
+  const isConfirmValid = confirmText === "DELETE";
+
+  return (
+    <div
+      className="fixed inset-0 z-50 overflow-y-auto"
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' && isConfirmValid && !loading) {
+          onConfirm();
+        } else if (e.key === 'Escape') {
+          onCancel();
+        }
+      }}
+    >
       <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
         {/* Background overlay */}
         <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onClick={onCancel}></div>
 
         {/* Modal panel */}
-        <div className="relative inline-block w-full max-w-md p-6 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+        <div className="relative inline-block w-full max-w-lg p-6 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
           {/* Icon */}
-          <div className={`flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full ${
-            hasQuizzes ? 'bg-orange-100' : 'bg-red-100'
-          }`}>
-            <Trash2 className={`w-6 h-6 ${hasQuizzes ? 'text-orange-600' : 'text-red-600'}`} />
+          <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full bg-red-100">
+            <Trash2 className="w-6 h-6 text-red-600" />
           </div>
 
           {/* Title */}
-          <h3 className="text-lg font-bold text-gray-900 text-center mb-4">
-            Delete "{categoryName}"?
+          <h3 className="text-lg font-bold text-gray-900 text-center mb-2">
+            Delete Quiz Permanently?
           </h3>
 
-          {/* Message */}
-          {hasQuizzes ? (
-            <>
-              {/* Strong Warning Box */}
-              <div className="bg-orange-50 border-2 border-orange-300 rounded-lg p-4 mb-4">
-                <p className="text-sm text-orange-900 font-semibold mb-2">
-                  ⚠️ This category contains {quizCount} active {quizCount === 1 ? 'quiz' : 'quizzes'}
-                </p>
-                <p className="text-xs text-orange-800 leading-relaxed">
-                  Deleting this category will automatically unlink {quizCount === 1 ? 'this quiz' : 'all quizzes'}, making {quizCount === 1 ? 'it' : 'them'} orphaned and harder to find. This action is permanent and cannot be undone.
-                </p>
-              </div>
-            </>
-          ) : (
-            <p className="text-sm text-gray-600 text-center mb-6">
-              This category is empty and safe to delete.
+          {/* Warning Message */}
+          <div className="bg-red-50 border-2 border-red-200 rounded-lg p-4 mb-4">
+            <p className="text-sm text-red-900 font-semibold mb-2">
+              ⚠️ You are about to delete "{quizTitle}"
             </p>
-          )}
+            <p className="text-xs text-red-800 leading-relaxed">
+              This will permanently erase all questions, leaderboard records, and user history. This action <strong>cannot be undone</strong>.
+            </p>
+          </div>
+
+          {/* Type Confirmation Input */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Type <span className="font-bold text-red-600">DELETE</span> to confirm:
+            </label>
+            <input
+              type="text"
+              value={confirmText}
+              onChange={(e) => setConfirmText(e.target.value)}
+              placeholder="Type DELETE"
+              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-sm font-mono"
+              autoFocus
+            />
+          </div>
 
           {/* Buttons */}
           <div className="flex gap-3">
             <button
               onClick={onCancel}
               disabled={loading}
-              className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+              className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               onClick={onConfirm}
-              disabled={loading}
-              className={`flex-1 px-4 py-2 text-sm font-semibold text-white rounded-lg transition-colors disabled:opacity-50 ${
-                hasQuizzes
-                  ? 'bg-orange-600 hover:bg-orange-700'
-                  : 'bg-red-600 hover:bg-red-700'
-              }`}
+              disabled={loading || !isConfirmValid}
+              className="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Deleting...' : hasQuizzes ? `Yes, Delete (${quizCount})` : 'Delete'}
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Deleting...
+                </span>
+              ) : (
+                "Delete Permanently"
+              )}
             </button>
           </div>
         </div>
       </div>
-    </div>
-  );
-};
-
-// Quiz Deletion Modal Component
-const ConfirmModal = ({ title, message, confirmText, confirmColor = "red", onConfirm, onCancel, loading }) => {
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-        {/* Background overlay */}
-        <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" onClick={onCancel}></div>
-
-        {/* Modal panel */}
-        <div className="relative inline-block w-full max-w-md p-6 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-          <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
-          <p className="text-sm text-gray-600 mb-6">{message}</p>
-
-          <div className="flex gap-3 justify-end">
-            <button
-              onClick={onCancel}
-              disabled={loading}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={onConfirm}
-              disabled={loading}
-              className={`px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors disabled:opacity-50 ${
-                confirmColor === "red"
-                  ? "bg-red-600 hover:bg-red-700"
-                  : "bg-[#6B7A8F] hover:bg-[#5a6675]"
-              }`}
-            >
-              {loading ? "Deleting..." : confirmText}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Quiz Card Component
-const QuizCard = ({ quiz, onClick, onDelete, isOwner }) => {
-  const [imageError, setImageError] = React.useState(false);
-  const totalQuestions = quiz.questions?.length || 0;
-  const totalPoints = quiz.questions?.reduce((sum, q) => sum + (q.points || 0), 0) || 0;
-  const fallbackImage = 'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?w=500';
-
-  return (
-    <div
-      onClick={onClick}
-      className="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-lg transition-all duration-200 cursor-pointer group relative"
-    >
-      {/* Top hover actions */}
-      <div className="absolute top-3 right-3 flex items-center gap-2 z-10">
-        {/* Private lock icon (shown on hover for private quizzes) */}
-        {!quiz.isPublic && (
-          <div
-            className="bg-gray-800/80 backdrop-blur-sm text-white p-2 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200"
-            title="Private Quiz"
-          >
-            <Lock className="w-4 h-4" />
-          </div>
-        )}
-
-        {/* Delete button (shown on hover for owner) */}
-        {isOwner && (
-          <button
-            onClick={onDelete}
-            className="p-2 bg-white hover:bg-red-50 text-red-600 rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-all duration-200"
-            title="Delete Quiz"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
-        )}
-      </div>
-
-      {/* Image */}
-      <div className="w-full h-40 mb-4 rounded-lg overflow-hidden bg-gray-100">
-        <img
-          src={imageError ? fallbackImage : (quiz.imageUrl || fallbackImage)}
-          alt={quiz.title}
-          onError={() => setImageError(true)}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-        />
-      </div>
-
-      {/* Title */}
-      <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-[#6B7A8F]">
-        {quiz.title}
-      </h3>
-
-      {/* Description */}
-      {quiz.description && (
-        <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-          {quiz.description}
-        </p>
-      )}
-
-      {/* Stats */}
-      <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
-        <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            {totalQuestions} questions
-          </span>
-          <span className="flex items-center gap-1">
-            ⭐ {totalPoints} pts
-          </span>
-        </div>
-      </div>
-
-      {/* Additional Info */}
-      <div className="flex items-center justify-between text-xs">
-        {quiz.settings?.timeLimit && (
-          <span className="text-gray-500">
-            ⏱️ {quiz.settings.timeLimit} min
-          </span>
-        )}
-        {quiz.stats?.totalAttempts > 0 && (
-          <span className="text-gray-500">
-            {quiz.stats.totalAttempts} attempts
-          </span>
-        )}
-      </div>
-
-      {/* Start Quiz Button */}
-      <button className="w-full mt-4 bg-[#6B7A8F] hover:bg-[#5a6675] text-white py-2 rounded-lg font-medium transition-colors duration-200 text-sm">
-        View Quiz
-      </button>
     </div>
   );
 };

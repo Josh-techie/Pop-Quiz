@@ -94,7 +94,7 @@ function App() {
             }
           />
           <Route
-            path="/category/:categoryId"
+            path="/category/:categorySlug"
             element={
               <ProtectedRoute>
                 <CategoryDetail />

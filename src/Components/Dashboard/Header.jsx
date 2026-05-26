@@ -2,9 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { auth } from "../../firebase";
+import { signOut } from "firebase/auth";
 import { getUserStats } from "../../services/firestoreService";
 import defaultAvatar from "../../Assets/avatar.png";
-import { Flame, Trophy, Target } from "lucide-react";
+import { Flame, Trophy, Target, LogOut } from "lucide-react";
 
 const DashboardHeader = ({
   toggleDropdown,
@@ -20,6 +21,7 @@ const DashboardHeader = ({
     totalPoints: 0,
   });
   const [loadingStats, setLoadingStats] = useState(true);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const dropdownRef = useRef(null);
   const avatarRef = useRef(null);
 
@@ -83,11 +85,18 @@ const DashboardHeader = ({
   }, []);
 
   const handleLogout = () => {
-    userSignOut();
+    toggleDropdown(); // Close dropdown
+    setShowLogoutModal(true); // Show confirmation modal
   };
 
-  const userSignOut = () => {
-    navigate("/login");
+  const confirmLogout = () => {
+    signOut(auth)
+      .then(() => {
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleSettingsProfilClick = () => {
@@ -227,6 +236,62 @@ const DashboardHeader = ({
           )}
         </div>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <div
+          className="fixed inset-0 z-50 overflow-y-auto"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              confirmLogout();
+            } else if (e.key === 'Escape') {
+              setShowLogoutModal(false);
+            }
+          }}
+        >
+          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            {/* Background overlay */}
+            <div
+              className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+              onClick={() => setShowLogoutModal(false)}
+            ></div>
+
+            {/* Modal panel */}
+            <div className="relative inline-block w-full max-w-md p-6 my-8 text-center align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+              {/* Icon */}
+              <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full bg-gray-100">
+                <LogOut className="w-6 h-6 text-[#494E52]" />
+              </div>
+
+              {/* Title */}
+              <h3 className="text-lg font-bold text-gray-900 mb-2">
+                Sign Out?
+              </h3>
+
+              {/* Message */}
+              <p className="text-sm text-gray-600 mb-6">
+                Are you sure you want to log out? You'll need to sign in again to access your quizzes and progress.
+              </p>
+
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowLogoutModal(false)}
+                  className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Stay Logged In
+                </button>
+                <button
+                  onClick={confirmLogout}
+                  className="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-[#494E52] rounded-lg hover:bg-[#3a3f42] transition-colors"
+                >
+                  Yes, Log Out
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

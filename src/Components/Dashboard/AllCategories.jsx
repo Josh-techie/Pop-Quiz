@@ -5,7 +5,7 @@ import { auth } from "../../firebase";
 import Avatar from "../../Assets/avatar.png";
 import DashboardHeader from "./Header";
 import CreateCategoryDrawer from "./CreateCategoryDrawer";
-import { Plus, Trash2, Lock, ArrowLeft, Search } from "lucide-react";
+import { Plus, Trash2, Lock, Search, ChevronRight } from "lucide-react";
 import { useNotifications } from "../../contexts/NotificationContext";
 import { SYSTEM_USER_ID } from "../../constants/system";
 import Navbar from "./NavBar";
@@ -305,33 +305,38 @@ function AllCategories() {
         {/* Content */}
         <div className="flex-1 px-4 md:px-8 pb-4 md:pb-8 overflow-y-auto">
           <div className="bg-white rounded-xl shadow-sm p-6 md:p-8">
-            {/* Header with back button and search */}
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-4">
+            {/* Breadcrumb Navigation */}
+            <div className="mb-6">
+              <nav className="flex items-center text-sm mb-6">
                 <button
                   onClick={() => navigate("/main")}
-                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
-                  aria-label="Go back to dashboard"
+                  className="text-gray-500 hover:text-gray-700 transition-colors font-medium"
                 >
-                  <ArrowLeft className="w-5 h-5 text-gray-600" />
+                  Dashboard
                 </button>
+                <ChevronRight className="w-4 h-4 text-gray-400 mx-2" />
+                <span className="text-gray-900 font-semibold">All Categories</span>
+              </nav>
+
+              {/* Header Section */}
+              <div className="flex items-start justify-between mb-6">
                 <div className="flex-1">
-                  <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
+                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                     All Categories
                   </h1>
-                  <p className="text-gray-500 text-sm mt-1">
+                  <p className="text-gray-500 text-sm">
                     {loading
                       ? "Loading categories..."
                       : error
                       ? "Error loading categories"
                       : searchQuery
                       ? `${filteredCategories.length} of ${categories.length} Categories (filtered)`
-                      : `${categories.length} ${categories.length === 1 ? 'Category' : 'Categories'} • Page ${currentPage} of ${totalPages}`}
+                      : `${categories.length} ${categories.length === 1 ? 'Category' : 'Categories'}${totalPages > 1 ? ` • Page ${currentPage} of ${totalPages}` : ''}`}
                   </p>
                 </div>
                 <button
                   onClick={() => setShowCreateDrawer(true)}
-                  className="bg-[#6B7A8F] hover:bg-[#5a6675] text-white px-4 md:px-6 py-2.5 rounded-xl font-medium transition-colors duration-200 text-sm md:text-base shadow-sm flex items-center gap-2"
+                  className="bg-[#6B7A8F] hover:bg-[#5a6675] text-white px-4 md:px-6 py-2.5 rounded-xl font-medium transition-colors duration-200 text-sm md:text-base shadow-sm flex items-center gap-2 flex-shrink-0"
                 >
                   <Plus className="w-4 h-4" />
                   <span className="hidden sm:inline">New Category</span>
@@ -340,13 +345,13 @@ function AllCategories() {
 
               {/* Search Bar */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search categories..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B7A8F] transition-colors"
+                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-gray-50"
                 />
               </div>
             </div>

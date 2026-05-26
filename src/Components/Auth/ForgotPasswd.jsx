@@ -132,19 +132,16 @@ const ForgotPasswd = () => {
                 </h2>
 
                 {/* Success Description */}
-                <p className="text-gray-600 text-sm md:text-base leading-relaxed max-w-md px-4">
-                  {successMessage}
+                <p className="text-gray-600 text-sm md:text-base leading-relaxed max-w-md px-4 mb-6">
+                  We've sent a secure password reset link to your email address. Click the link in the email to create a new password.
                 </p>
 
-                {/* Primary CTA - Open Email Client */}
-                <a
-                  href="mailto:"
-                  className="w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-semibold rounded-lg px-4 py-3 md:py-3.5 mt-6 transition-all duration-200 flex items-center justify-center text-sm md:text-base shadow-sm hover:shadow-md"
-                >
-                  Open Email
-                </a>
+                {/* Helpful Tip */}
+                <p className="text-gray-500 text-xs md:text-sm max-w-md px-4 mb-6">
+                  Don't see it? Check your spam folder or wait a few minutes for it to arrive.
+                </p>
 
-                {/* Secondary Button - Return to Sign In */}
+                {/* Primary CTA - Return to Sign In */}
                 <button
                   type="button"
                   onClick={() => {
@@ -152,7 +149,7 @@ const ForgotPasswd = () => {
                     setIdentifier("");
                     navigate("/login");
                   }}
-                  className="w-full bg-white hover:bg-gray-50 active:bg-gray-100 text-gray-700 font-semibold rounded-lg px-4 py-3 md:py-3.5 mt-3 transition-all duration-200 border-2 border-gray-300 hover:border-gray-400 text-sm md:text-base"
+                  className="w-full bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-semibold rounded-lg px-4 py-3 md:py-3.5 transition-all duration-200 flex items-center justify-center text-sm md:text-base shadow-sm hover:shadow-md"
                 >
                   Return to Sign In
                 </button>

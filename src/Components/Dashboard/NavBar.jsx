@@ -38,7 +38,15 @@ function Navbar({ activeRoute }) {
   const auth = getAuth();
   const { unreadCount } = useNotifications();
 
-  const userSignOut = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const handleLogoutClick = (e) => {
+    e.preventDefault();
+    setShowLogoutModal(true);
+  };
+
+  const confirmLogout = () => {
     signOut(auth)
       .then(() => {
         navigate("/login");
@@ -47,8 +55,6 @@ function Navbar({ activeRoute }) {
         console.log(error);
       });
   };
-
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
@@ -265,12 +271,9 @@ function Navbar({ activeRoute }) {
 
         {/* Logout */}
         <div className="w-full relative group">
-          <Link
-            onClick={userSignOut}
-            to="/logout"
-            className={`flex items-center rounded-xl transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
-              location.pathname === "/logout" ? "bg-[#494E52] text-white" : "hover:bg-gray-100"
-            } ${
+          <button
+            onClick={handleLogoutClick}
+            className={`flex items-center rounded-xl transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] hover:bg-gray-100 ${
               !isExpanded
                 ? "justify-center w-12 h-12 p-0"
                 : "gap-3 w-full p-3"
@@ -286,7 +289,7 @@ function Navbar({ activeRoute }) {
             >
               Logout
             </span>
-          </Link>
+          </button>
           {/* Tooltip */}
           {!isExpanded && (
             <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-50">
@@ -295,6 +298,62 @@ function Navbar({ activeRoute }) {
           )}
         </div>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <div
+          className="fixed inset-0 z-50 overflow-y-auto"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              confirmLogout();
+            } else if (e.key === 'Escape') {
+              setShowLogoutModal(false);
+            }
+          }}
+        >
+          <div className="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            {/* Background overlay */}
+            <div
+              className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75"
+              onClick={() => setShowLogoutModal(false)}
+            ></div>
+
+            {/* Modal panel */}
+            <div className="relative inline-block w-full max-w-md p-6 my-8 text-center align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+              {/* Icon */}
+              <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 rounded-full bg-gray-100">
+                <LogOut className="w-6 h-6 text-[#494E52]" />
+              </div>
+
+              {/* Title */}
+              <h3 className="text-lg font-bold text-gray-900 mb-2">
+                Sign Out?
+              </h3>
+
+              {/* Message */}
+              <p className="text-sm text-gray-600 mb-6">
+                Are you sure you want to log out? You'll need to sign in again to access your quizzes and progress.
+              </p>
+
+              {/* Buttons */}
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowLogoutModal(false)}
+                  className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Stay Logged In
+                </button>
+                <button
+                  onClick={confirmLogout}
+                  className="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-[#494E52] rounded-lg hover:bg-[#3a3f42] transition-colors"
+                >
+                  Yes, Log Out
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 }

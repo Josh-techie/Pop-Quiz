@@ -74,6 +74,27 @@ export const getCategoryById = async (categoryId) => {
 };
 
 /**
+ * Get a single category by slug
+ */
+export const getCategoryBySlug = async (slug) => {
+  try {
+    const categoriesRef = collection(db, "categories");
+    const q = query(categoriesRef, where("slug", "==", slug), limit(1));
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const doc = querySnapshot.docs[0];
+      return { success: true, data: { id: doc.id, ...doc.data() } };
+    } else {
+      return { success: false, error: "Category not found" };
+    }
+  } catch (error) {
+    console.error("Error getting category by slug:", error);
+    return { success: false, error: error.message };
+  }
+};
+
+/**
  * Update a category
  */
 export const updateCategory = async (categoryId, updates) => {
