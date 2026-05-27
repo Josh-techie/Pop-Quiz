@@ -21,6 +21,7 @@ import MedicineQuestions from "./Components/Quiz/MedicineQuestions";
 import ReviewQuizMedicine from "./Components/Quiz/ReviewQuizMedicine";
 import CategoryDetail from "./Components/Quiz/CategoryDetail";
 import AllCategories from "./Components/Dashboard/AllCategories";
+import AllQuizzesInCategory from "./Components/Quiz/AllQuizzesInCategory";
 import { NotificationProvider } from "./contexts/NotificationContext";
 import ToastNotification from "./Components/Common/ToastNotification";
 
@@ -98,6 +99,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <CategoryDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/category/:categorySlug/all-quizzes"
+            element={
+              <ProtectedRoute>
+                <AllQuizzesInCategory />
               </ProtectedRoute>
             }
           />

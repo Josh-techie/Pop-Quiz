@@ -13,11 +13,6 @@ import QuoteImg from "../../Assets/Quote.jpg";
 import { createUserProfile, checkUsernameAvailability, getUserProfile } from "../../services/firestoreService";
 import { Eye, EyeOff, Check, X } from "lucide-react";
 
-// Move redirect_home function outside the component
-function redirect_home(navigate) {
-  navigate("/login");
-}
-
 const SignUp = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");

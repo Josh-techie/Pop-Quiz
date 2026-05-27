@@ -188,23 +188,26 @@ function DashboardDynamic() {
   };
 
   return (
-    <div className="flex flex-col py-10 px-16 h-screen overflow-y-auto w-full bg-gray-100">
-      {/* Header */}
-      <DashboardHeader
-        toggleDropdown={toggleDropdown}
-        showDropdown={showDropdown}
-        Avatar={Avatar}
-      />
+    <>
+      {/* Dashboard Header */}
+      <div className="flex-shrink-0 py-4 md:py-6 px-4 md:px-8 bg-gray-100">
+        <DashboardHeader
+          toggleDropdown={toggleDropdown}
+          showDropdown={showDropdown}
+          Avatar={Avatar}
+        />
+      </div>
 
-      {/* Main Content */}
-      <div className="bg-white rounded-lg p-8">
-        {/* Title Section */}
+      {/* Content */}
+      <div className="flex-1 px-4 md:px-8 pb-4 md:pb-8 overflow-y-auto overflow-x-hidden">
+        <div className="bg-white rounded-lg p-8 max-w-full box-border">
+        {/* Title Section - Perfect Center Alignment */}
         <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+          <div className="flex flex-col gap-0.5">
+            <h1 className="text-2xl font-bold text-gray-900 tracking-tight leading-none">
               Select Topic
             </h1>
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-500 text-sm leading-none">
               {loading
                 ? "Loading categories..."
                 : error
@@ -212,10 +215,10 @@ function DashboardDynamic() {
                 : `${categories.length} Categories Available`}
             </p>
           </div>
-          {!loading && !error && categories.length > 7 && (
+          {!loading && !error && (
             <Link
               to="/categories"
-              className="text-[#6B7A8F] hover:text-[#5a6675] font-medium text-sm md:text-base flex items-center gap-2 transition-colors"
+              className="text-[#6B7A8F] hover:text-[#5a6675] font-medium text-sm flex items-center gap-2 transition-colors flex-shrink-0"
             >
               View All
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -306,6 +309,7 @@ function DashboardDynamic() {
           </div>
         )}
 
+        </div>
       </div>
 
       {/* Create Category Drawer */}
@@ -329,7 +333,7 @@ function DashboardDynamic() {
           loading={deletingCategory}
         />
       )}
-    </div>
+    </>
   );
 }
 

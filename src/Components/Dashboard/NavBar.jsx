@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
-import { useLocation } from "react-router-dom";
 import { useNotifications } from "../../contexts/NotificationContext";
+import Logo from "../../Assets/Logo.png";
 
 import {
   Bell,
@@ -12,33 +12,13 @@ import {
   LogOut,
   Home,
 } from "lucide-react";
-import { motion } from "framer-motion";
 
-import RightArrowIcon from "../../Assets/icons/rightArrow.svg";
-
-const variants = {
-  expanded: {
-    width: "20%",
-    transition: {
-      duration: 0.35,
-      ease: [0.4, 0, 0.2, 1] // cubic-bezier for smooth deceleration
-    }
-  },
-  nonexpanded: {
-    width: "80px",
-    transition: {
-      duration: 0.35,
-      ease: [0.4, 0, 0.2, 1]
-    }
-  },
-};
-
-function Navbar({ activeRoute }) {
+function Navbar() {
   const navigate = useNavigate();
   const auth = getAuth();
+  const location = useLocation();
   const { unreadCount } = useNotifications();
 
-  const [isExpanded, setIsExpanded] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const handleLogoutClick = (e) => {
@@ -56,247 +36,185 @@ function Navbar({ activeRoute }) {
       });
   };
 
-  const toggleExpanded = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  const location = useLocation();
-
   return (
-    <motion.div
-      animate={isExpanded ? "expanded" : "nonexpanded"}
-      variants={variants}
-      className={
-        "py-10 h-screen flex flex-col border border-r-1 bg-[#FDFDFD] relative" +
-        (isExpanded ? " px-10" : " px-6")
-      }
-    >
-      {/* Toggle Button */}
-      <div
-        onClick={toggleExpanded}
-        className="cursor-pointer absolute -right-3 top-10 rounded-full w-6 h-6 bg-[#494E52] flex justify-center items-center hover:bg-gray-600 transition-colors"
-      >
-        <img
-          src={RightArrowIcon}
-          className={`w-2 transition-transform duration-300 ${
-            isExpanded ? "" : "rotate-180"
-          }`}
-          alt="toggle"
-        />
-      </div>
-
-      {/* Branding Zone - Logo (only show when expanded) */}
-      <div
-        className={`flex items-center gap-3 mb-8 h-12 transition-all duration-300 select-none ${
-          isExpanded ? 'opacity-100' : 'opacity-0 h-0 mb-0 pointer-events-none'
-        }`}
-      >
-        {/* Logo Mark */}
-        <div className="w-10 h-10 bg-[#494E52] rounded-lg flex items-center justify-center flex-shrink-0">
-          <span className="text-white font-bold text-xl">Q</span>
+    <>
+      {/* Desktop Sidebar - Fixed 240px width */}
+      <div className="hidden md:flex w-60 h-screen flex-col bg-white border-r border-gray-200">
+        {/* Logo Section - Official Logo */}
+        <div className="flex items-center justify-center px-6 py-6 border-b border-gray-100">
+          <img
+            src={Logo}
+            alt="Pop Quiz"
+            className="w-full h-auto max-w-[180px] object-contain"
+          />
         </div>
-        {/* Logo Text */}
-        <span className="font-bold text-xl text-[#494E52] whitespace-nowrap">
-          POP QUIZ
-        </span>
-      </div>
 
-      {/* Navigation Zone */}
-      <div className={`flex flex-col space-y-4 transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] select-none ${isExpanded ? '' : 'mt-16 items-center'}`}>
-        {/* Home/Dashboard */}
-        <div className="w-full relative group">
+        {/* Navigation Links */}
+        <nav className="flex-1 px-4 py-6 space-y-1">
+          {/* Section: Workspace */}
+          <div className="px-3 mb-3">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              Workspace
+            </p>
+          </div>
+
           <Link
             to="/main"
-            className={`flex items-center rounded-xl transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
-              location.pathname === "/main" ? "bg-[#494E52] text-white" : "hover:bg-gray-100"
-            } ${
-              !isExpanded
-                ? "justify-center w-12 h-12 p-0"
-                : "gap-3 w-full p-3"
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+              location.pathname === "/main"
+                ? "bg-gray-100 text-[#494E52] font-medium"
+                : "text-gray-700 hover:bg-gray-50"
             }`}
           >
-            <Home className="w-6 h-6 flex-shrink-0" />
-            <span
-              className={`whitespace-nowrap select-none ${
-                isExpanded
-                  ? 'opacity-100 translate-x-0 transition-all duration-[250ms] ease-in-out delay-100'
-                  : 'opacity-0 -translate-x-3 w-0 transition-all duration-[250ms] ease-in-out'
-              }`}
-            >
-              Dashboard
-            </span>
+            <Home className="w-5 h-5 flex-shrink-0" />
+            <span className="text-sm">Dashboard</span>
           </Link>
-          {/* Tooltip */}
-          {!isExpanded && (
-            <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-50">
-              Dashboard
-            </div>
-          )}
-        </div>
 
-        {/* Make a Quiz */}
-        <div className="w-full relative group">
           <Link
             to="/makequiz"
-            className={`flex items-center rounded-xl transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
-              location.pathname === "/makequiz" ? "bg-[#494E52] text-white" : "hover:bg-gray-100"
-            } ${
-              !isExpanded
-                ? "justify-center w-12 h-12 p-0"
-                : "gap-3 w-full p-3"
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+              location.pathname === "/makequiz"
+                ? "bg-gray-100 text-[#494E52] font-medium"
+                : "text-gray-700 hover:bg-gray-50"
             }`}
           >
-            <ClipboardEdit className="w-6 h-6 flex-shrink-0" />
-            <span
-              className={`whitespace-nowrap select-none ${
-                isExpanded
-                  ? 'opacity-100 translate-x-0 transition-all duration-[250ms] ease-in-out delay-100'
-                  : 'opacity-0 -translate-x-3 w-0 transition-all duration-[250ms] ease-in-out'
-              }`}
-            >
-              Make a Quiz
-            </span>
+            <ClipboardEdit className="w-5 h-5 flex-shrink-0" />
+            <span className="text-sm">Make a Quiz</span>
           </Link>
-          {/* Tooltip */}
-          {!isExpanded && (
-            <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-50">
-              Make a Quiz
-            </div>
-          )}
-        </div>
 
-        {/* Leaderboard */}
-        <div className="w-full relative group">
           <Link
             to="/leaderboard"
-            className={`flex items-center rounded-xl transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
               location.pathname === "/leaderboard"
-                ? "bg-[#494E52] text-white"
-                : "hover:bg-gray-100"
-            } ${
-              !isExpanded
-                ? "justify-center w-12 h-12 p-0"
-                : "gap-3 w-full p-3"
+                ? "bg-gray-100 text-[#494E52] font-medium"
+                : "text-gray-700 hover:bg-gray-50"
             }`}
           >
-            <Trophy className="w-6 h-6 flex-shrink-0" />
-            <span
-              className={`whitespace-nowrap select-none ${
-                isExpanded
-                  ? 'opacity-100 translate-x-0 transition-all duration-[250ms] ease-in-out delay-100'
-                  : 'opacity-0 -translate-x-3 w-0 transition-all duration-[250ms] ease-in-out'
-              }`}
-            >
-              Leaderboard
-            </span>
+            <Trophy className="w-5 h-5 flex-shrink-0" />
+            <span className="text-sm">Leaderboard</span>
           </Link>
-          {/* Tooltip */}
-          {!isExpanded && (
-            <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-50">
-              Leaderboard
-            </div>
-          )}
-        </div>
 
-        {/* Notifications */}
-        <div className="w-full relative group">
+          {/* Section: Account */}
+          <div className="px-3 mt-6 mb-3">
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              Account
+            </p>
+          </div>
+
           <Link
             to="/notification"
-            className={`flex items-center rounded-xl transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] relative ${
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
               location.pathname === "/notification"
-                ? "bg-[#494E52] text-white"
-                : "hover:bg-gray-100"
-            } ${
-              !isExpanded
-                ? "justify-center w-12 h-12 p-0"
-                : "gap-3 w-full p-3"
+                ? "bg-gray-100 text-[#494E52] font-medium"
+                : "text-gray-700 hover:bg-gray-50"
             }`}
           >
             <div className="relative flex-shrink-0">
-              <Bell className="w-6 h-6" />
+              <Bell className="w-5 h-5" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[10px]">
                   {unreadCount > 9 ? '9+' : unreadCount}
                 </span>
               )}
             </div>
-            <span
-              className={`whitespace-nowrap select-none ${
-                isExpanded
-                  ? 'opacity-100 translate-x-0 transition-all duration-[250ms] ease-in-out delay-100'
-                  : 'opacity-0 -translate-x-3 w-0 transition-all duration-[250ms] ease-in-out'
-              }`}
-            >
-              Notifications
-            </span>
+            <span className="text-sm">Notifications</span>
           </Link>
-          {/* Tooltip */}
-          {!isExpanded && (
-            <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-50">
-              Notifications
-            </div>
-          )}
-        </div>
 
-        {/* Profile */}
-        <div className="w-full relative group">
           <Link
             to="/account"
-            className={`flex items-center rounded-xl transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${
-              location.pathname === "/account" ? "bg-[#494E52] text-white" : "hover:bg-gray-100"
-            } ${
-              !isExpanded
-                ? "justify-center w-12 h-12 p-0"
-                : "gap-3 w-full p-3"
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+              location.pathname === "/account"
+                ? "bg-gray-100 text-[#494E52] font-medium"
+                : "text-gray-700 hover:bg-gray-50"
             }`}
           >
-            <User className="w-6 h-6 flex-shrink-0" />
-            <span
-              className={`whitespace-nowrap select-none ${
-                isExpanded
-                  ? 'opacity-100 translate-x-0 transition-all duration-[250ms] ease-in-out delay-100'
-                  : 'opacity-0 -translate-x-3 w-0 transition-all duration-[250ms] ease-in-out'
-              }`}
-            >
-              Profile
-            </span>
+            <User className="w-5 h-5 flex-shrink-0" />
+            <span className="text-sm">Profile</span>
           </Link>
-          {/* Tooltip */}
-          {!isExpanded && (
-            <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-50">
-              Profile
-            </div>
-          )}
-        </div>
+        </nav>
 
-        {/* Logout */}
-        <div className="w-full relative group">
+        {/* Logout Button - Pushed to bottom */}
+        <div className="px-4 pb-6 border-t border-gray-100 pt-4">
           <button
             onClick={handleLogoutClick}
-            className={`flex items-center rounded-xl transition-all duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] hover:bg-gray-100 ${
-              !isExpanded
-                ? "justify-center w-12 h-12 p-0"
-                : "gap-3 w-full p-3"
+            className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-gray-700 hover:bg-gray-50 transition-all"
+          >
+            <LogOut className="w-5 h-5 flex-shrink-0" />
+            <span className="text-sm">Logout</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Bottom Navigation Bar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 z-50 pb-safe">
+        <nav className="flex items-center justify-around h-16 px-2">
+          <Link
+            to="/main"
+            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] ${
+              location.pathname === "/main"
+                ? "text-[#494E52]"
+                : "text-gray-500"
             }`}
           >
-            <LogOut className="w-6 h-6 flex-shrink-0" />
-            <span
-              className={`whitespace-nowrap select-none ${
-                isExpanded
-                  ? 'opacity-100 translate-x-0 transition-all duration-[250ms] ease-in-out delay-100'
-                  : 'opacity-0 -translate-x-3 w-0 transition-all duration-[250ms] ease-in-out'
-              }`}
-            >
-              Logout
-            </span>
-          </button>
-          {/* Tooltip */}
-          {!isExpanded && (
-            <div className="absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-200 whitespace-nowrap z-50">
-              Logout
+            <Home className="w-6 h-6" />
+            <span className="text-[10px] font-medium">Home</span>
+          </Link>
+
+          <Link
+            to="/makequiz"
+            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] ${
+              location.pathname === "/makequiz"
+                ? "text-[#494E52]"
+                : "text-gray-500"
+            }`}
+          >
+            <ClipboardEdit className="w-6 h-6" />
+            <span className="text-[10px] font-medium">Quiz</span>
+          </Link>
+
+          <Link
+            to="/leaderboard"
+            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] ${
+              location.pathname === "/leaderboard"
+                ? "text-[#494E52]"
+                : "text-gray-500"
+            }`}
+          >
+            <Trophy className="w-6 h-6" />
+            <span className="text-[10px] font-medium">Board</span>
+          </Link>
+
+          <Link
+            to="/notification"
+            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] relative ${
+              location.pathname === "/notification"
+                ? "text-[#494E52]"
+                : "text-gray-500"
+            }`}
+          >
+            <div className="relative">
+              <Bell className="w-6 h-6" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-4 h-4 flex items-center justify-center text-[9px]">
+                  {unreadCount > 9 ? '9' : unreadCount}
+                </span>
+              )}
             </div>
-          )}
-        </div>
+            <span className="text-[10px] font-medium">Alerts</span>
+          </Link>
+
+          <Link
+            to="/account"
+            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] ${
+              location.pathname === "/account"
+                ? "text-[#494E52]"
+                : "text-gray-500"
+            }`}
+          >
+            <User className="w-6 h-6" />
+            <span className="text-[10px] font-medium">Profile</span>
+          </Link>
+        </nav>
       </div>
 
       {/* Logout Confirmation Modal */}
@@ -354,7 +272,7 @@ function Navbar({ activeRoute }) {
           </div>
         </div>
       )}
-    </motion.div>
+    </>
   );
 }
 

@@ -21,13 +21,6 @@ function ReviewQuizMedicine() {
     }
   }, []);
 
-  // Function to get the correct option for a given question
-  const getCorrectOption = (questionIndex) => {
-    return quizData[1].quiz_questions[questionIndex].options[
-      quizData[1].quiz_questions[questionIndex].correct_option
-    ];
-  };
-
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   const handleNext = () => {

@@ -10,6 +10,7 @@ const Toast = ({ toast, onRemove }) => {
   const startTimeRef = useRef(null);
   const remainingTimeRef = useRef(toast.duration || 4000);
   const originalDurationRef = useRef(toast.duration || 4000);
+  const speedMultiplierRef = useRef(1); // 1 = normal speed, 0.3 = slowed down
 
   const getIcon = (type) => {
     switch (type) {
@@ -65,7 +66,7 @@ const Toast = ({ toast, onRemove }) => {
     const duration = remainingTimeRef.current;
 
     timerRef.current = setInterval(() => {
-      const elapsed = Date.now() - startTimeRef.current;
+      const elapsed = (Date.now() - startTimeRef.current) * speedMultiplierRef.current;
       const remaining = duration - elapsed;
       // Use original duration for progress calculation to maintain consistency
       const progressPercent = (remaining / originalDurationRef.current) * 100;
@@ -82,7 +83,7 @@ const Toast = ({ toast, onRemove }) => {
   const pauseTimer = () => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
-      const elapsed = Date.now() - startTimeRef.current;
+      const elapsed = (Date.now() - startTimeRef.current) * speedMultiplierRef.current;
       remainingTimeRef.current = remainingTimeRef.current - elapsed;
     }
   };
@@ -99,15 +100,22 @@ const Toast = ({ toast, onRemove }) => {
         clearInterval(timerRef.current);
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleMouseEnter = () => {
     setIsPaused(true);
+    // Slow down timer to 30% speed on hover
     pauseTimer();
+    speedMultiplierRef.current = 0.3;
+    resumeTimer();
   };
 
   const handleMouseLeave = () => {
     setIsPaused(false);
+    // Resume normal speed
+    pauseTimer();
+    speedMultiplierRef.current = 1;
     resumeTimer();
   };
 

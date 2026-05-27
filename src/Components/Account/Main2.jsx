@@ -12,27 +12,23 @@ import "../../styles/index.css";
 
 
 export default function App() {
- 
+
   return (
-    <div className='flex'>
-
+    <div className="flex h-screen overflow-hidden bg-gray-100 max-w-full">
       <Navbar />
-          <main className="main-content">
-        {/* <Header /> */}
-      
-      <SimpleBar style={{ maxHeight: '100vh' }}>
-        <ChakraProvider theme={theme}>
-          <Cover />
 
-          <Container display={{ base: 'block', md: 'flex' }} maxW="container.xl">
-            <Sidebar />
-            <Content />
-          </Container>
-        </ChakraProvider>
-      </SimpleBar>
+      <main className="flex-1 flex flex-col overflow-hidden max-w-full">
+        <SimpleBar style={{ maxHeight: '100vh', width: '100%' }}>
+          <ChakraProvider theme={theme}>
+            <Cover />
 
+            <Container display={{ base: 'block', md: 'flex' }} maxW="container.xl">
+              <Sidebar />
+              <Content />
+            </Container>
+          </ChakraProvider>
+        </SimpleBar>
       </main>
-
     </div>
   )
 }

@@ -115,13 +115,6 @@ function MedicineQuestions() {
     navigate("/quiz-review-medicine");
   };
 
-  // Intercept clicks on navbar links and show abandon modal
-  const handleNavClick = (e, path) => {
-    e.preventDefault();
-    setPendingNavigation(path);
-    setIsAbandonModalOpen(true);
-  };
-
   const handleAbandonQuiz = () => {
     setIsAbandonModalOpen(false);
     if (pendingNavigation) {

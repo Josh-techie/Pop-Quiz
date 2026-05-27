@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getCategories, deleteCategory, getQuizzesByCategory } from "../../services/firestoreService";
 import { auth } from "../../firebase";
 import Avatar from "../../Assets/avatar.png";
 import DashboardHeader from "./Header";
 import CreateCategoryDrawer from "./CreateCategoryDrawer";
-import { Plus, Trash2, Lock, Search, ChevronRight } from "lucide-react";
+import { Plus, Trash2, Lock, Search, ChevronRight, ArrowLeft, Grid3x3, List, ChevronDown } from "lucide-react";
 import { useNotifications } from "../../contexts/NotificationContext";
 import { SYSTEM_USER_ID } from "../../constants/system";
 import Navbar from "./NavBar";
@@ -178,8 +178,14 @@ function AllCategories() {
   const [quizCountInCategory, setQuizCountInCategory] = useState(0);
   const [deletingCategory, setDeletingCategory] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 12;
+  const [sortBy, setSortBy] = useState("newest"); // newest, alphabetical, mostPlayed
+  const [viewMode, setViewMode] = useState("grid"); // grid or list
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [displayedCount, setDisplayedCount] = useState(12);
+  const observerRef = useRef(null);
+  const loadMoreRef = useRef(null);
+  const sortDropdownRef = useRef(null);
+  const ITEMS_PER_LOAD = 12;
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -211,32 +217,72 @@ function AllCategories() {
     fetchCategories();
   }, []);
 
-  // Filter categories based on search query
+  // Filter and sort categories
   useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setFilteredCategories(categories);
-    } else {
-      const filtered = categories.filter((category) =>
+    let filtered = categories;
+
+    // Apply search filter
+    if (searchQuery.trim() !== "") {
+      filtered = filtered.filter((category) =>
         category.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         category.description?.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      setFilteredCategories(filtered);
     }
-    // Reset to first page when search changes
-    setCurrentPage(1);
-  }, [searchQuery, categories]);
 
-  // Calculate pagination
-  const totalPages = Math.ceil(filteredCategories.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentCategories = filteredCategories.slice(startIndex, endIndex);
+    // Apply sorting
+    const sorted = [...filtered].sort((a, b) => {
+      switch (sortBy) {
+        case "newest":
+          return (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0);
+        case "oldest":
+          return (a.createdAt?.toMillis() || 0) - (b.createdAt?.toMillis() || 0);
+        case "updated":
+          return (b.updatedAt?.toMillis() || b.createdAt?.toMillis() || 0) -
+                 (a.updatedAt?.toMillis() || a.createdAt?.toMillis() || 0);
+        case "alphabetical":
+          return a.name.localeCompare(b.name);
+        case "alphabetical-desc":
+          return b.name.localeCompare(a.name);
+        default:
+          return 0;
+      }
+    });
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    // Scroll to top of content
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+    setFilteredCategories(sorted);
+    setDisplayedCount(12); // Reset displayed count when filters change
+  }, [searchQuery, categories, sortBy]);
+
+  // Infinite scroll observer
+  const handleObserver = useCallback((entries) => {
+    const [target] = entries;
+    if (target.isIntersecting && displayedCount < filteredCategories.length) {
+      setDisplayedCount(prev => Math.min(prev + ITEMS_PER_LOAD, filteredCategories.length));
+    }
+  }, [displayedCount, filteredCategories.length]);
+
+  useEffect(() => {
+    const option = {
+      root: null,
+      rootMargin: "100px",
+      threshold: 0
+    };
+
+    observerRef.current = new IntersectionObserver(handleObserver, option);
+
+    if (loadMoreRef.current) {
+      observerRef.current.observe(loadMoreRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [handleObserver]);
+
+  // Calculate what to display
+  const currentCategories = filteredCategories.slice(0, displayedCount);
+  const hasMore = displayedCount < filteredCategories.length;
 
   const handleCategoryCreated = () => {
     fetchCategories();
@@ -303,57 +349,126 @@ function AllCategories() {
         </div>
 
         {/* Content */}
-        <div className="flex-1 px-4 md:px-8 pb-4 md:pb-8 overflow-y-auto">
-          <div className="bg-white rounded-xl shadow-sm p-6 md:p-8">
-            {/* Breadcrumb Navigation */}
-            <div className="mb-6">
-              <nav className="flex items-center text-sm mb-6">
+        <div className="flex-1 px-3 md:px-8 pb-20 md:pb-8 overflow-y-auto overflow-x-hidden">
+          <div className="bg-white rounded-lg md:rounded-xl shadow-sm p-3 md:p-6 max-w-full">
+            {/* Compact Header - Responsive Layout */}
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4 mb-4 md:mb-6">
+              {/* Left: Back Button + Title (Full width on mobile) */}
+              <div className="flex items-center gap-2 md:gap-3">
                 <button
                   onClick={() => navigate("/main")}
-                  className="text-gray-500 hover:text-gray-700 transition-colors font-medium"
+                  className="flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-lg border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-50 transition-all text-gray-600 flex-shrink-0"
+                  title="Back to Dashboard"
                 >
-                  Dashboard
+                  <ArrowLeft className="w-4 h-4" />
                 </button>
-                <ChevronRight className="w-4 h-4 text-gray-400 mx-2" />
-                <span className="text-gray-900 font-semibold">All Categories</span>
-              </nav>
-
-              {/* Header Section */}
-              <div className="flex items-start justify-between mb-6">
-                <div className="flex-1">
-                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+                <div className="flex flex-col gap-0.5 flex-1">
+                  <h1 className="text-lg md:text-xl font-bold text-gray-900 tracking-tight leading-none">
                     All Categories
                   </h1>
-                  <p className="text-gray-500 text-sm">
+                  <p className="text-gray-500 text-xs md:text-sm leading-none">
                     {loading
-                      ? "Loading categories..."
+                      ? "Loading..."
                       : error
-                      ? "Error loading categories"
+                      ? "Error"
                       : searchQuery
-                      ? `${filteredCategories.length} of ${categories.length} Categories (filtered)`
-                      : `${categories.length} ${categories.length === 1 ? 'Category' : 'Categories'}${totalPages > 1 ? ` • Page ${currentPage} of ${totalPages}` : ''}`}
+                      ? `${filteredCategories.length} of ${categories.length}`
+                      : `${categories.length} ${categories.length === 1 ? 'Category' : 'Categories'}`}
                   </p>
                 </div>
-                <button
-                  onClick={() => setShowCreateDrawer(true)}
-                  className="bg-[#6B7A8F] hover:bg-[#5a6675] text-white px-4 md:px-6 py-2.5 rounded-xl font-medium transition-colors duration-200 text-sm md:text-base shadow-sm flex items-center gap-2 flex-shrink-0"
-                >
-                  <Plus className="w-4 h-4" />
-                  <span className="hidden sm:inline">New Category</span>
-                </button>
               </div>
 
-              {/* Search Bar */}
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search categories..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-gray-50"
-                />
+              {/* Search Bar with Controls (Full width on mobile) */}
+              <div className="flex items-center gap-2 w-full md:w-auto md:flex-1 md:min-w-0">
+                <div className="relative flex-1 md:max-w-md">
+                  <Search className="absolute left-2.5 md:left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-9 md:pl-10 pr-2 md:pr-3 py-1.5 md:py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#6B7A8F] focus:border-transparent text-sm bg-gray-50"
+                  />
+                </div>
+
+                {/* Sort Dropdown */}
+                <div className="relative" ref={sortDropdownRef}>
+                  <button
+                    onClick={() => setShowSortDropdown(!showSortDropdown)}
+                    className="flex items-center gap-1 px-2 md:px-2.5 py-1.5 md:py-2 border-2 border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700 whitespace-nowrap min-w-[80px] md:min-w-[100px] justify-between"
+                  >
+                    <span className="hidden sm:inline text-xs md:text-sm">
+                      {sortBy === "newest" && "Newest"}
+                      {sortBy === "oldest" && "Oldest"}
+                      {sortBy === "updated" && "Updated"}
+                      {sortBy === "alphabetical" && "A-Z"}
+                      {sortBy === "alphabetical-desc" && "Z-A"}
+                    </span>
+                    <ChevronDown className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                  </button>
+                  {showSortDropdown && (
+                    <div className="absolute left-0 right-0 mt-2 bg-white border-2 border-gray-200 rounded-lg shadow-lg z-10 overflow-hidden">
+                      <button
+                        onClick={() => { setSortBy("newest"); setShowSortDropdown(false); }}
+                        className={`w-full text-left px-3 py-2 md:py-2.5 hover:bg-gray-50 text-xs md:text-sm transition-colors ${sortBy === "newest" ? "bg-gray-100 font-semibold text-[#6B7A8F]" : ""}`}
+                      >
+                        Newest Added
+                      </button>
+                      <button
+                        onClick={() => { setSortBy("oldest"); setShowSortDropdown(false); }}
+                        className={`w-full text-left px-3 py-2 md:py-2.5 hover:bg-gray-50 text-xs md:text-sm transition-colors border-t border-gray-100 ${sortBy === "oldest" ? "bg-gray-100 font-semibold text-[#6B7A8F]" : ""}`}
+                      >
+                        Oldest Added
+                      </button>
+                      <button
+                        onClick={() => { setSortBy("updated"); setShowSortDropdown(false); }}
+                        className={`w-full text-left px-3 py-2 md:py-2.5 hover:bg-gray-50 text-xs md:text-sm transition-colors border-t border-gray-100 ${sortBy === "updated" ? "bg-gray-100 font-semibold text-[#6B7A8F]" : ""}`}
+                      >
+                        Last Updated
+                      </button>
+                      <button
+                        onClick={() => { setSortBy("alphabetical"); setShowSortDropdown(false); }}
+                        className={`w-full text-left px-3 py-2 md:py-2.5 hover:bg-gray-50 text-xs md:text-sm transition-colors border-t border-gray-100 ${sortBy === "alphabetical" ? "bg-gray-100 font-semibold text-[#6B7A8F]" : ""}`}
+                      >
+                        Alphabetical (A-Z)
+                      </button>
+                      <button
+                        onClick={() => { setSortBy("alphabetical-desc"); setShowSortDropdown(false); }}
+                        className={`w-full text-left px-3 py-2 md:py-2.5 hover:bg-gray-50 text-xs md:text-sm transition-colors border-t border-gray-100 ${sortBy === "alphabetical-desc" ? "bg-gray-100 font-semibold text-[#6B7A8F]" : ""}`}
+                      >
+                        Alphabetical (Z-A)
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* View Mode Toggle */}
+                <div className="flex items-center border-2 border-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+                  <button
+                    onClick={() => setViewMode("grid")}
+                    className={`p-1.5 md:p-2 transition-colors ${viewMode === "grid" ? "bg-[#6B7A8F] text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
+                    title="Grid View"
+                  >
+                    <Grid3x3 className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                  </button>
+                  <button
+                    onClick={() => setViewMode("list")}
+                    className={`p-1.5 md:p-2 transition-colors ${viewMode === "list" ? "bg-[#6B7A8F] text-white" : "bg-white text-gray-600 hover:bg-gray-50"}`}
+                    title="List View"
+                  >
+                    <List className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                  </button>
+                </div>
               </div>
+
+              {/* Right: New Category Button - Hidden on mobile (uses FAB) */}
+              <button
+                onClick={() => setShowCreateDrawer(true)}
+                className="hidden md:flex bg-[#6B7A8F] hover:bg-[#5a6675] text-white px-3 py-2 rounded-lg font-medium transition-colors text-sm shadow-sm items-center gap-2 flex-shrink-0"
+              >
+                <Plus className="w-4 h-4" />
+                <span>New</span>
+              </button>
             </div>
 
             {/* Error Message */}
@@ -373,97 +488,68 @@ function AllCategories() {
               </div>
             )}
 
-            {/* Categories Grid - Paginated */}
+            {/* Categories Grid/List - Infinite Scroll */}
             {!loading && !error && filteredCategories.length > 0 && (
               <>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                  {currentCategories.map((category) => (
-                    <Card
-                      key={category.id}
-                      title={category.name}
-                      image={category.image}
-                      description={category.description}
-                      cardLink={`/category/${category.slug || category.id}`}
-                      categoryId={category.id}
-                      createdBy={category.createdBy}
-                      isSystemCategory={category.isSystemCategory || false}
-                      onDelete={handleDeleteClick}
-                    />
-                  ))}
-                </div>
-
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-2 mt-8">
-                    {/* Previous Button */}
-                    <button
-                      onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
-                      className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                      aria-label="Previous page"
-                    >
-                      <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                      </svg>
-                    </button>
-
-                    {/* Page Numbers */}
-                    <div className="flex items-center gap-1">
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-                        // Show first page, last page, current page, and pages around current
-                        const showPage =
-                          page === 1 ||
-                          page === totalPages ||
-                          (page >= currentPage - 1 && page <= currentPage + 1);
-
-                        const showEllipsis =
-                          (page === currentPage - 2 && currentPage > 3) ||
-                          (page === currentPage + 2 && currentPage < totalPages - 2);
-
-                        if (showEllipsis) {
-                          return (
-                            <span key={page} className="px-2 text-gray-400">
-                              ...
-                            </span>
-                          );
-                        }
-
-                        if (!showPage) return null;
-
-                        return (
-                          <button
-                            key={page}
-                            onClick={() => handlePageChange(page)}
-                            className={`min-w-[40px] h-10 rounded-lg font-medium transition-colors ${
-                              currentPage === page
-                                ? 'bg-[#6B7A8F] text-white'
-                                : 'border border-gray-300 hover:bg-gray-50 text-gray-700'
-                            }`}
-                          >
-                            {page}
-                          </button>
-                        );
-                      })}
-                    </div>
-
-                    {/* Next Button */}
-                    <button
-                      onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
-                      className="p-2 rounded-lg border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                      aria-label="Next page"
-                    >
-                      <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </button>
+                {viewMode === "grid" ? (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                    {currentCategories.map((category) => (
+                      <Card
+                        key={category.id}
+                        title={category.name}
+                        image={category.image}
+                        description={category.description}
+                        cardLink={`/category/${category.slug || category.id}`}
+                        categoryId={category.id}
+                        createdBy={category.createdBy}
+                        isSystemCategory={category.isSystemCategory || false}
+                        onDelete={handleDeleteClick}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {currentCategories.map((category) => (
+                      <Link
+                        key={category.id}
+                        to={`/category/${category.slug || category.id}`}
+                        className="flex items-center gap-4 p-4 bg-white border-2 border-gray-100 rounded-lg hover:border-gray-300 hover:shadow-md transition-all group"
+                      >
+                        <img
+                          src={category.image || 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=500'}
+                          alt={category.name}
+                          className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-gray-900 group-hover:text-[#6B7A8F] transition-colors truncate">
+                            {category.name}
+                          </h3>
+                          <p className="text-sm text-gray-500 line-clamp-1">
+                            {category.description || "No description"}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {category.isSystemCategory && (
+                            <Lock className="w-4 h-4 text-gray-400" />
+                          )}
+                          <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+                        </div>
+                      </Link>
+                    ))}
                   </div>
                 )}
 
-                {/* Page Info */}
-                {totalPages > 1 && (
-                  <p className="text-center text-sm text-gray-500 mt-4">
-                    Showing {startIndex + 1}-{Math.min(endIndex, filteredCategories.length)} of {filteredCategories.length} categories
+                {/* Infinite Scroll Trigger */}
+                {hasMore && (
+                  <div ref={loadMoreRef} className="flex justify-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#6B7A8F]"></div>
+                  </div>
+                )}
+
+                {/* Showing Count */}
+                {!hasMore && filteredCategories.length > 12 && (
+                  <p className="text-center text-sm text-gray-500 mt-6">
+                    Showing all {filteredCategories.length} categories
                   </p>
                 )}
               </>
