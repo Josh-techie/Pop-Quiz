@@ -23,15 +23,17 @@ import CategoryDetail from "./Components/Quiz/CategoryDetail";
 import AllCategories from "./Components/Dashboard/AllCategories";
 import AllQuizzesInCategory from "./Components/Quiz/AllQuizzesInCategory";
 import { NotificationProvider } from "./contexts/NotificationContext";
+import { NavigationProvider } from "./contexts/NavigationContext";
 import ToastNotification from "./Components/Common/ToastNotification";
 
 function App() {
   return (
     <NotificationProvider>
-      <div className="App">
-        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-          <ToastNotification />
-        <Routes>
+      <NavigationProvider>
+        <div className="App">
+          <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+            <ToastNotification />
+          <Routes>
           {/* Public Routes - No Authentication Required */}
           <Route path="/" element={<SignIn />} />
           <Route path="/login" element={<SignIn />} />
@@ -171,8 +173,9 @@ function App() {
             }
           />
         </Routes>
-      </BrowserRouter>
-    </div>
+        </BrowserRouter>
+      </div>
+      </NavigationProvider>
     </NotificationProvider>
   );
 }

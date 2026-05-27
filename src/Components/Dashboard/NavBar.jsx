@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
 import { useNotifications } from "../../contexts/NotificationContext";
+import { useNavigation } from "../../contexts/NavigationContext";
 import Logo from "../../Assets/Logo.png";
 
 import {
@@ -18,8 +19,15 @@ function Navbar() {
   const auth = getAuth();
   const location = useLocation();
   const { unreadCount } = useNotifications();
+  const { checkNavigation } = useNavigation();
 
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  // Protected navigation handler
+  const handleNavigationClick = (e, path) => {
+    e.preventDefault();
+    checkNavigation(() => navigate(path));
+  };
 
   const handleLogoutClick = (e) => {
     e.preventDefault();
@@ -58,9 +66,10 @@ function Navbar() {
             </p>
           </div>
 
-          <Link
-            to="/main"
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+          <a
+            href="/main"
+            onClick={(e) => handleNavigationClick(e, "/main")}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all cursor-pointer ${
               location.pathname === "/main"
                 ? "bg-gray-100 text-[#494E52] font-medium"
                 : "text-gray-700 hover:bg-gray-50"
@@ -68,11 +77,12 @@ function Navbar() {
           >
             <Home className="w-5 h-5 flex-shrink-0" />
             <span className="text-sm">Dashboard</span>
-          </Link>
+          </a>
 
-          <Link
-            to="/makequiz"
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+          <a
+            href="/makequiz"
+            onClick={(e) => handleNavigationClick(e, "/makequiz")}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all cursor-pointer ${
               location.pathname === "/makequiz"
                 ? "bg-gray-100 text-[#494E52] font-medium"
                 : "text-gray-700 hover:bg-gray-50"
@@ -80,11 +90,12 @@ function Navbar() {
           >
             <ClipboardEdit className="w-5 h-5 flex-shrink-0" />
             <span className="text-sm">Make a Quiz</span>
-          </Link>
+          </a>
 
-          <Link
-            to="/leaderboard"
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+          <a
+            href="/leaderboard"
+            onClick={(e) => handleNavigationClick(e, "/leaderboard")}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all cursor-pointer ${
               location.pathname === "/leaderboard"
                 ? "bg-gray-100 text-[#494E52] font-medium"
                 : "text-gray-700 hover:bg-gray-50"
@@ -92,7 +103,7 @@ function Navbar() {
           >
             <Trophy className="w-5 h-5 flex-shrink-0" />
             <span className="text-sm">Leaderboard</span>
-          </Link>
+          </a>
 
           {/* Section: Account */}
           <div className="px-3 mt-6 mb-3">
@@ -101,9 +112,10 @@ function Navbar() {
             </p>
           </div>
 
-          <Link
-            to="/notification"
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+          <a
+            href="/notification"
+            onClick={(e) => handleNavigationClick(e, "/notification")}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all cursor-pointer ${
               location.pathname === "/notification"
                 ? "bg-gray-100 text-[#494E52] font-medium"
                 : "text-gray-700 hover:bg-gray-50"
@@ -118,11 +130,12 @@ function Navbar() {
               )}
             </div>
             <span className="text-sm">Notifications</span>
-          </Link>
+          </a>
 
-          <Link
-            to="/account"
-            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all ${
+          <a
+            href="/account"
+            onClick={(e) => handleNavigationClick(e, "/account")}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all cursor-pointer ${
               location.pathname === "/account"
                 ? "bg-gray-100 text-[#494E52] font-medium"
                 : "text-gray-700 hover:bg-gray-50"
@@ -130,7 +143,7 @@ function Navbar() {
           >
             <User className="w-5 h-5 flex-shrink-0" />
             <span className="text-sm">Profile</span>
-          </Link>
+          </a>
         </nav>
 
         {/* Logout Button - Pushed to bottom */}
@@ -148,9 +161,10 @@ function Navbar() {
       {/* Mobile Bottom Navigation Bar */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 z-50 pb-safe">
         <nav className="flex items-center justify-around h-16 px-2">
-          <Link
-            to="/main"
-            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] ${
+          <a
+            href="/main"
+            onClick={(e) => handleNavigationClick(e, "/main")}
+            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] cursor-pointer ${
               location.pathname === "/main"
                 ? "text-[#494E52]"
                 : "text-gray-500"
@@ -158,11 +172,12 @@ function Navbar() {
           >
             <Home className="w-6 h-6" />
             <span className="text-[10px] font-medium">Home</span>
-          </Link>
+          </a>
 
-          <Link
-            to="/makequiz"
-            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] ${
+          <a
+            href="/makequiz"
+            onClick={(e) => handleNavigationClick(e, "/makequiz")}
+            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] cursor-pointer ${
               location.pathname === "/makequiz"
                 ? "text-[#494E52]"
                 : "text-gray-500"
@@ -170,11 +185,12 @@ function Navbar() {
           >
             <ClipboardEdit className="w-6 h-6" />
             <span className="text-[10px] font-medium">Quiz</span>
-          </Link>
+          </a>
 
-          <Link
-            to="/leaderboard"
-            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] ${
+          <a
+            href="/leaderboard"
+            onClick={(e) => handleNavigationClick(e, "/leaderboard")}
+            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] cursor-pointer ${
               location.pathname === "/leaderboard"
                 ? "text-[#494E52]"
                 : "text-gray-500"
@@ -182,11 +198,12 @@ function Navbar() {
           >
             <Trophy className="w-6 h-6" />
             <span className="text-[10px] font-medium">Board</span>
-          </Link>
+          </a>
 
-          <Link
-            to="/notification"
-            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] relative ${
+          <a
+            href="/notification"
+            onClick={(e) => handleNavigationClick(e, "/notification")}
+            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] relative cursor-pointer ${
               location.pathname === "/notification"
                 ? "text-[#494E52]"
                 : "text-gray-500"
@@ -201,11 +218,12 @@ function Navbar() {
               )}
             </div>
             <span className="text-[10px] font-medium">Alerts</span>
-          </Link>
+          </a>
 
-          <Link
-            to="/account"
-            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] ${
+          <a
+            href="/account"
+            onClick={(e) => handleNavigationClick(e, "/account")}
+            className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[60px] cursor-pointer ${
               location.pathname === "/account"
                 ? "text-[#494E52]"
                 : "text-gray-500"
@@ -213,7 +231,7 @@ function Navbar() {
           >
             <User className="w-6 h-6" />
             <span className="text-[10px] font-medium">Profile</span>
-          </Link>
+          </a>
         </nav>
       </div>
 

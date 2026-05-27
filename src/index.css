@@ -48,3 +48,34 @@ input:invalid-focus {
     transform: translateY(0) scale(1);
   }
 }
+
+/* Quiz Card Carousel Slide Animations */
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-in-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.3s ease-in-out;
+}

@@ -398,7 +398,7 @@ const QuizCard = ({ quiz, onDelete, onToggleVisibility, onCopyLink, onView, onEd
         <div className="absolute inset-0 bg-black/10"></div>
 
         {/* Corner Badges - Always Visible */}
-        <div className="absolute top-2 left-2 z-10">
+        <div className="absolute top-2 left-2 z-10 flex flex-col gap-1.5">
           <span
             className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-semibold"
             style={{
@@ -409,6 +409,17 @@ const QuizCard = ({ quiz, onDelete, onToggleVisibility, onCopyLink, onView, onEd
             }}
           >
             {totalQuestions} {totalQuestions === 1 ? 'Q' : 'Qs'}
+          </span>
+          <span
+            className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-semibold"
+            style={{
+              background: 'rgba(255, 223, 0, 0.3)',
+              backdropFilter: 'blur(6px)',
+              border: '1px solid rgba(255, 223, 0, 0.3)',
+              color: '#FFFFFF'
+            }}
+          >
+            ⭐ {quiz.totalPoints || totalQuestions * 10} pts
           </span>
         </div>
 
